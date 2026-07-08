@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        header {
+            background: #007BFF;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login {
+            background: white;
+            color: #007BFF;
+        }
+
+        .register {
+            background: #28a745;
+            color: white;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        main {
+            text-align: center;
+            margin-top: 80px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button id="loginBtn" class="login" onclick="goToLogin()">Login</button>
+        <button id="registerBtn" class="register" onclick="goToRegister()">Register</button>
+        <button onclick="logout()">Logout</button>
+    </header>
+
+    <main>
+        <h1>Welcome</h1>
+        <p>Click Login or Register to continue.</p>
+    </main>
+
+    <script>
+        
+
+        function logout() {
+
+            deleteCookie("userId");
+            deleteCookie("isAdmin");
+
+            window.location.href = "dashboard.html";
+
+        }
+        function deleteCookie(name) {
+
+            document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
+
+        }
+
+        function goToLogin() {
+            window.location.href = "UserLogin.html";
+        }
+
+        function goToRegister() {
+            window.location.href = "UserRegister.html";
+        }
+
+
+        function getCookie(name) {
+
+            const cookies = document.cookie.split(";");
+
+            for (let cookie of cookies) {
+
+                cookie = cookie.trim();
+
+                if (cookie.startsWith(name + "=")) {
+
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+
+                }
+
+            }
+
+            return null;
+
+        }
+
+        const userId = getCookie("userId");
+        const isAdmin = getCookie("isAdmin");
+
+
+        if (userId) {
+
+            // Logged in
+            document.getElementById("loginBtn").style.display = "none";
+            document.getElementById("registerBtn").style.display = "none";
+
+        }
+        else {
+
+            // Not logged in
+            document.getElementById("loginBtn").style.display = "inline-block";
+            document.getElementById("registerBtn").style.display = "inline-block";
+
+        }
+
+        // Check Admin
+        if (isAdmin === "true") {
+
+            console.log("Admin");
+
+        }
+        else {
+
+            console.log("Normal User");
+
+        }
+
+    </script>
+
+</body>
+</html>
