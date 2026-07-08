@@ -52,8 +52,9 @@
 <body>
 
     <header>
+        <button id="Additem" class="login" onclick="goToAddItem()">Add</button>
         <button id="loginBtn" class="login" onclick="goToLogin()">Login</button>
-        <button id="registerBtn" class="register" onclick="goToRegister()">Register</button>
+        <button id="registerBtn" class="register" <!--onclick="goToRegister()-->">Register</button>
         <button onclick="logout()">Logout</button>
     </header>
 
@@ -63,7 +64,9 @@
     </main>
 
     <script>
-        
+        function goToAddItem() {
+            
+        }
 
         function logout() {
 
@@ -117,14 +120,21 @@
             // Logged in
             document.getElementById("loginBtn").style.display = "none";
             document.getElementById("registerBtn").style.display = "none";
-
+            if (isAdmin == "true") {
+                document.getElementById("Additem").style.display = "inline-block";
+            }
+            else
+            {
+                document.getElementById("Additem").style.display = "none";
+            }
+            
         }
         else {
 
             // Not logged in
             document.getElementById("loginBtn").style.display = "inline-block";
             document.getElementById("registerBtn").style.display = "inline-block";
-
+            document.getElementById("Additem").style.display = "none";
         }
 
         // Check Admin
