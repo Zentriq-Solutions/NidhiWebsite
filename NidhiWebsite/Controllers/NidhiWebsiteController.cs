@@ -20,6 +20,7 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
+                data.user_password = BCrypt.Net.BCrypt.HashPassword(data.user_password);
                 var userdata = new User();
                 userdata = new User
                 {
@@ -49,16 +50,24 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                bool isvalidate = datacontext.Data_tbl_User.Any(x =>
-                    x.user_name == data.user_name &&
-                    x.user_password == data.user_password);
-
+                var user = datacontext.Data_tbl_User.FirstOrDefault(x =>
+                    x.user_name == data.user_name);
+                if (user == null)
+                {
+                    return Unauthorized("Invalid username.");
+                }
+                bool isvalidate = BCrypt.Net.BCrypt.Verify(
+                                data.user_password,
+                                user.user_password);
                 if (!isvalidate)
                 {
                     return Unauthorized("Invalid username or password.");
                 }
-                var isadmin = datacontext.Data_tbl_User.Where(l => l.user_name == data.user_name && l.user_password == data.user_password).Select(k =>new { k.user_is_admin,k.user_id }).FirstOrDefault();
-                return Ok(isadmin);
+                   return Ok(new
+                   {
+                       user.user_name,
+                       user.user_is_admin
+                   });
             }
             catch (Exception ex)
             {
