@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Add Product</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .product-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #0056b3;
+            }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="product-box">
+
+        <h2>Add Product</h2>
+
+        <input type="text" id="product_name" placeholder="Product Name">
+
+        <input type="text" id="product_code" placeholder="Product Code">
+
+        <input type="number" id="product_price" placeholder="Product Price">
+
+        <textarea id="product_description" placeholder="Product Description"></textarea>
+
+        <input type="file" id="product_image">
+        <div style="display:flex; gap:10px; margin-top:20px;">
+
+            <button type="button" onclick="goBack()" style="background:#6c757d;">
+                Back
+            </button>
+
+            <button onclick="saveProduct()">Save Product</button>
+
+        </div>
+
+       
+
+        <p id="message"></p>
+
+    </div>
+
+    <script>
+
+        // Read Cookie
+        function getCookie(name) {
+
+            const cookies = document.cookie.split(";");
+
+            for (let cookie of cookies) {
+
+                cookie = cookie.trim();
+
+                if (cookie.startsWith(name + "=")) {
+
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+
+                }
+
+            }
+
+            return null;
+
+        }
+        function goBack() {
+            window.location.href = "Dashboard.html";
+        }
+
+        async function saveProduct() {
+
+            const formData = new FormData();
+
+            formData.append("product_name",
+                document.getElementById("product_name").value);
+
+            formData.append("product_code",
+                document.getElementById("product_code").value);
+
+            formData.append("product_price",
+                document.getElementById("product_price").value);
+
+            formData.append("product_description",
+                document.getElementById("product_description").value);
+
+            formData.append("product_user_id",
+                getCookie("userId"));
+
+            const imageFile =
+                document.getElementById("product_image").files[0];
+
+            if (imageFile != null) {
+
+                formData.append("ImageFile", imageFile);
+
+            }
+
+            const response = await fetch("https://localhost:7280/api/Product/AddProduct", {
+
+                method: "POST",
+
+                body: formData
+
+            });
+
+            if (response.ok) {
+
+                document.getElementById("message").innerHTML =
+                    "Product Added Successfully.";
+
+                document.getElementById("product_name").value = "";
+                document.getElementById("product_code").value = "";
+                document.getElementById("product_price").value = "";
+                document.getElementById("product_description").value = "";
+                document.getElementById("product_image").value = "";
+
+            }
+            else {
+
+                document.getElementById("message").innerHTML =
+                    "Failed to Add Product.";
+
+                
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>

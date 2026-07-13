@@ -59,14 +59,14 @@ namespace NidhiWebsite.Controllers
                 bool isvalidate = BCrypt.Net.BCrypt.Verify(
                                 data.user_password,
                                 user.user_password);
-                if (!isvalidate)
+               if (!isvalidate)
                 {
                     return Unauthorized("Invalid username or password.");
                 }
                    return Ok(new
                    {
-                       user.user_name,
-                       user.user_is_admin
+                       user.user_is_admin,
+                       user.user_id
                    });
             }
             catch (Exception ex)

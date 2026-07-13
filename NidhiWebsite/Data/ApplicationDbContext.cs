@@ -12,6 +12,18 @@ namespace NidhiWebsite.Data
 
         }
         public DbSet<User> Data_tbl_User { get; set; }
+        public DbSet<ProductModel> Data_tbl_Product { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ProductModel>()
+                .HasOne(p => p.Data_tbl_User)
+                .WithMany(u => u.Data_tbl_Product)
+                .HasForeignKey(p => p.product_user_id)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
 
     }
 }
