@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
+using static System.Net.WebRequestMethods;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NidhiWebsite.Controllers
@@ -91,6 +93,34 @@ namespace NidhiWebsite.Controllers
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        [HttpGet("GetProduct")]
+        public IActionResult GetProduct()
+        {
+            try
+            {
+                //string uploadFolder = Path.Combine(
+                //                _environment.WebRootPath,
+                //                "Upload");
+                var path= "https://localhost:7280/Upload/";
+                var productdata = datacontext.Data_tbl_Product.AsNoTracking().
+                    Where(l => l.product_id != 0).
+                                  Select(m => new
+                                  {
+                                      productid = m.product_id,
+                                      name = m.product_name,
+                                      code = m.product_code,
+                                      image = path+ m.product_image,
+                                      price = m.product_price,
+                                      description = m.product_description,
+                                  }).ToArray();
+                return Ok(productdata);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }
