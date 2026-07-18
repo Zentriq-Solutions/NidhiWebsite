@@ -13,13 +13,92 @@
             font-family: Arial, sans-serif;
         }
 
-        header {
-            background: #007BFF;
-            padding: 15px 30px;
+        .top-header {
             display: flex;
-            justify-content: flex-end;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            background: #8f1b1b;
+            color: white;
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
+
+        .logo img {
+            width: 180px;
+        }
+
+        .search-box {
+            width: 40%;
+            display: flex;
+            align-items: center;
+        }
+
+            .search-box input {
+                width: 100%;
+                border: none;
+                outline: none;
+                background: transparent;
+                border-bottom: 2px solid white;
+                color: white;
+                font-size: 18px;
+                padding: 8px;
+            }
+
+            .search-box span {
+                margin-left: 10px;
+                font-size: 22px;
+                cursor: pointer;
+            }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+            .menu div {
+                text-align: center;
+                cursor: pointer;
+            }
+
+        .profile {
+            position: relative;
+        }
+
+        #profileBtn {
+            background: none;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .profile-popup {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 70px;
+            width: 180px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.3);
+            overflow: hidden;
+        }
+
+            .profile-popup button {
+                width: 100%;
+                border: none;
+                background: white;
+                padding: 12px;
+                cursor: pointer;
+                text-align: left;
+            }
+
+                .profile-popup button:hover {
+                    background: #eee;
+                }
 
         button {
             padding: 10px 20px;
@@ -29,43 +108,163 @@
             font-size: 16px;
         }
 
-        .login {
-            background: white;
-            color: #007BFF;
-        }
-
-        .register {
-            background: #28a745;
-            color: white;
-        }
-
         button:hover {
             opacity: 0.9;
         }
 
         main {
             text-align: center;
-            margin-top: 80px;
+            margin-top: 35px;
+        }
+        h1 {
+            text-align: center;
+        }
+
+        /* Product Section */
+
+        #productContainer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
+            overflow: hidden;
+            transition: 0.3s;
+            margin-left:15px;
+            /*margin-top:3px;*/
+            margin-right:10px;
+             
+        }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .product-card img {
+                width: 100%;
+                height: 340px;
+                object-fit: cover;
+            }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .product-code {
+            color: gray;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            color: green;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            color: #555;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <button id="Additem" class="login" onclick="goToAddItem()">Add</button>
-        <button id="loginBtn" class="login" onclick="goToLogin()">Login</button>
-        <button id="registerBtn" class="register" onclick="goToRegister()">Register</button>
-        <button onclick="logout()">Logout</button>
+    <header class="top-header">
+
+        <div class="logo">
+            <img src="images/logo.png" alt="Logo">
+        </div>
+
+        <div class="search-box">
+            <input type="text" placeholder="Search">
+            <span>🔍</span>
+        </div>
+
+        <div class="menu">
+
+            <div class="profile">
+
+                <button id="profileBtn">
+                    👤
+                    <br>
+                    Profile
+                </button>
+
+                <div class="profile-popup" id="profilePopup">
+
+                    <button id="loginBtn" onclick="goToLogin()">Login</button>
+
+                    <button id="registerBtn" onclick="goToRegister()">Register</button>
+
+                    <button id="Additem" onclick="goToAddItem()">Add Item</button>
+
+                    <button id="Additemgroup" onclick="goToAddItemGroup()">Add Item Group</button>
+
+                    <button id="logoutBtn" onclick="logout()">Logout</button>
+
+                </div>
+
+            </div>
+
+            <div class="wishlist">
+                ❤️
+                <br>
+                Wishlist
+            </div>
+
+            <div class="cart">
+                🛒
+                <br>
+                Cart
+            </div>
+
+        </div>
+
     </header>
-    
+
     <main>
-        <h1>Welcome</h1>
-        <p>Click Login or Register to continue.</p>
+
+        <div id="productContainer"></div>
     </main>
 
     <script>
+        const profileBtn = document.getElementById("profileBtn");
+        const popup = document.getElementById("profilePopup");
+
+        profileBtn.onclick = function () {
+
+            popup.style.display =
+                popup.style.display === "block"
+                    ? "none"
+                    : "block";
+        };
+
+        window.onclick = function (e) {
+
+            if (!e.target.closest(".profile")) {
+
+                popup.style.display = "none";
+            }
+
+        };
         function goToAddItem() {
             window.location.href = "ProductCreation.html";
+        }
+        function goToAddItemGroup() {
+            window.location.href="ItemGroupCreation.html"
         }
 
         function logout() {
@@ -113,28 +312,28 @@
 
         const userId = getCookie("userId");
         const isAdmin = getCookie("isAdmin");
-
-
         if (userId) {
 
-            // Logged in
-            document.getElementById("loginBtn").style.display = "none";
-            document.getElementById("registerBtn").style.display = "none";
+            loginBtn.style.display = "none";
+            registerBtn.style.display = "none";
+
+            logoutBtn.style.display = "block";
+
             if (isAdmin == "true") {
-                document.getElementById("Additem").style.display = "inline-block";
+                Additem.style.display = "block";
             }
-            else
-            {
-                document.getElementById("Additem").style.display = "none";
+            else {
+                Additem.style.display = "none";
             }
-            
+
         }
         else {
 
-            // Not logged in
-            document.getElementById("loginBtn").style.display = "inline-block";
-            document.getElementById("registerBtn").style.display = "inline-block";
-            document.getElementById("Additem").style.display = "none";
+            loginBtn.style.display = "block";
+            registerBtn.style.display = "block";
+
+            logoutBtn.style.display = "none";
+            Additem.style.display = "none";
         }
 
         // Check Admin
@@ -146,6 +345,59 @@
         else {
 
             console.log("Normal User");
+
+        }
+
+        window.onload = function () {
+            loadProducts();
+        };
+
+        function loadProducts() {
+
+            fetch("https://localhost:7280/api/Product/GetProduct")
+                .then(response => response.json())
+                .then(products => {
+
+                    const container = document.getElementById("productContainer");
+
+                    container.innerHTML = "";
+
+                    products.forEach(product => {
+
+                        container.innerHTML += `
+
+                        <div class="product-card">
+
+                            <img src="${product.image}" alt="Product Image">
+
+                            <div class="card-body">
+
+                                <div class="product-name">${product.name}</div>
+
+                                <div class="product-code">
+                                    Code : ${product.code}
+                                </div>
+
+                                <div class="product-price">
+                                    ₹ ${product.price}
+                                </div>
+
+                                <div class="product-description">
+                                    ${product.description}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                    });
+
+                })
+                .catch(error => {
+                    console.log(error);
+                });
 
         }
 

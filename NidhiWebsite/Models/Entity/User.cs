@@ -17,6 +17,8 @@ namespace NidhiWebsite.Models.Entity
         public bool user_is_admin { get; set; }
         public ICollection<ProductModel> Data_tbl_Product { get; set; }
         = new List<ProductModel>();
+        public ICollection<ItemGroupModel> Data_tbl_Item_group { get; set; }
+            = new List<ItemGroupModel>();
 
     }
 }

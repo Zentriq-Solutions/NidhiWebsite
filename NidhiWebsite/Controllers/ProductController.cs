@@ -74,6 +74,24 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
+                var allproduct = datacontext.Data_tbl_Product.AsNoTracking().
+                                 Where(l => l.product_id!= 0).
+                                 Select(m => new
+                                 {
+                                     product_id = m.product_id,
+                                     product_name = m.product_name,
+                                     product_code = m.product_code,
+                                 });
+                if (allproduct.Any(l => l.product_name == product.product_name && l.product_id!=product.product_id))
+                {
+                    return false;
+                }
+
+                if (allproduct.Any(l => l.product_code == product.product_code && l.product_id != product.product_id))
+                {
+                    return false;
+                }
+
                 var productdata = new ProductModel();
                 productdata = new ProductModel
                 {
@@ -85,6 +103,7 @@ namespace NidhiWebsite.Controllers
                     product_user_id = product.product_user_id,
                     product_created_date = DateTime.UtcNow,
                     product_row_date = DateTime.UtcNow,
+                    product_item_group_id = product.product_item_group_id,
                 };
                 datacontext.Data_tbl_Product.Add(productdata);
                 datacontext.SaveChanges();

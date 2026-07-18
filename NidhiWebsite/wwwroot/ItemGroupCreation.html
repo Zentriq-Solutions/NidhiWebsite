@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Add Item Group</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .item_group-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 100px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #0056b3;
+            }
+
+        #message {
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="item_group-box">
+
+        <h2>Add Item Group</h2>
+
+        <input type="text" id="item_group_name" placeholder="Item Group Name">
+
+        <input type="text" id="item_group_code" placeholder="Item Group Code">
+
+        <textarea id="item_group_description" placeholder="Item Group Description"></textarea>
+
+        <input type="file" id="item_group_image">
+        <div style="display:flex; gap:10px; margin-top:20px;">
+
+            <button type="button" onclick="goBack()" style="background:#6c757d;">
+                Back
+            </button>
+
+            <button onclick="saveItemGroup()">Save Item Group</button>
+
+        </div>
+
+       
+
+        <p id="message"></p>
+
+    </div>
+
+    <script>
+
+        // Read Cookie
+        function getCookie(name) {
+
+            const cookies = document.cookie.split(";");
+
+            for (let cookie of cookies) {
+
+                cookie = cookie.trim();
+
+                if (cookie.startsWith(name + "=")) {
+
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+
+                }
+
+            }
+
+            return null;
+
+        }
+        function goBack() {
+            window.location.href = "Dashboard.html";
+        }
+
+        async function saveItemGroup() {
+
+            const formData = new FormData();
+
+            formData.append("item_group_name",
+                document.getElementById("item_group_name").value);
+
+            formData.append("item_group_code",
+                document.getElementById("item_group_code").value);
+
+
+            formData.append("item_group_description",
+                document.getElementById("item_group_description").value);
+
+            formData.append("item_group_user_id",
+                getCookie("userId"));
+
+            const imageFile =
+                document.getElementById("item_group_image").files[0];
+
+            if (imageFile != null) {
+
+                formData.append("ImageFile", imageFile);
+
+            }
+
+            const response = await fetch("https://localhost:7280/api/ItemGroup/ItemGroup", {
+
+                method: "POST",
+
+                body: formData
+
+            });
+
+            if (response.ok) {
+
+                document.getElementById("message").innerHTML =
+                    "Product Added Successfully.";
+
+                document.getElementById("item_group_name").value = "";
+                document.getElementById("item_group_code").value = "";
+                document.getElementById("item_group_description").value = "";
+                document.getElementById("item_group_image").value = "";
+
+            }
+            else {
+
+                const error = await response.json();
+
+                document.getElementById("message").innerHTML = 
+                    "Failed to Add Product.";
+
+                
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
