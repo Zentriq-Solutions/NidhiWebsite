@@ -26,7 +26,10 @@
         }
 
         .logo img {
-            width: 180px;
+            width: 150px;
+            height:100px;
+            align-content:center;
+            border-radius:10px;
         }
 
         .search-box {
@@ -185,7 +188,7 @@
     <header class="top-header">
 
         <div class="logo">
-            <img src="images/logo.png" alt="Logo">
+            <img src="https://localhost:7280/Upload/nidhilogo.png" alt="Logo">
         </div>
 
         <div class="search-box">
@@ -212,6 +215,8 @@
                     <button id="Additem" onclick="goToAddItem()">Add Item</button>
 
                     <button id="Additemgroup" onclick="goToAddItemGroup()">Add Item Group</button>
+
+                    <button id="AllItemGroup" onclick="goToAllItemGroup()">Created Item Group</button>
 
                     <button id="logoutBtn" onclick="logout()">Logout</button>
 
@@ -264,7 +269,11 @@
             window.location.href = "ProductCreation.html";
         }
         function goToAddItemGroup() {
-            window.location.href="ItemGroupCreation.html"
+            window.location.href = "ItemGroupCreation.html"
+        }
+
+        function goToAllItemGroup() {
+            window.location.href = "AllItemGroup.html"
         }
 
         function logout() {
@@ -321,9 +330,14 @@
 
             if (isAdmin == "true") {
                 Additem.style.display = "block";
+                AllItemGroup.style.display = "block";
+                Additemgroup.style.display = "block";
+
             }
             else {
                 Additem.style.display = "none";
+                AllItemGroup.style.display = "none";
+                Additemgroup.style.display = "none";
             }
 
         }
@@ -334,6 +348,8 @@
 
             logoutBtn.style.display = "none";
             Additem.style.display = "none";
+            AllItemGroup.style.display = "none";
+            Additemgroup.style.display = "none";
         }
 
         // Check Admin
@@ -366,31 +382,31 @@
 
                         container.innerHTML += `
 
-                        <div class="product-card">
+                            <div class="product-card">
 
-                            <img src="${product.image}" alt="Product Image">
+                                <img src="${product.image}" alt="Product Image">
 
-                            <div class="card-body">
+                                <div class="card-body">
 
-                                <div class="product-name">${product.name}</div>
+                                    <div class="product-name">${product.name}</div>
 
-                                <div class="product-code">
-                                    Code : ${product.code}
-                                </div>
+                                    <div class="product-code">
+                                        Code : ${product.code}
+                                    </div>
 
-                                <div class="product-price">
-                                    ₹ ${product.price}
-                                </div>
+                                    <div class="product-price">
+                                        ₹ ${product.price}
+                                    </div>
 
-                                <div class="product-description">
-                                    ${product.description}
+                                    <div class="product-description">
+                                        ${product.description}
+                                    </div>
+
                                 </div>
 
                             </div>
 
-                        </div>
-
-                    `;
+                        `;
 
                     });
 

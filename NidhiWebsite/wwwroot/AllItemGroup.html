@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Item Groups</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #8f1b1b;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: white;
+            color: #8f1b1b;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 95%;
+            margin: 30px auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #8f1b1b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,.2);
+        }
+
+        th {
+            background: #8f1b1b;
+            color: white;
+            padding: 12px;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tr:hover {
+            background: #f1f1f1;
+        }
+        .details-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: #8f1b1b;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: .3s;
+        }
+
+            .details-btn:hover {
+                background: #b22222;
+                transform: scale(1.1);
+            }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>Item Group List</h2>
+
+        <button onclick="goBack()">Dashboard</button>
+    </header>
+
+    <div class="container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Item Group Name</th>
+                    <th>Item Group Code</th>
+                    <th>Description</th>
+                    <th>Details</th>
+                    
+                </tr>
+            </thead>
+
+            <tbody id="itemGroupBody">
+            </tbody>
+        </table>
+
+    </div>
+
+    <script>
+
+function goBack(){
+    window.location.href="dashboard.html";
+}
+
+window.onload=function(){
+    loadItemGroups();
+}
+
+function loadItemGroups(){
+
+    fetch("https://localhost:7280/api/ItemGroup/GetAllItemGroup")
+    .then(response=>response.json())
+    .then(data=>{
+
+        const tbody=document.getElementById("itemGroupBody");
+
+        tbody.innerHTML="";
+
+        data.forEach(item=>{
+
+            tbody.innerHTML+=`
+                <tr>
+                    <td>${item.item_group_id}</td>
+                    <td>${item.item_group_name}</td>
+                    <td>${item.item_group_code}</td>
+                    <td>${item.item_group_description}</td>
+                    <td>
+        <button class="details-btn"
+            onclick="viewDetails(${item.item_group_id})"
+            title="View Details">
+            👁️
+        </button>
+    </td>
+                </tr>
+            `;
+
+        });
+
+    })
+    .catch(error=>{
+        console.log(error);
+        alert("Unable to load Item Groups.");
+    });
+
+        }
+        function viewDetails(id) {
+            window.location.href = "ItemGroupCreation.html?id=" + id;
+        }
+
+    </script>
+
+</body>
+</html>
