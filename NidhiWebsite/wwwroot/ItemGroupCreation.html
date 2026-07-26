@@ -101,7 +101,7 @@
     </div>
 
     <script>
-        const path = "https://localhost:7280/Upload/";
+        const path = "/Upload/";
 
         // Read Cookie
         function getCookie(name) {
@@ -168,7 +168,7 @@
 
             }
 
-            const response = await fetch("https://localhost:7280/api/ItemGroup/ItemGroup", {
+            const response = await fetch("/api/ItemGroup/ItemGroup", {
 
                 method: "POST",
 
@@ -219,7 +219,7 @@
         async function loadItemGroup(id) {
 
             const response = await fetch(
-                "https://localhost:7280/api/ItemGroup/GetItemGroup?itemgroupid=" + id,
+                "/api/ItemGroup/GetItemGroup?itemgroupid=" + id,
                 {
                     method: "POST"
                 });

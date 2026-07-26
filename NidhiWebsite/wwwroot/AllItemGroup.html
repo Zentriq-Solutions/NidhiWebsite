@@ -131,7 +131,7 @@ window.onload=function(){
 
 function loadItemGroups(){
 
-    fetch("https://localhost:7280/api/ItemGroup/GetAllItemGroup")
+    fetch("/api/ItemGroup/GetAllItemGroup")
     .then(response=>response.json())
     .then(data=>{
 

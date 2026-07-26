@@ -6,181 +6,310 @@
     <title>Home</title>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        .top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #8f1b1b;
-            color: white;
-            padding: 15px 40px;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo img {
-            width: 150px;
-            height:100px;
-            align-content:center;
-            border-radius:10px;
-        }
-
-        .search-box {
-            width: 40%;
-            display: flex;
-            align-items: center;
-        }
-
-            .search-box input {
-                width: 100%;
-                border: none;
-                outline: none;
-                background: transparent;
-                border-bottom: 2px solid white;
-                color: white;
-                font-size: 18px;
-                padding: 8px;
-            }
-
-            .search-box span {
-                margin-left: 10px;
-                font-size: 22px;
-                cursor: pointer;
-            }
-
-        .menu {
-            display: flex;
-            align-items: center;
-            gap: 35px;
-        }
-
-            .menu div {
-                text-align: center;
-                cursor: pointer;
-            }
-
-        .profile {
-            position: relative;
-        }
-
-        #profileBtn {
-            background: none;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .profile-popup {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 70px;
-            width: 180px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,.3);
-            overflow: hidden;
-        }
-
-            .profile-popup button {
-                width: 100%;
-                border: none;
-                background: white;
-                padding: 12px;
-                cursor: pointer;
-                text-align: left;
-            }
-
-                .profile-popup button:hover {
-                    background: #eee;
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: Arial, sans-serif;
                 }
 
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
+                .top-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    background: #8f1b1b;
+                    color: white;
+                    padding: 15px 40px;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1000;
+                }
+
+                .logo img {
+                    width: 150px;
+                    height: 100px;
+                    align-content: center;
+                    border-radius: 10px;
+                }
+
+                .search-box {
+                    width: 40%;
+                    display: flex;
+                    align-items: center;
+                }
+
+                    .search-box input {
+                        width: 100%;
+                        border: none;
+                        outline: none;
+                        background: transparent;
+                        border-bottom: 2px solid white;
+                        color: white;
+                        font-size: 18px;
+                        padding: 8px;
+                    }
+
+                    .search-box span {
+                        margin-left: 10px;
+                        font-size: 22px;
+                        cursor: pointer;
+                    }
+
+                .menu {
+                    display: flex;
+                    align-items: center;
+                    gap: 35px;
+                }
+
+                    .menu div {
+                        text-align: center;
+                        cursor: pointer;
+                    }
+
+                .profile {
+                    position: relative;
+                }
+
+                #profileBtn {
+                    background: none;
+                    color: white;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 18px;
+                }
+                .profile-popup {
+
+                    display: none;
+                    position: absolute;
+                    right: 0;
+                    top: 70px;
+                    width: 180px;
+                    background: white;
+                    border-radius: 8px;
+                    box-shadow: 0 5px 15px rgba(0,0,0,.3);
+                    overflow: hidden;
+                }
+
+                    .profile-popup button {
+                        width: 100%;
+                        border: none;
+                        background: white;
+                        padding: 12px;
+                        cursor: pointer;
+                        text-align: left;
+                    }
+
+                        .profile-popup button:hover {
+                            background: #eee;
+                        }
+
+                button {
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-size: 16px;
+                }
+
+                    button:hover {
+                        opacity: 0.9;
+                    }
+
+                main {
+                    text-align: center;
+                    margin-top: 35px;
+                }
+
+                h1 {
+                    text-align: center;
+                }
+
+                /* ============================= /
+        / Carousel Section /
+        / ============================= */
+
+                .carousel-section {
+                    width: 100%;
+                    margin-top: 20px;
+                    padding: 0 30px;
+                }
+
+                .carousel-container {
+                    position: relative;
+                    width: 100%;
+                    max-width: 1400px;
+                    height: 400px;
+                    margin: auto;
+                    overflow: hidden;
+                    border-radius: 15px;
+                    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                }
+
+                .carousel-slide {
+                    display: none;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                    .carousel-slide.active {
+                        display: block;
+                    }
+
+                    .carousel-slide img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                /* Previous and Next Buttons */
+
+                .carousel-btn {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    width: 45px;
+                    height: 45px;
+                    padding: 0;
+                    border-radius: 50%;
+                    background: rgba(0, 0, 0, 0.5);
+                    color: white;
+                    font-size: 25px;
+                    cursor: pointer;
+                    z-index: 10;
+                }
+
+                .carousel-btn {
+                    background: rgba(0, 0, 0, 0.8);
+                }
+
+                    .carousel-btn.prev {
+                        left: 20px;
+                    }
+
+                    .carousel-btn.next {
+                        right: 20px;
+                    }
+
+                /* Carousel Dots */
+
+                .carousel-dots {
+                    position: absolute;
+                    bottom: 15px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .dot {
+                    width: 12px;
+                    height: 12px;
+                    background: white;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    opacity: 0.6;
+                }
+
+                    .dot.active {
+                        opacity: 1;
+                    }
+
+                /* Product Section */
+
+                #productContainer {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 10px;
+                    margin-top: 10px;
+                }
+
+                .product-card {
+                    background: white;
+                    border-radius: 20px;
+                    box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
+                    overflow: hidden;
+                    transition: 0.3s;
+                    margin-left: 15px;
+                    /*margin-top:3px;*/
+                    margin-right: 10px;
+                }
+
+                    .product-card:hover {
+                        transform: translateY(-5px);
+                    }
+
+                    .product-card img {
+                        width: 100%;
+                        height: 340px;
+                        object-fit: cover;
+                    }
+
+                .card-body {
+                    padding: 10px;
+                }
+
+                .product-name {
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-bottom: 8px;
+                }
+
+                .product-code {
+                    color: gray;
+                    font-size: 14px;
+                    margin-bottom: 8px;
+                }
+
+                .product-price {
+                    color: green;
+                    font-size: 18px;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+
+                .product-description {
+                    color: #555;
+                    font-size: 14px;
+                }
+
+
+        .itemgroupwisedata {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            padding: 30px 20px;
+        }
+
+        .item-group-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            border: 3px solid #ddd;
             cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        main {
             text-align: center;
-            margin-top: 35px;
-        }
-        h1 {
-            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        /* Product Section */
-
-        #productContainer {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
-            overflow: hidden;
-            transition: 0.3s;
-            margin-left:15px;
-            /*margin-top:3px;*/
-            margin-right:10px;
-             
-        }
-
-            .product-card:hover {
-                transform: translateY(-5px);
+            .item-group-circle span {
+                font-size: 15px;
+                font-weight: 600;
+                color: #333;
+                padding: 10px;
+                word-break: break-word;
             }
 
-            .product-card img {
-                width: 100%;
-                height: 340px;
-                object-fit: cover;
+            .item-group-circle:hover {
+                transform: translateY(-5px) scale(1.05);
+                border-color: #000;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             }
-
-        .card-body {
-            padding: 10px;
-        }
-
-        .product-name {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .product-code {
-            color: gray;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .product-price {
-            color: green;
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .product-description {
-            color: #555;
-            font-size: 14px;
-        }
+        
     </style>
 </head>
 <body>
@@ -188,7 +317,7 @@
     <header class="top-header">
 
         <div class="logo">
-            <img src="https://localhost:7280/Upload/nidhilogo.png" alt="Logo">
+            <img src="/Upload/nidhilogo.png" alt="Logo">
         </div>
 
         <div class="search-box">
@@ -241,11 +370,108 @@
     </header>
 
     <main>
-
+        <section class="carousel-section">
+            <div class="carousel-container">
+                <div class="carousel-slide active"> <img src="/Upload/33160b6e-882d-4024-b0cb-3b597a5e66ea.jpg" alt="Banner 1"> </div>
+                <div class="carousel-slide"> <img src="/Upload/8d1918ec-f121-4aa3-9e15-221b7b5ed821.jpg" alt="Banner 2"> </div>
+                <button class="carousel-btn prev" onclick="changeSlide(-1)"> ❮ </button>
+                <button class="carousel-btn next" onclick="changeSlide(1)"> ❯ </button>
+                <div class="carousel-dots"> <span class="dot active" onclick="currentSlide(0)"></span> <span class="dot" onclick="currentSlide(1)"></span> <span class="dot" onclick="currentSlide(2)"></span> </div>
+            </div>
+        </section>
+        <section class="itemgroupwisedata">
+        </section>
         <div id="productContainer"></div>
     </main>
-
     <script>
+        //#region Page Loading
+        document.addEventListener(
+            "DOMContentLoaded",
+            async function () {
+                loadItemGroups();
+
+                loadProducts();
+
+            }
+        );
+
+        async function loadItemGroups() {
+            try {
+                const response = await fetch("api/ItemGroup/GetAllItemGroupWiseFiltering");
+                if (!response.ok) {
+                    throw new Error("Failed to load item groups");
+                }
+                const itemGroups = await response.json(); const container = document.querySelector(".itemgroupwisedata");
+                container.innerHTML = "";
+                // Create circle for every item group
+                itemGroups.forEach(itemGroup => {
+                    const circle = document.createElement("div");
+                    circle.className = "item-group-circle";
+                    // Store item group ID
+                    circle.dataset.itemGroupId = itemGroup.item_group_id;
+                    const name = document.createElement("span");
+                    name.textContent = itemGroup.item_group_name;
+                    circle.appendChild(name);
+                    // Double click event
+                    circle.addEventListener("dblclick", function () {
+                        const itemGroupId = this.dataset.itemGroupId;
+                        getProductsByItemGroup(itemGroupId);
+                    }); container.appendChild(circle);
+                });
+            } catch (error) { console.error("Error loading item groups:", error); }
+        } 
+
+        function loadProducts() {
+
+            fetch("/api/Product/GetProduct")
+                .then(response => response.json())
+                .then(products => {
+
+                    const container = document.getElementById("productContainer");
+
+                    container.innerHTML = "";
+
+                    products.forEach(product => {
+
+                        container.innerHTML += `
+        
+                                                    <div class="product-card">
+        
+                                                        <img src="${product.image}" alt="Product Image">
+        
+                                                        <div class="card-body">
+        
+                                                            <div class="product-name">${product.name}</div>
+        
+                                                            <div class="product-code">
+                                                                Code : ${product.code}
+                                                            </div>
+        
+                                                            <div class="product-price">
+                                                                ₹ ${product.price}
+                                                            </div>
+        
+                                                            <div class="product-description">
+                                                                ${product.description}
+                                                            </div>
+        
+                                                        </div>
+        
+                                                    </div>
+        
+                                                `;
+
+                    });
+
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+
+        }
+        //#endregion Page Loading
+
+
         const profileBtn = document.getElementById("profileBtn");
         const popup = document.getElementById("profilePopup");
 
@@ -364,58 +590,91 @@
 
         }
 
-        window.onload = function () {
-            loadProducts();
-        };
 
-        function loadProducts() {
+        /* ============================= */
+        /* Carousel JavaScript */
+        /* ============================= */
 
-            fetch("https://localhost:7280/api/Product/GetProduct")
-                .then(response => response.json())
-                .then(products => {
+        let slideIndex = 0;
 
-                    const container = document.getElementById("productContainer");
+        const slides = document.querySelectorAll(".carousel-slide");
+        const dots = document.querySelectorAll(".dot");
 
-                    container.innerHTML = "";
+        function showSlide(index) {
 
-                    products.forEach(product => {
 
-                        container.innerHTML += `
+            if (index >= slides.length) {
+                slideIndex = 0;
+            }
 
-                            <div class="product-card">
+            if (index < 0) {
+                slideIndex = slides.length - 1;
+            }
 
-                                <img src="${product.image}" alt="Product Image">
+            slides.forEach(slide => {
+                slide.classList.remove("active");
+            });
 
-                                <div class="card-body">
+            dots.forEach(dot => {
+                dot.classList.remove("active");
+            });
 
-                                    <div class="product-name">${product.name}</div>
+            slides[slideIndex].classList.add("active");
+            dots[slideIndex].classList.add("active");
 
-                                    <div class="product-code">
-                                        Code : ${product.code}
-                                    </div>
-
-                                    <div class="product-price">
-                                        ₹ ${product.price}
-                                    </div>
-
-                                    <div class="product-description">
-                                        ${product.description}
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        `;
-
-                    });
-
-                })
-                .catch(error => {
-                    console.log(error);
-                });
 
         }
+
+        function changeSlide(direction) {
+
+
+            slideIndex = slideIndex + direction;
+
+            showSlide(slideIndex);
+
+        }
+
+        function currentSlide(index) {
+
+
+            slideIndex = index;
+
+            showSlide(slideIndex);
+
+
+        }
+
+        /* Automatic Slide */
+
+        setInterval(function () {
+
+
+            slideIndex++;
+
+            showSlide(slideIndex);
+
+
+        }, 5000);
+        //region Itemgroupwiseloading
+       // Call Product API
+        async function getProductsByItemGroup(itemGroupId) {
+            try {
+                const response = await fetch(`/api/Product/GetAllProductItemGroupWise?itemgroupid=${itemGroupId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to load products");
+                }
+                const products = await response.json();
+                // Save products
+                sessionStorage.setItem("itemGroupProducts", JSON.stringify(products));
+                // Open Product List page
+                window.location.href = "ProductList.html";
+            } catch (error) {
+                console.error("Error loading products:", error);
+                alert("Unable to load products");
+            }
+        } // Load item groups when page loads
+
+     
 
     </script>
 

@@ -186,5 +186,25 @@ namespace NidhiWebsite.Controllers
             }
         }
 
+        [HttpGet("GetAllItemGroupWiseFiltering")]
+        public IActionResult GetAllItemGroupWiseFiltering()
+        {
+            try
+            {
+                var itemgroup = datacontext.Data_tbl_Item_group.AsNoTracking().
+                                Where(l => l.item_group_id != 0).
+                                Select(m => new
+                                {
+                                    item_group_id = m.item_group_id,
+                                    item_group_name = m.item_group_name,
+                                }).ToArray();
+                return Ok(itemgroup);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

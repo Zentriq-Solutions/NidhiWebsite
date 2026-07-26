@@ -123,7 +123,7 @@ namespace NidhiWebsite.Controllers
                 //string uploadFolder = Path.Combine(
                 //                _environment.WebRootPath,
                 //                "Upload");
-                var path= "https://localhost:7280/Upload/";
+                var path= "/Upload/";
                 var productdata = datacontext.Data_tbl_Product.AsNoTracking().
                     Where(l => l.product_id != 0).
                                   Select(m => new
@@ -132,6 +132,32 @@ namespace NidhiWebsite.Controllers
                                       name = m.product_name,
                                       code = m.product_code,
                                       image = path+ m.product_image,
+                                      price = m.product_price,
+                                      description = m.product_description,
+                                  }).ToArray();
+                return Ok(productdata);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetAllProductItemGroupWise")]
+        public IActionResult GetAllProductItemGroupWise(int itemgroupid)
+        {
+            try
+            {
+                var path = "/Upload/";
+                var productdata = datacontext.Data_tbl_Product.AsNoTracking().
+                    Where(l =>( l.product_id != 0) &&
+                                l.product_item_group_id==itemgroupid).
+                                  Select(m => new
+                                  {
+                                      productid = m.product_id,
+                                      name = m.product_name,
+                                      code = m.product_code,
+                                      image = path + m.product_image,
                                       price = m.product_price,
                                       description = m.product_description,
                                   }).ToArray();

@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Add Product</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #8f1b1b;
+            color: white;
+            padding: 15px 40px;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #8f1b1b;
+            color: white;
+            padding: 15px 40px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .logo img {
+            width: 150px;
+            height: 100px;
+            align-content: center;
+            border-radius: 10px;
+        }
+
+        .search-box {
+            width: 40%;
+            display: flex;
+            align-items: center;
+        }
+
+            .search-box input {
+                width: 100%;
+                border: none;
+                outline: none;
+                background: transparent;
+                border-bottom: 2px solid white;
+                color: white;
+                font-size: 18px;
+                padding: 8px;
+            }
+
+            .search-box span {
+                margin-left: 10px;
+                font-size: 22px;
+                cursor: pointer;
+            }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+            .menu div {
+                text-align: center;
+                cursor: pointer;
+            }
+
+        .profile {
+            position: relative;
+        }
+
+        #profileBtn {
+            background: none;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .profile-popup {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 70px;
+            width: 180px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.3);
+            overflow: hidden;
+        }
+
+            .profile-popup button {
+                width: 100%;
+                border: none;
+                background: white;
+                padding: 12px;
+                cursor: pointer;
+                text-align: left;
+            }
+
+                .profile-popup button:hover {
+                    background: #eee;
+                }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            button:hover {
+                opacity: 0.9;
+            }
+
+        main {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+
+        <div class="logo">
+
+            <img src="/Upload/nidhilogo.png"
+                 alt="Logo">
+
+        </div>
+
+
+        <div class="search-box">
+
+            <input type="text"
+                   placeholder="Search">
+
+            <span>🔍</span>
+
+        </div>
+
+
+        <div class="menu">
+
+            <div class="profile">
+
+                <button id="profileBtn">
+
+                    👤
+                    <br>
+
+                    Profile
+
+                </button>
+
+
+                <div class="profile-popup"
+                     id="profilePopup">
+
+                    <button id="loginBtn"
+                            onclick="goToLogin()">
+
+                        Login
+
+                    </button>
+
+
+                    <button id="registerBtn"
+                            onclick="goToRegister()">
+
+                        Register
+
+                    </button>
+
+
+                    <button id="Additem"
+                            onclick="goToAddItem()">
+
+                        Add Item
+
+                    </button>
+
+
+                    <button id="Additemgroup"
+                            onclick="goToAddItemGroup()">
+
+                        Add Item Group
+
+                    </button>
+
+
+                    <button id="AllItemGroup"
+                            onclick="goToAllItemGroup()">
+
+                        Created Item Group
+
+                    </button>
+
+
+                    <button id="logoutBtn"
+                            onclick="logout()">
+
+                        Logout
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="wishlist">
+
+                ❤️
+                <br>
+
+                Wishlist
+
+            </div>
+
+
+            <div class="cart">
+
+                🛒
+                <br>
+
+                Cart
+
+            </div>
+
+        </div>
+
+    </header>
+
+</body>
+
+</html>
