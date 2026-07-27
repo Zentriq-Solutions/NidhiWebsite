@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
 
@@ -12,10 +13,12 @@ namespace NidhiWebsite.Controllers
     {
         private readonly IWebHostEnvironment _environment;
         private readonly ApplicationDbContext datacontext;
-        public ItemGroupController(IWebHostEnvironment environment, ApplicationDbContext context)
+        private readonly IMemoryCache _cache;
+        public ItemGroupController(IWebHostEnvironment environment, ApplicationDbContext context,IMemoryCache cache)
         {
             _environment = environment;
             datacontext = context;
+            _cache = cache;
         }
 
         #region Item Group Save
@@ -113,6 +116,7 @@ namespace NidhiWebsite.Controllers
                     }
                 }
                 datacontext.SaveChanges();
+                _cache.Remove("itemGroups_list");
                 return "success";
             }
             catch (Exception)
@@ -127,13 +131,22 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var itemgroup = datacontext.Data_tbl_Item_group.AsNoTracking().
+                const string cacheKey = "itemGroups_list";
+
+                if (!_cache.TryGetValue(cacheKey, out List<ItemGroupModelForProvider> itemgroup))
+                {
+                    itemgroup = datacontext.Data_tbl_Item_group.AsNoTracking().
                                 Where(l => l.item_group_id != 0).
-                                Select(m => new
+                                Select(m => new ItemGroupModelForProvider
                                 {
                                     item_group_id = m.item_group_id,
                                     item_group_name = m.item_group_name,
-                                }).ToArray();
+                                }).ToList();
+                    var cacheOptions = new MemoryCacheEntryOptions()
+            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+
+                    _cache.Set(cacheKey, itemgroup, cacheOptions);
+                }
                 return Ok(itemgroup);
             }
             catch (Exception ex)
@@ -191,13 +204,22 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var itemgroup = datacontext.Data_tbl_Item_group.AsNoTracking().
+                const string cacheKey = "itemGroups_list";
+
+                if (!_cache.TryGetValue(cacheKey, out List<ItemGroupModelForProvider> itemgroup))
+                {
+                    itemgroup = datacontext.Data_tbl_Item_group.AsNoTracking().
                                 Where(l => l.item_group_id != 0).
-                                Select(m => new
+                                Select(m => new ItemGroupModelForProvider
                                 {
                                     item_group_id = m.item_group_id,
                                     item_group_name = m.item_group_name,
-                                }).ToArray();
+                                }).ToList();
+                    var cacheOptions = new MemoryCacheEntryOptions()
+           .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+
+                    _cache.Set(cacheKey, itemgroup, cacheOptions);
+                }
                 return Ok(itemgroup);
             }
             catch (Exception ex)

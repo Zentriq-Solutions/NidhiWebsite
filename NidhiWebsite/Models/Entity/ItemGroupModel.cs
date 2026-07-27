@@ -31,4 +31,9 @@ namespace NidhiWebsite.Models.Entity
         public ICollection<ProductModel> Data_tbl_Product { get; set; }
             = new List<ProductModel>();
     }
+    public class ItemGroupModelForProvider
+    {
+        public int item_group_id { get; set; }
+        public string item_group_name { get; set; }
+    }
 }

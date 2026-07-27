@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
 using static System.Net.WebRequestMethods;
@@ -15,10 +16,12 @@ namespace NidhiWebsite.Controllers
     {
         private readonly IWebHostEnvironment _environment;
         private readonly ApplicationDbContext datacontext;
-        public ProductController(IWebHostEnvironment environment, ApplicationDbContext context)
+        private readonly IMemoryCache _cache;
+        public ProductController(IWebHostEnvironment environment, ApplicationDbContext context,IMemoryCache cache)
         {
             _environment = environment;
             datacontext = context;
+            _cache=cache;
         }
         [HttpPost("AddProduct")]
         public async Task<IActionResult> Create(ProductModel product)
@@ -107,6 +110,7 @@ namespace NidhiWebsite.Controllers
                 };
                 datacontext.Data_tbl_Product.Add(productdata);
                 datacontext.SaveChanges();
+                _cache.Remove("product_list");
                 return true;
             }
             catch (Exception)
@@ -119,14 +123,15 @@ namespace NidhiWebsite.Controllers
         public IActionResult GetProduct()
         {
             try
-            {
-                //string uploadFolder = Path.Combine(
-                //                _environment.WebRootPath,
-                //                "Upload");
-                var path= "/Upload/";
-                var productdata = datacontext.Data_tbl_Product.AsNoTracking().
+            { 
+                const string cacheKey = "product_list";
+
+                if (!_cache.TryGetValue(cacheKey, out List<ProductForInitailloadingModel> productdata))
+                {
+                    var path= "/Upload/";
+                productdata = datacontext.Data_tbl_Product.AsNoTracking().
                     Where(l => l.product_id != 0).
-                                  Select(m => new
+                                  Select(m => new ProductForInitailloadingModel
                                   {
                                       productid = m.product_id,
                                       name = m.product_name,
@@ -134,7 +139,12 @@ namespace NidhiWebsite.Controllers
                                       image = path+ m.product_image,
                                       price = m.product_price,
                                       description = m.product_description,
-                                  }).ToArray();
+                                  }).Take(12).ToList();
+                    var cacheOptions = new MemoryCacheEntryOptions()
+                            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
+
+                    _cache.Set(cacheKey, productdata, cacheOptions);
+                }
                 return Ok(productdata);
             }
             catch (Exception ex)
