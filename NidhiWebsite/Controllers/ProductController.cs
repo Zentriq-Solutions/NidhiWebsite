@@ -121,7 +121,6 @@ namespace NidhiWebsite.Controllers
             try
             { 
                 const string cacheKey = "product_list";
-
                 if (!_cache.TryGetValue(cacheKey, out List<ProductForInitailloadingModel> productdata))
                 {
                     var path= "/Upload/";
@@ -131,14 +130,11 @@ namespace NidhiWebsite.Controllers
                                   {
                                       productid = m.product_id,
                                       name = m.product_name,
-                                      code = m.product_code,
                                       image = path+ m.product_image,
                                       price = m.product_price,
-                                      description = m.product_description,
                                   }).Take(12).ToList();
                     var cacheOptions = new MemoryCacheEntryOptions()
-                            .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-
+                           .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
                     _cache.Set(cacheKey, productdata, cacheOptions);
                 }
                 return Ok(productdata);

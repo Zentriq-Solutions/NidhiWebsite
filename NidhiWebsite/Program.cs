@@ -23,6 +23,53 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.Value;
+
+    if (!string.IsNullOrEmpty(path) &&
+        !path.EndsWith(".html") &&
+        !path.Contains("."))
+    {
+        var htmlFile = Path.Combine(
+            app.Environment.WebRootPath,
+            path.TrimStart('/') + ".html"
+        );
+
+        if (File.Exists(htmlFile))
+        {
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(htmlFile);
+            return;
+        }
+    }
+
+    await next();
+});
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.Value;
+
+    if (!string.IsNullOrEmpty(path) &&
+        !path.EndsWith(".html") &&
+        !path.Contains("."))
+    {
+        var htmlFile = Path.Combine(
+            app.Environment.WebRootPath,
+            path.TrimStart('/') + ".html"
+        );
+
+        if (File.Exists(htmlFile))
+        {
+            context.Response.ContentType = "text/html";
+            await context.Response.SendFileAsync(htmlFile);
+            return;
+        }
+    }
+
+    await next();
+});
+
 app.UseStaticFiles();
 
 app.UseAuthorization();
