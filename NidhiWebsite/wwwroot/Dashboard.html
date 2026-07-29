@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         :root {
@@ -522,6 +523,115 @@
                 border-color: var(--gold);
                 box-shadow: 0 8px 20px rgba(7, 40, 38, 0.22);
             }
+
+        /* Footer*/
+
+        footer {
+            background: var(--teal-deep);
+            color: var(--cream);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 40px 40px 20px;
+            margin-top: 60px;
+        }
+
+            footer .col {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 20px;
+                min-width: 180px;
+            }
+
+            footer .logo {
+                width: 100px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+            }
+
+            footer h4 {
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                font-size: 15px;
+                color: var(--gold-bright);
+                padding-bottom: 16px;
+            }
+
+            footer p {
+                font-size: 13px;
+                margin: 0 0 8px 0;
+                color: rgba(246,243,236,0.75);
+            }
+
+                footer p strong {
+                    color: var(--cream);
+                }
+
+            footer a {
+                font-size: 13px;
+                text-decoration: none;
+                color: rgba(246,243,236,0.75);
+                margin-bottom: 10px;
+                transition: color 0.15s ease;
+            }
+
+                footer a:hover {
+                    color: var(--gold-bright);
+                }
+
+            footer .follow {
+                margin-top: 12px;
+            }
+
+                footer .follow h4 {
+                    padding-bottom: 10px;
+                }
+
+            footer .icon {
+                display: flex;
+                gap: 14px;
+            }
+
+                footer .icon i {
+                    color: rgba(246,243,236,0.75);
+                    cursor: pointer;
+                    font-size: 16px;
+                    transition: color 0.15s ease;
+                }
+
+                    footer .icon i:hover {
+                        color: var(--gold-bright);
+                    }
+
+            footer .install .row {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+                footer .install .row img {
+                    border: 1px solid var(--gold);
+                    border-radius: 6px;
+                    height: 38px;
+                }
+
+                footer .install .row p {
+                    font-size: 12px;
+                    color: rgba(246,243,236,0.6);
+                    margin: 0;
+                }
+
+            footer .copyright {
+                width: 100%;
+                text-align: center;
+                border-top: 1px solid rgba(246,243,236,0.15);
+                margin-top: 12px;
+                padding-top: 16px;
+                font-size: 12px;
+                color: rgba(246,243,236,0.5);
+            }
     </style>
 </head>
 <body>
@@ -701,14 +811,14 @@
 
                     products.forEach(product => {
                         container.innerHTML += `
-                        <div class="product-card">
-                            <img src="${product.image}" alt="Product Image">
-                            <div class="card-body">
-                                <div class="product-name">${product.name}</div>
-                                <div class="product-price">₹ ${product.price}</div>
+                            <div class="product-card">
+                                <img src="${product.image}" alt="Product Image">
+                                <div class="card-body">
+                                    <div class="product-name">${product.name}</div>
+                                    <div class="product-price">₹ ${product.price}</div>
+                                </div>
                             </div>
-                        </div>
-                    `;
+                        `;
                     });
                 })
                 .catch(error => {
@@ -944,5 +1054,58 @@
 
     </script>
 
+
+    <footer class="section-p1">
+        <div class="col">
+            <img class="logo" src="/Upload/nidhilogo.png" alt="Nidhi logo">
+            <h4>Contact</h4>
+            <p><strong>Address:</strong> 562 Wellington Road, San Francisco </p>
+            <p><strong>Phone:</strong> 8596859, 85474585 </p>
+            <p><strong>Hours:</strong> 10:00 am - 10:00 pm Mon-Sat </p>
+            <div class="follow">
+                <h4>Follow us</h4>
+                <div class="icon">
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-pinterest-p"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h4>About</h4>
+            <a href="#">About Us</a>
+            <a href="#">Delivery Information</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+            <a href="#">Contact Us</a>
+        </div>
+
+        <div class="col">
+            <h4>My Account</h4>
+            <a href="#">Sign In</a>
+            <a href="#">View Cart</a>
+            <a href="#">My Wishlist</a>
+            <a href="#">Track My Order</a>
+            <a href="#">Help</a>
+        </div>
+
+        <div class="col install">
+            <h4>Install App</h4>
+            <p>From app store or Google play</p>
+            <div class="row">
+                <img src="img/pay/app.jpg" alt="">
+                <img src="img/pay/play.jpg" alt="">
+                <p>Secured Payment Gateway</p>
+                <img src="img/pay/pay.png" alt="">
+            </div>
+        </div>
+
+        <div class="copyright">
+            <p>Nidhi Member Registry &mdash; All Rights Reserved</p>
+        </div>
+    </footer>
 </body>
 </html>
