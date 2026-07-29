@@ -266,6 +266,7 @@
                     margin-left: 15px;
                     /*margin-top:3px;*/
                     margin-right: 10px;
+                    margin-top:20px;
                 }
 
                     .product-card:hover {
@@ -288,24 +289,12 @@
                     margin-bottom: 8px;
                 }
 
-                .product-code {
-                    color: gray;
-                    font-size: 14px;
-                    margin-bottom: 8px;
-                }
-
                 .product-price {
                     color: green;
                     font-size: 18px;
                     font-weight: bold;
                     margin-bottom: 10px;
                 }
-
-                .product-description {
-                    color: #555;
-                    font-size: 14px;
-                }
-
 
         .itemgroupwisedata {
             display: flex;
@@ -491,9 +480,7 @@
                         <img src="${product.image}" alt="Product Image">
                         <div class="card-body">
                             <div class="product-name">${product.name}</div>
-                            <div class="product-code">Code : ${product.code}</div>
                             <div class="product-price">₹ ${product.price}</div>
-                            <div class="product-description">${product.description}</div>
                         </div>
                     </div>
                 `;
@@ -528,14 +515,14 @@
 
             };
             function goToAddItem() {
-                window.location.href = "ProductCreation.html";
+                window.location.href = "ProductCreation";
             }
             function goToAddItemGroup() {
-                window.location.href = "ItemGroupCreation.html"
+                window.location.href = "ItemGroupCreation"
             }
 
             function goToAllItemGroup() {
-                window.location.href = "AllItemGroup.html"
+                window.location.href = "AllItemGroup"
             }
 
             function logout() {
@@ -543,7 +530,7 @@
                 deleteCookie("userId");
                 deleteCookie("isAdmin");
 
-                window.location.href = "dashboard.html";
+                window.location.href = "dashboard";
 
             }
             function deleteCookie(name) {
@@ -553,11 +540,11 @@
             }
 
             function goToLogin() {
-                window.location.href = "UserLogin.html";
+                window.location.href = "UserLogin";
             }
 
             function goToRegister() {
-                window.location.href = "UserRegister.html";
+                window.location.href = "UserRegister";
             }
 
 
@@ -703,7 +690,7 @@
                     // Save products
                     sessionStorage.setItem("itemGroupProducts", JSON.stringify(products));
                     // Open Product List page
-                    window.location.href = "ProductList.html";
+                    window.location.href = "ProductList";
                 } catch (error) {
                     console.error("Error loading products:", error);
                     alert("Unable to load products");
