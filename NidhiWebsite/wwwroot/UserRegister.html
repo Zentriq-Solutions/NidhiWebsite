@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -182,4 +182,457 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     </script>
 
 </body>
+</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #D8DED2;
+            --sage-line: #C6CEC0;
+            --error: #B3452C;
+            --success: #3E7A4F;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, Helvetica, sans-serif;
+            background: var(--cream);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            padding: 24px;
+        }
+
+        .frame {
+            width: 100%;
+            max-width: 860px;
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -20px rgba(7, 40, 38, 0.35);
+        }
+
+        /* ---------- Left ledger panel ---------- */
+        .panel {
+            background: var(--teal);
+            background-image: radial-gradient(circle at 85% 15%, rgba(201,162,39,0.18), transparent 55%), repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 34px);
+            color: var(--cream);
+            padding: 44px 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .mark {
+            width: 46px;
+            height: 46px;
+            border: 1.5px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            color: var(--gold-bright);
+            flex-shrink: 0;
+        }
+
+        .panel-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand {
+            font-family: 'Fraunces', serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .brand-sub {
+            font-size: 11.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(246,243,236,0.55);
+            margin-top: 2px;
+        }
+
+        .panel-mid {
+            margin-top: 46px;
+        }
+
+            .panel-mid h1 {
+                font-family: 'Fraunces', serif;
+                font-weight: 500;
+                font-size: 30px;
+                line-height: 1.28;
+                margin: 0 0 14px;
+            }
+
+            .panel-mid p {
+                font-size: 14px;
+                line-height: 1.65;
+                color: rgba(246,243,236,0.72);
+                max-width: 30ch;
+                margin: 0;
+            }
+
+        .ledger-entries {
+            margin-top: 34px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .ledger-entries .row {
+                display: flex;
+                align-items: baseline;
+                gap: 10px;
+                font-size: 12.5px;
+                color: rgba(246,243,236,0.6);
+            }
+
+                .ledger-entries .row span.no {
+                    font-family: 'Fraunces', serif;
+                    color: var(--gold-bright);
+                    font-size: 13px;
+                }
+
+        .panel-foot {
+            font-size: 11.5px;
+            color: rgba(246,243,236,0.4);
+            letter-spacing: 0.04em;
+        }
+
+        /* ---------- Right form panel ---------- */
+        .form-side {
+            padding: 44px 40px 36px;
+        }
+
+            .form-side h2 {
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                font-size: 24px;
+                margin: 0 0 4px;
+                color: var(--teal-deep);
+            }
+
+            .form-side .lede {
+                font-size: 13.5px;
+                color: #6B7570;
+                margin: 0 0 28px;
+            }
+
+        .field {
+            margin-top: 18px;
+            position: relative;
+        }
+
+            .field:first-of-type {
+                margin-top: 0;
+            }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: #7C8880;
+            margin-bottom: 7px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 9px 2px;
+            border: none;
+            border-bottom: 1.5px solid var(--sage-line);
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: var(--ink);
+            border-radius: 0;
+            transition: border-color 0.18s ease;
+        }
+
+        textarea {
+            resize: none;
+            padding-top: 6px;
+        }
+
+            input:focus, textarea:focus {
+                outline: none;
+                border-bottom-color: var(--gold);
+            }
+
+            input::placeholder, textarea::placeholder {
+                color: #B8C0B9;
+            }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 13px 18px;
+            border: none;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+            button[type="submit"] {
+                flex: 1.4;
+                background: var(--teal);
+                color: var(--cream);
+                box-shadow: 0 8px 18px -8px rgba(11,61,58,0.55);
+            }
+
+                button[type="submit"]:hover {
+                    background: var(--teal-deep);
+                    transform: translateY(-1px);
+                }
+
+            button[type="button"] {
+                flex: 1;
+                background: transparent;
+                color: #7C8880;
+                border: 1.5px solid var(--sage-line);
+            }
+
+                button[type="button"]:hover {
+                    border-color: #9AA69C;
+                    color: var(--ink);
+                }
+
+        #message {
+            text-align: left;
+            margin-top: 16px;
+            font-size: 13.5px;
+            font-weight: 600;
+            min-height: 18px;
+        }
+
+        @media (max-width: 720px) {
+            .frame {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 32px 28px;
+            }
+
+            .panel-mid h1 {
+                font-size: 24px;
+            }
+
+            .ledger-entries {
+                display: none;
+            }
+
+            .form-side {
+                padding: 34px 26px 30px;
+            }
+
+            .row-2 {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="frame">
+
+        <div class="panel">
+            <div>
+                <div class="panel-top">
+                    <div class="mark">N</div>
+                    <div>
+                        <div class="brand">Nidhi</div>
+                        <div class="brand-sub">Member Registry</div>
+                    </div>
+                </div>
+
+                <div class="panel-mid">
+                    <h1>Every member,<br>a line in the ledger.</h1>
+                    <p>Add your details below and you'll be entered into the register — accurate records keep the fund trustworthy for everyone in it.</p>
+                </div>
+            </div>
+
+            <div>
+                <div class="ledger-entries">
+                    <div class="row"><span class="no">01</span> Identity &amp; contact</div>
+                    <div class="row"><span class="no">02</span> Residential address</div>
+                    <div class="row"><span class="no">03</span> Confirmation on file</div>
+                </div>
+            </div>
+
+            <div class="panel-foot">Kept confidential &middot; verified on submit</div>
+        </div>
+
+        <div class="form-side">
+
+            <h2>Create your account</h2>
+            <p class="lede">Takes about a minute. Fields marked are required.</p>
+
+            <form id="registerForm">
+
+                <div class="field">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="e.g. anjali.rao" required>
+                </div>
+
+                <div class="field">
+                    <label for="userpassword">Password</label>
+                    <input type="password" id="userpassword" placeholder="••••••••" required>
+                </div>
+
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+
+                <div class="field">
+                    <label for="phonenumber">Phone Number</label>
+                    <input type="text" id="phonenumber" placeholder="10-digit mobile number" required>
+                </div>
+
+                <div class="field row-2">
+                    <div>
+                        <label for="place">Place</label>
+                        <input type="text" id="place" placeholder="Town / City" required>
+                    </div>
+                    <div>
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" pattern="[0-9]{6}" inputmode="numeric" placeholder="6 digits" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="address">Address</label>
+                    <textarea id="address" rows="3" placeholder="House name, street, landmark" required></textarea>
+                </div>
+
+                <div class="actions">
+                    <button type="button" onclick="goBack()">Back</button>
+                    <button type="submit">Register</button>
+                </div>
+
+            </form>
+
+            <p id="message"></p>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function goBack() {
+            window.location.href = "Dashboard.html";
+        }
+
+        document.getElementById("registerForm").addEventListener("submit", async function (e) {
+
+            e.preventDefault();
+
+            const userData = {
+
+                user_name: document.getElementById("username").value,
+                user_password: document.getElementById("userpassword").value,
+                user_email: document.getElementById("email").value,
+                user_phone_number: document.getElementById("phonenumber").value,
+                user_place: document.getElementById("place").value,
+                user_pincode: document.getElementById("pincode").value,
+                user_address: document.getElementById("address").value,
+                user_admin: false,
+            };
+
+            try {
+
+                const response = await fetch("/api/NidhiWebsite/saveuser", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify(userData)
+
+                });
+
+                if (response.ok) {
+
+                    document.getElementById("message").innerHTML = "User Registered Successfully.";
+                    document.getElementById("message").style.color = "green";
+
+                    document.getElementById("registerForm").reset();
+
+                }
+                else {
+
+                    const error = await response.text();
+
+                    document.getElementById("message").innerHTML = error;
+                    document.getElementById("message").style.color = "red";
+
+                }
+
+            }
+            catch (err) {
+
+                document.getElementById("message").innerHTML = "Unable to connect to server.";
+                document.getElementById("message").style.color = "red";
+
+            }
+
+        });
+
+    </script>
+
+</body>
 </html>
+
+
