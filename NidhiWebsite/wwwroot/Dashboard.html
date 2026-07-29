@@ -195,6 +195,157 @@
             color: var(--teal-deep);
         }
 
+
+        /*Popup section*/
+
+        /* ============================= */
+        /* Login Popup */
+        /* ============================= */
+
+        .login-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 40, 38, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-popup {
+            position: relative;
+            width: 90%;
+            max-width: 420px;
+            background: var(--cream);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(7, 40, 38, 0.4);
+            animation: popupShow 0.3s ease;
+        }
+
+        /* Popup Animation */
+
+        @keyframes popupShow {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Close Button */
+
+        .login-popup-close {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--teal-deep);
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .login-popup-close:hover {
+                background: var(--sage);
+                color: var(--gold);
+            }
+
+        /* Icon */
+
+        .login-popup-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--teal);
+            color: var(--gold-bright);
+            font-size: 30px;
+            box-shadow: 0 5px 15px rgba(7, 40, 38, 0.25);
+        }
+
+        /* Heading */
+
+        .login-popup h2 {
+            font-family: 'Fraunces', serif;
+            color: var(--teal-deep);
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        /* Description */
+
+        .login-popup p {
+            color: #5F6B64;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Buttons Container */
+
+        .login-popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Login Button */
+
+        .popup-login-btn {
+            width: 100%;
+            background: var(--teal);
+            color: var(--cream);
+            border: 2px solid var(--teal);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .popup-login-btn:hover {
+                background: var(--teal-deep);
+                border-color: var(--teal-deep);
+            }
+
+        /* Register Button */
+
+        .popup-register-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--teal);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .popup-register-btn:hover {
+                background: var(--gold);
+                color: white;
+            }
         /* ============================= /
         / Carousel Section /
         / ============================= */
@@ -419,13 +570,13 @@
 
                 </div>
 
-                <div class="wishlist">
+                <div class="wishlist" onclick="LoginPopUp()">
                     ❤️
                     <br>
                     Wishlist
                 </div>
 
-                <div class="cart">
+                <div class="cart" onclick="LoginPopUp()">
                     🛒
                     <br>
                     Cart
@@ -434,6 +585,42 @@
             </div>
 
         </header>
+        <!-- Login Popup -->
+        <div id="loginPopup" class="login-popup-overlay">
+
+            <div class="login-popup">
+
+                <!-- Close Button -->
+                <button class="login-popup-close" onclick="closeLoginPopUp()">
+                    &times;
+                </button>
+
+                <div class="login-popup-icon">
+                    🔐
+                </div>
+
+                <h2>Login Required</h2>
+
+                <p>
+                    Please login to your account to access your
+                    Wishlist and Cart.
+                </p>
+
+                <div class="login-popup-buttons">
+
+                    <button class="popup-login-btn" onclick="goToLogin()">
+                        Login
+                    </button>
+
+                    <button class="popup-register-btn" onclick="goToRegister()">
+                        Create Account
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
 
         <main>
             <section class="carousel-section">
@@ -532,6 +719,24 @@
         }
         //#endregion Page Loading
 
+
+        function LoginPopUp() {
+            const userId = getCookie("userId");
+
+            if (userId) {
+                popup.style.display = "none";
+            }
+            else {
+                const popup = document.getElementById("loginPopup");
+                popup.style.display = "flex";
+            }
+        }
+
+        function closeLoginPopUp() {
+            const popup = document.getElementById("loginPopup");
+
+            popup.style.display = "none";
+        }
 
         const profileBtn = document.getElementById("profileBtn");
         const popup = document.getElementById("profilePopup");
