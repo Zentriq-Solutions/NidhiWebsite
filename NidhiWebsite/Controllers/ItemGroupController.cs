@@ -111,7 +111,6 @@ namespace NidhiWebsite.Controllers
                         productdata.item_group_description = data.item_group_description;
                         productdata.item_group_user_id = data.item_group_user_id;
                         productdata.item_group_row_date = DateTime.UtcNow;
-                        datacontext.Data_tbl_Item_group.Update(productdata);
                     }
                 }
                 datacontext.SaveChanges();
