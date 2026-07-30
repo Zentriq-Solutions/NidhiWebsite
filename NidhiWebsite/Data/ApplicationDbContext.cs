@@ -14,6 +14,7 @@ namespace NidhiWebsite.Data
         public DbSet<User> Data_tbl_User { get; set; }
         public DbSet<ProductModel> Data_tbl_Product { get; set; }
         public DbSet<ItemGroupModel> Data_tbl_Item_group { get; set; }
+        public DbSet<WishListModel> Data_tbl_Wish_list { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

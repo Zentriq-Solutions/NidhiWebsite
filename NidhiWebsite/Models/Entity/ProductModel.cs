@@ -20,7 +20,9 @@ namespace NidhiWebsite.Models.Entity
         [ForeignKey(nameof(product_user_id))]
         [ValidateNever]
         public virtual User Data_tbl_User { get; set; }
-
+        [ValidateNever]
+        public ICollection<WishListModel> Data_tbl_Wish_list { get; set; }
+    = new List<WishListModel>();
         public int product_item_group_id { get; set; }
 
         [ForeignKey(nameof(product_item_group_id))]
