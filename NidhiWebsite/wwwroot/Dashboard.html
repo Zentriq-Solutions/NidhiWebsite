@@ -1176,13 +1176,15 @@
             window.location.href = "AllItemGroup"
         }
 
-        function logout() {
-
+        async function logout() {
+            await fetch("/api/Product/ClearCache", {
+                method: "POST"
+            });
             deleteCookie("userId");
             deleteCookie("isAdmin");
-
+            sessionStorage.clear();
+            localStorage.clear();
             window.location.href = "dashboard";
-
         }
         function deleteCookie(name) {
 

@@ -170,5 +170,13 @@ namespace NidhiWebsite.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("ClearCache")]
+        public IActionResult ClearCache()
+        {
+            _cache.Remove("product_list");
+            _cache.Remove("itemGroups_list");
+            return Ok();
+        }
     }
 }

@@ -324,6 +324,9 @@
                 setCookie("userId", data.user_id);
                 setCookie("isAdmin", data.user_is_admin);
                 document.getElementById("message").innerHTML = "Login Successful";
+                await fetch("/api/Product/ClearCache", {
+                    method: "POST"
+                });
                 // Navigate to next page
                 window.location.href = "dashboard";
             } else {
