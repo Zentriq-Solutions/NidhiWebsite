@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.EntityFrameworkCore;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
 namespace NidhiWebsite.Controllers
@@ -18,6 +18,18 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
+                var alluser = datacontext.Data_tbl_User.AsNoTracking().
+                                 Where(l => l.user_id != 0).
+                                 Select(m => new
+                                 {
+                                     user_id = m.user_id,
+                                     user_name = m.user_name,
+                                     user_phone_number = m.user_phone_number,
+                                 });
+                if (alluser.Any(l => l.user_name == data.user_name && l.user_phone_number == data.user_phone_number/* l.product_id != product.product_id*/))
+                {
+                    return BadRequest("Name Already Exist");
+                }
                 data.user_password = BCrypt.Net.BCrypt.HashPassword(data.user_password);
                 var userdata = new User();
                 userdata = new User
