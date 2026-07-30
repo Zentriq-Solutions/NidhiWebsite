@@ -26,7 +26,14 @@ namespace NidhiWebsite.Models.Entity
     public class WishListForInitialLoadingModel
     {
         public int productid { get; set; }
-
+    }
+    public class Srvc_GetAllWishList_Model
+    {
+        public int ProductID { get; set; }
+        public string ProductName { get; set; }
+        public decimal ProductPrice { get; set; }
+        public int ProductUserId { get; set; }
+        public string ProductImage { get; set; }
     }
 
     public class CartModel
