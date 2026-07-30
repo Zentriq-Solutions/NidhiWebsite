@@ -28,7 +28,8 @@ namespace NidhiWebsite.Models.Entity
         public virtual ItemGroupModel Data_tbl_Item_group { get; set; }
         [NotMapped]
         public IFormFile ImageFile { get; set; }
-
+        public ICollection<WishListModel> Data_tbl_Wish_list { get; set; }
+            = new List<WishListModel>();
     }
 
     public class ProductForInitailloadingModel

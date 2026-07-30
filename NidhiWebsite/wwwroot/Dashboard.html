@@ -456,6 +456,7 @@
             margin-left: 15px;
             margin-right: 10px;
             border: 1px solid var(--sage-line);
+            position: relative;
         }
 
             .product-card:hover {
@@ -523,8 +524,33 @@
                 border-color: var(--gold);
                 box-shadow: 0 8px 20px rgba(7, 40, 38, 0.22);
             }
+        .wishlist-icon {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,.2);
+            z-index: 100;
+        }
 
-/*Featured Section*/
+            .wishlist-icon i {
+                color: #666;
+                font-size: 20px;
+                transition: .3s;
+            }
+
+            .wishlist-icon:hover i {
+                color: red;
+            }
+
+        /*Featured Section*/
         .section-p1 {
             padding: 40px 80px;
         }
@@ -847,8 +873,8 @@
             <section class="itemgroupwisedata">
             </section>
             <div id="productContainer"></div>
-            
-            <!--Featured Section--> 
+
+            <!--Featured Section-->
             <section id="product1" class="section-p1">
                 <h2>Featured Products</h2>
                 <p>New & Modern Designs for You</p>
@@ -925,6 +951,7 @@
         </main>
     </div>
     <script>
+        let wishlistProducts = [];
         //#region Page Loading
         document.addEventListener("DOMContentLoaded", async function () {
             const pageLoader = document.getElementById("pageLoader");
@@ -933,6 +960,7 @@
             try {
                 await Promise.all([
                     loadItemGroups(),
+                    loadWishList(),
                     loadProducts()
                 ]);
             } catch (error) {
@@ -987,15 +1015,23 @@
                     }
 
                     products.forEach(product => {
+                        const isWishListed = wishlistProducts.some(
+                            x => x.productid === product.productid);
                         container.innerHTML += `
-                            <div class="product-card">
-                                <img src="${product.image}" alt="Product Image">
-                                <div class="card-body">
-                                    <div class="product-name">${product.name}</div>
-                                    <div class="product-price">₹ ${product.price}</div>
-                                </div>
+                                <div class="product-card">
+                                <div class="wishlist-icon"
+                                 onclick="addToWishlist(${product.productid}, this)">
+                                <i class="${isWishListed ? 'fa-solid' : 'fa-regular'} fa-heart"
+                                   style="color:${isWishListed ? 'red' : '#666'}">
+                                </i>
                             </div>
-                        `;
+                                    <img src="${product.image}" alt="Product Image">
+                                    <div class="card-body">
+                                        <div class="product-name">${product.name}</div>
+                                        <div class="product-price">₹ ${product.price}</div>
+                                    </div>
+                                </div>
+                            `;
                     });
                 })
                 .catch(error => {
@@ -1004,7 +1040,92 @@
                     container.innerHTML = "<p>Unable to load products.</p>";
                 });
         }
+        async function loadWishList() {
+
+            const userId = getCookie("userId");
+
+            if (!userId) return;
+
+            try {
+
+                const response = await fetch(`/api/Customer/GetWishList?userId=${userId}`);
+
+                if (!response.ok) {
+                    throw new Error("Unable to load wishlist");
+                }
+
+                wishlistProducts = await response.json();
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+            }
+        }
         //#endregion Page Loading
+        
+        async function addToWishlist(productId, element) {
+
+            const userId = getCookie("userId");
+
+            if (!userId) {
+                LoginPopUp();
+                return;
+            }
+
+            const icon = element.querySelector("i");
+            const isWishListed = icon.classList.contains("fa-solid");
+
+            try {
+
+                let url = "";
+                let method = "POST";
+
+                if (!isWishListed) {
+
+                    // Add to Wishlist
+                    url = `/api/Customer/SaveWishList?userId=${userId}&productId=${productId}`;
+
+                } else {
+
+                    // Remove from Wishlist
+                    url = `/api/Customer/WishListRemove?userId=${userId}&productId=${productId}`;
+
+                }
+
+                const response = await fetch(url, {
+                    method: method
+                });
+
+                if (!response.ok) {
+                    throw new Error("Operation failed");
+                }
+
+                if (!isWishListed) {
+
+                    // Heart Red
+                    icon.classList.remove("fa-regular");
+                    icon.classList.add("fa-solid");
+                    icon.style.color = "red";
+
+                } else {
+
+                    // Heart Normal
+                    icon.classList.remove("fa-solid");
+                    icon.classList.add("fa-regular");
+                    icon.style.color = "#666";
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(error);
+                alert("Unable to update wishlist");
+
+            }
+        }
 
 
         function LoginPopUp() {

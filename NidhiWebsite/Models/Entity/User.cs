@@ -19,6 +19,8 @@ namespace NidhiWebsite.Models.Entity
         = new List<ProductModel>();
         public ICollection<ItemGroupModel> Data_tbl_Item_group { get; set; }
             = new List<ItemGroupModel>();
+        public ICollection<WishListModel> Data_tbl_Wish_list { get; set; }
+            = new List<WishListModel>();
 
     }
 }
