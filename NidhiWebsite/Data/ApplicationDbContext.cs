@@ -36,6 +36,19 @@ namespace NidhiWebsite.Data
                 .WithOne(p => p.Data_tbl_Item_group)
                 .HasForeignKey(p => p.product_item_group_id)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<WishListModel>()
+                .HasOne(w => w.Data_tbl_User)
+                .WithMany(u => u.Data_tbl_Wish_list)
+                .HasForeignKey(w => w.wishlist_user_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<WishListModel>()
+                .HasOne(w => w.Data_tbl_Product)
+                .WithMany(p => p.Data_tbl_Wish_list)
+                .HasForeignKey(w => w.wishlist_product_id)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
     }
