@@ -28,4 +28,23 @@ namespace NidhiWebsite.Models.Entity
         public int productid { get; set; }
 
     }
+
+    public class CartModel
+    {
+        [Key]
+        public int cart_id { get; set; }
+        public DateTime cart_row_date { get; set; }
+
+        public int cart_user_id { get; set; }
+
+        [ForeignKey(nameof(cart_user_id))]
+        [ValidateNever]
+        public virtual User Data_tbl_User { get; set; }
+
+        public int cart_product_id { get; set; }
+
+        [ForeignKey(nameof(cart_product_id))]
+        [ValidateNever]
+        public virtual ProductModel Data_tbl_Product { get; set; }
+    }
 }

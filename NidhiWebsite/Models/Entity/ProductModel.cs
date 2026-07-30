@@ -30,6 +30,8 @@ namespace NidhiWebsite.Models.Entity
         public IFormFile ImageFile { get; set; }
         public ICollection<WishListModel> Data_tbl_Wish_list { get; set; }
             = new List<WishListModel>();
+        public ICollection<CartModel> Data_tbl_Cart { get; set; }
+            = new List<CartModel>();
     }
 
     public class ProductForInitailloadingModel

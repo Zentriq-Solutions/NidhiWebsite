@@ -19,6 +19,7 @@ namespace NidhiWebsite.Controllers
             datacontext = context;
             _cache = cache;
         }
+        #region WishListApis
         [HttpGet("GetWishList")]
         public  IActionResult GetWishList(int userId)
         {
@@ -86,5 +87,56 @@ namespace NidhiWebsite.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
+
+        #region Cart Apis
+        [HttpPost("SaveCart")]
+        public IActionResult SaveCart(int userId, int productId)
+        {
+            try
+            {
+                var exists = datacontext.Data_tbl_Cart
+                    .Any(x => x.cart_user_id == userId &&
+                              x.cart_product_id == productId);
+                if (exists)
+                {
+                    return Ok("Already  Exist");
+                }
+                CartModel cart = new CartModel
+                {
+                    cart_user_id = userId,
+                    cart_product_id = productId,
+                    cart_row_date = DateTime.UtcNow
+                };
+                datacontext.Data_tbl_Cart.Add(cart);
+                datacontext.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("CartRemove")]
+        public IActionResult RemoveCart(int cartid)
+        {
+            try
+            {
+                var exists = datacontext.Data_tbl_Cart
+                    .FirstOrDefault(x => x.cart_id == cartid);
+                if (exists != null)
+                {
+                    datacontext.Data_tbl_Cart.Remove(exists);
+                }
+                datacontext.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
     }
 }
