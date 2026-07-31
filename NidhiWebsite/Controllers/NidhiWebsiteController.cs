@@ -14,7 +14,7 @@ namespace NidhiWebsite.Controllers
             this.datacontext = datacontext;
         }
         [HttpPost("saveuser")]
-        public IActionResult savevouchertypeitems(User data)
+        public IActionResult savecustomer(User data)
         {
             try
             {
