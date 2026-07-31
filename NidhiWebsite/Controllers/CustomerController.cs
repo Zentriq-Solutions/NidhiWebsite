@@ -159,6 +159,28 @@ namespace NidhiWebsite.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("GetAllCartItems")]
+        public IActionResult GetAllGetAllCartItemsWishList(int userId)
+        {
+            try
+            {
+                var path = "/Upload/";
+                var wishlistdata = datacontext.Data_tbl_Cart.AsNoTracking()
+                  .Where(w => w.cart_user_id == userId)
+                  .Select(m => new Srvc_GetAllCartItems_Model
+                  {
+                      ProductID = m.cart_product_id,
+                      ProductName = m.Data_tbl_Product.product_name,
+                      ProductImage = path + m.Data_tbl_Product.product_image,
+                      ProductPrice = m.Data_tbl_Product.product_price,
+                  }).ToList();
+                return Ok(wishlistdata);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         #endregion
     }
 }

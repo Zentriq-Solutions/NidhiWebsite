@@ -54,4 +54,13 @@ namespace NidhiWebsite.Models.Entity
         [ValidateNever]
         public virtual ProductModel Data_tbl_Product { get; set; }
     }
+
+    public class Srvc_GetAllCartItems_Model
+    {
+        public int ProductID { get; set; }
+        public string ProductName { get; set; }
+        public decimal ProductPrice { get; set; }
+        public string ProductImage { get; set; }
+    }
+
 }
