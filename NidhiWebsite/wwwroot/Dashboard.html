@@ -1018,7 +1018,7 @@
                         const isWishListed = wishlistProducts.some(
                             x => x.productid === product.productid);
                         container.innerHTML += `
-                                <div class="product-card">
+                                <div class="product-card" onclick="openProductDetails(${product.productid})">
                                 <div class="wishlist-icon"
                                  onclick="addToWishlist(${product.productid}, this)">
                                 <i class="${isWishListed ? 'fa-solid' : 'fa-regular'} fa-heart"
@@ -1125,6 +1125,13 @@
                 alert("Unable to update wishlist");
 
             }
+        }
+
+        async function openProductDetails(productId) {
+
+            window.location.href =
+                `ProductDetails?productId=${productId}`;
+
         }
 
 

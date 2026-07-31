@@ -178,5 +178,37 @@ namespace NidhiWebsite.Controllers
             _cache.Remove("itemGroups_list");
             return Ok();
         }
+
+        [HttpGet("GetProductById")]
+        public IActionResult GetProductById(int productId)
+        {
+            try
+            {
+                var path = "/Upload/";
+
+                var product = datacontext.Data_tbl_Product.AsNoTracking()
+                    .Where(p => p.product_id == productId)
+                    .Select(p => new
+                    {
+                        productid = p.product_id,
+                        name = p.product_name,
+                        price = p.product_price,
+                        description = p.product_description,
+                        code = p.product_code,
+                        image = path + p.product_image
+                    }).FirstOrDefault();
+
+                if (product == null)
+                {
+                    return NotFound(new{message = "Product not found"});
+                }
+
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new{message = ex.Message});
+            }
+        }
     }
 }
