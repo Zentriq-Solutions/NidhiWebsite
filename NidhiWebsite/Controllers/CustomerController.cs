@@ -119,9 +119,7 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var exists = datacontext.Data_tbl_Cart
-                    .Any(x => x.cart_user_id == userId &&
-                              x.cart_product_id == productId);
+                var exists = datacontext.Data_tbl_Cart.Any(x => x.cart_user_id == userId &&x.cart_product_id == productId);
                 if (exists)
                 {
                     return Ok("Already  Exist");
@@ -134,7 +132,7 @@ namespace NidhiWebsite.Controllers
                 };
                 datacontext.Data_tbl_Cart.Add(cart);
                 datacontext.SaveChanges();
-                return Ok();
+                return Ok("Product added to cart");
             }
             catch (Exception ex)
             {

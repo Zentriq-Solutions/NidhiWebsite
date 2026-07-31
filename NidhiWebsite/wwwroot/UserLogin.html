@@ -327,7 +327,6 @@
                 await fetch("/api/Product/ClearCache", {
                     method: "POST"
                 });
-                // Navigate to next page
                 window.location.href = "dashboard";
             } else {
                 document.getElementById("message").innerHTML = "Invalid Username or Password";

@@ -370,6 +370,14 @@
                 width: 100%;
             }
         }
+
+        .cart-message {
+            margin-top: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--teal);
+            min-height: 20px;
+        }
     </style>
 
 </head>
@@ -480,9 +488,10 @@
 
 
             </div>
-
+            <div id="cartMessage" class="cart-message"></div>
 
         </div>
+
 
     </div>
 
@@ -496,6 +505,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get("productId");
+        const userId = getCookie("userId")
         // ============================================
         // CHECK PRODUCT ID
         // ============================================
@@ -521,8 +531,7 @@
 
             try {
                 // Call your API
-                const response = await fetch(
-                    `/api/Product/GetProductById?productId=${productId}`);
+                const response = await fetch(`/api/Product/GetProductById?productId=${productId}`);
 
                 if (!response.ok) {
 
@@ -546,29 +555,17 @@
 
             }
             catch (error) {
-
-                console.error(
-                    "Error loading product:",
-                    error
-                );
-
                 alert("Product not found");
-
                 window.location.href = "dashboard";
             }
         }
-        // ============================================
-        // CALL LOAD FUNCTION
-        // ============================================
-
-
+       
         // ============================================
         // ADD TO CART
         // ============================================
 
-        function addToCart() {
+        async function addToCart() {
 
-            const userId =getCookie("userId");
 
             if (!userId) {
 
@@ -576,69 +573,51 @@
 
                 window.location.href ="UserLogin";
                 return;
-
             }
-
-            // Get product ID
-            const productId =window.selectedProduct.productid;
-
-            /*
-                Your Add To Cart API can be called here.
-
-                Example:
-
-                fetch("/api/Cart/AddToCart", {
+            
+            var response = await fetch(`/api/Customer/SaveCart?userId=${userId}&productId=${productId}`, {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        userId: userId,
-                        productId: productId
-                    })
-                });
-            */
-
-            alert("Product added to cart!");
+            });
+            if (!response.ok) {
+                throw new Error("Failed to add product to cart.");
+            }
+            const messageElement = document.getElementById("cartMessage");
+            const message = await response.text();
+            messageElement.textContent = message;
+            messageElement.style.color = "var(--success)";
+            setTimeout(() => {messageElement.textContent = "";}, 1000);
         }
         // ============================================
         // BUY NOW
         // ============================================
 
         function buyNow() {
-
-            const userId =getCookie("userId");
-
             if (!userId) {
 
                 alert("Please login to buy this product.");
                 window.location.href ="UserLogin";
                 return;
-
             }
-
             alert("Buy Now clicked!");
-
         }
-
-        // ============================================
         // GET COOKIE
-        // ============================================
-
         function getCookie(name) {
 
-            const cookies =document.cookie.split(";");
+            const cookies = document.cookie.split(";");
 
             for (let cookie of cookies) {
 
-                cookie =cookie.trim();
+                cookie = cookie.trim();
 
-                if (cookie.startsWith(name + "="))
-                {
+                if (cookie.startsWith(name + "=")) {
+
                     return decodeURIComponent(cookie.substring(name.length + 1));
                 }
+
             }
+
             return null;
+
         }
     </script>
 </body>
