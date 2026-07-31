@@ -180,7 +180,7 @@ namespace NidhiWebsite.Controllers
         }
 
         [HttpGet("GetProductById")]
-        public IActionResult GetProductById(int productId)
+        public IActionResult GetProductById(int productId,int userId)
         {
             try
             {
@@ -195,8 +195,10 @@ namespace NidhiWebsite.Controllers
                         price = p.product_price,
                         description = p.product_description,
                         code = p.product_code,
-                        image = path + p.product_image
-                    }).FirstOrDefault();
+                        image = path + p.product_image,
+                        iscartitem=p.Data_tbl_Cart.Any(c => c.cart_user_id == userId && c.cart_product_id == productId)
+
+            }).FirstOrDefault();
 
                 if (product == null)
                 {

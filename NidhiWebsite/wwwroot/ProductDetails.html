@@ -465,26 +465,18 @@
 
             <div class="product-buttons">
 
+                <button id="cartButton" class="add-cart-btn" onclick="cartAction()">
+                   <i id="cartIcon" class="fa-solid fa-cart-shopping"></i> <span id="cartButtonText"> Add to Cart </span>
+                    </button>
 
-                <button class="add-cart-btn"
-                        onclick="addToCart()">
+                    <button class="buy-now-btn"
+                            onclick="buyNow()">
 
-                    <i class="fa-solid fa-cart-shopping"></i>
+                        <i class="fa-solid fa-bolt"></i>
 
-                    Add to Cart
+                        Buy Now
 
-                </button>
-
-
-
-                <button class="buy-now-btn"
-                        onclick="buyNow()">
-
-                    <i class="fa-solid fa-bolt"></i>
-
-                    Buy Now
-
-                </button>
+                    </button>
 
 
             </div>
@@ -531,7 +523,7 @@
 
             try {
                 // Call your API
-                const response = await fetch(`/api/Product/GetProductById?productId=${productId}`);
+                const response = await fetch(`/api/Product/GetProductById?productId=${productId}&userId=${userId}`);
 
                 if (!response.ok) {
 
@@ -552,14 +544,14 @@
                 document.getElementById("productCode").textContent =product.code ||product.productid;
                 // Store product for buttons
                 window.selectedProduct = product;
-
+                updateCartButton(product.iscartitem);
             }
             catch (error) {
                 alert("Product not found");
                 window.location.href = "dashboard";
             }
         }
-       
+
         // ============================================
         // ADD TO CART
         // ============================================
@@ -585,7 +577,70 @@
             const message = await response.text();
             messageElement.textContent = message;
             messageElement.style.color = "var(--success)";
+            window.selectedProduct.iscartitem = true;
+            updateCartButton(true);
             setTimeout(() => {messageElement.textContent = "";}, 1000);
+        }
+
+        async function removeFromCart() {
+            try {
+                const response = await fetch(`/api/Customer/CartRemove?userid=${userId}&productid=${productId}`,
+                    {
+                        method: "POST"
+                    });
+                if (!response.ok) {
+                    throw new Error("Failed to remove product from cart.");
+                }
+                window.selectedProduct.iscartitem = false;
+                updateCartButton(false);
+                const messageElement = document.getElementById("cartMessage");
+                messageElement.textContent = "Product removed from cart";
+                messageElement.style.color = "var(--success)";
+                setTimeout(() =>
+                {
+                    messageElement.textContent = "";
+                }, 1000);
+            }
+            catch (error)
+            {
+                alert(error.message);
+            }
+        }
+
+        function updateCartButton(isInCart)
+        {
+            const icon = document.getElementById("cartIcon");
+            const text = document.getElementById("cartButtonText");
+            if (isInCart)
+            { 
+                text.textContent = "Remove";
+                icon.className = "fa-solid fa-trash";
+            }  
+            else
+            {
+                text.textContent = "Add to Cart";
+                icon.className = "fa-solid fa-cart-shopping";
+            }
+        }
+        async function cartAction()
+        {
+            if (!userId) {
+                alert("Please login to manage your cart.");
+                window.location.href = "UserLogin";
+                return;
+            }
+            if (!window.selectedProduct) {
+                alert("Product details are not loaded.");
+                return;
+            }
+            if (window.selectedProduct.iscartitem)
+            {
+                await removeFromCart();
+            }
+            else
+            {
+                await addToCart();
+            }
         }
         // ============================================
         // BUY NOW

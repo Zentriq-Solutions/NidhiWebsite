@@ -141,12 +141,12 @@ namespace NidhiWebsite.Controllers
         }
 
         [HttpPost("CartRemove")]
-        public IActionResult RemoveCart(int cartid)
+        public IActionResult RemoveCart(int userId,int productId)
         {
             try
             {
                 var exists = datacontext.Data_tbl_Cart
-                    .FirstOrDefault(x => x.cart_id == cartid);
+                    .FirstOrDefault(x => (x.cart_user_id == userId) && (x.cart_product_id==productId));
                 if (exists != null)
                 {
                     datacontext.Data_tbl_Cart.Remove(exists);
