@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
+using System.Reflection.Metadata;
 
 namespace NidhiWebsite.Controllers
 {
@@ -222,6 +223,32 @@ namespace NidhiWebsite.Controllers
                                       }).ToList();
                   
                 return Ok(productdata);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("GetProductByIdForAdmin")]
+        public IActionResult GetProductByIdForAdmin(int productId)
+        {
+            try
+            {
+                var itemgroup = datacontext.Data_tbl_Product.AsNoTracking().
+                                Where(l => l.product_id == productId).
+                                Select(m => new
+                                {
+                                    product_id = m.product_id,
+                                    product_name = m.product_name,
+                                    product_code = m.product_code,
+                                    product_price = m.product_price,
+                                    product_description = m.product_description,
+                                    product_image = m.product_image,
+                                    product_item_group_id=m.product_item_group_id,
+                                    product_item_group_name=m.Data_tbl_Item_group.item_group_name,
+            }).FirstOrDefault();
+                return Ok(itemgroup);
             }
             catch (Exception ex)
             {
