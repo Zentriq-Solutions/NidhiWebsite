@@ -171,14 +171,6 @@ namespace NidhiWebsite.Controllers
             }
         }
 
-        [HttpPost("ClearCache")]
-        public IActionResult ClearCache()
-        {
-            _cache.Remove("product_list");
-            _cache.Remove("itemGroups_list");
-            return Ok();
-        }
-
         [HttpGet("GetProductById")]
         public IActionResult GetProductById(int productId,int userId)
         {

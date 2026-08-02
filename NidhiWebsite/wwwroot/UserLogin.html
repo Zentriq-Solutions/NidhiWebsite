@@ -285,11 +285,8 @@
 
     <script>
         // Create Cookie
-        function setCookie(name, value, hours = 1) {
-            const date = new Date();
-            date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
-            document.cookie =
-                `${name}=${encodeURIComponent(value)};expires=${date.toUTCString()};path=/`;
+        function setCookie(name, value) {
+            document.cookie =`${name}=${encodeURIComponent(value)};path=/`;
         }
         // Read Cookie
         function getCookie(name) {
@@ -324,9 +321,6 @@
                 setCookie("userId", data.user_id);
                 setCookie("isAdmin", data.user_is_admin);
                 document.getElementById("message").innerHTML = "Login Successful";
-                await fetch("/api/Product/ClearCache", {
-                    method: "POST"
-                });
                 window.location.href = "dashboard";
             } else {
                 document.getElementById("message").innerHTML = "Invalid Username or Password";

@@ -160,7 +160,7 @@ namespace NidhiWebsite.Controllers
             }
         }
         [HttpGet("GetAllCartItems")]
-        public IActionResult GetAllGetAllCartItemsWishList(int userId)
+        public IActionResult GetAllGetAllCartItems(int userId)
         {
             try
             {

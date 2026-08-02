@@ -960,9 +960,9 @@
             try {
                 await Promise.all([
                     loadItemGroups(),
-                    loadWishList(),
-                    loadProducts()
+                    loadWishList()   // must finish BEFORE loadProducts runs
                 ]);
+                await loadProducts();
             } catch (error) {
                 console.error("Error loading page data:", error);
             } finally {
@@ -1184,10 +1184,8 @@
             window.location.href = "AllItemGroup"
         }
 
-        async function logout() {
-            await fetch("/api/Product/ClearCache", {
-                method: "POST"
-            });
+        async function logout()
+        {
             deleteCookie("userId");
             deleteCookie("isAdmin");
             sessionStorage.clear();
