@@ -204,5 +204,29 @@ namespace NidhiWebsite.Controllers
                 return StatusCode(500, new{message = ex.Message});
             }
         }
+
+        [HttpGet("GetAllProduct")]
+        public IActionResult GetAllProduct()
+        {
+            try
+            {
+                   var productdata = datacontext.Data_tbl_Product.AsNoTracking().
+                        Where(l => l.product_id != 0).
+                                      Select(m => new
+                                      {
+                                          productid = m.product_id,
+                                          name = m.product_name,
+                                          code=m.product_code,
+                                          description=m.product_description,
+                                          price = m.product_price,
+                                      }).ToList();
+                  
+                return Ok(productdata);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

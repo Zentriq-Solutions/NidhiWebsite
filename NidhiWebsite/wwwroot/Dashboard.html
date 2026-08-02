@@ -802,6 +802,8 @@
 
                         <button id="AllItemGroup" onclick="goToAllItemGroup()">Created Item Group</button>
 
+                        <button id="AllItem" onclick="goToAllItem()">Created Item</button>
+
                         <button id="logoutBtn" onclick="logout()">Logout</button>
 
                     </div>
@@ -1176,7 +1178,9 @@
         function goToAllItemGroup() {
             window.location.href = "AllItemGroup"
         }
-
+        function goToAllItem() {
+            window.location.href = "AllItem"
+        }
         async function logout()
         {
             deleteCookie("userId");
@@ -1240,12 +1244,14 @@
                 Additem.style.display = "block";
                 AllItemGroup.style.display = "block";
                 Additemgroup.style.display = "block";
+                AllItem.style.display = "block";
 
             }
             else {
                 Additem.style.display = "none";
                 AllItemGroup.style.display = "none";
                 Additemgroup.style.display = "none";
+                AllItem.style.display = "none";
             }
 
         }
@@ -1258,6 +1264,7 @@
             Additem.style.display = "none";
             AllItemGroup.style.display = "none";
             Additemgroup.style.display = "none";
+            AllItem.style.display = "none";
         }
 
         // Check Admin
@@ -1271,7 +1278,7 @@
             console.log("Normal User");
 
         }
-
+        
 
         /* ============================= */
         /* Carousel JavaScript */
