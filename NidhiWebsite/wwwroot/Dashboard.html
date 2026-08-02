@@ -814,11 +814,11 @@
                     Wishlist
                 </div>
 
-                <div class="cart" onclick="LoginPopUp()">
-                    🛒
-                    <br>
-                    Cart
-                </div>
+                <div class="cart" onclick="goToCart()">
+    🛒
+    <br>
+    Cart
+</div>
 
             </div>
 
@@ -1137,15 +1137,8 @@
 
 
         function LoginPopUp() {
-            const userId = getCookie("userId");
-
-            if (userId) {
-                popup.style.display = "none";
-            }
-            else {
-                const popup = document.getElementById("loginPopup");
-                popup.style.display = "flex";
-            }
+            const popup = document.getElementById("loginPopup");
+            popup.style.display = "flex";
         }
 
         function closeLoginPopUp() {
@@ -1205,7 +1198,14 @@
         function goToRegister() {
             window.location.href = "UserRegister";
         }
-
+        function goToCart() {
+            const userId = getCookie("userId");
+            if (userId) {
+                window.location.href = "CartItemDetails";
+            } else {
+                LoginPopUp();
+            }
+        }
 
         function getCookie(name) {
 
