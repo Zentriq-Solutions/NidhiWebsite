@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
 using System.Reflection.Metadata;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NidhiWebsite.Controllers
 {
@@ -93,20 +94,38 @@ namespace NidhiWebsite.Controllers
                 }
 
                 var productdata = new ProductModel();
-                productdata = new ProductModel
+                if (product.product_id == 0)
                 {
-                    product_name = product.product_name,
-                    product_code = product.product_code,
-                    product_image = product.product_image,
-                    product_price = product.product_price,
-                    product_description = product.product_description,
-                    product_user_id = product.product_user_id,
-                    product_created_date = DateTime.UtcNow,
-                    product_row_date = DateTime.UtcNow,
-                    product_item_group_id = product.product_item_group_id,
-                };
-                datacontext.Data_tbl_Product.Add(productdata);
-                datacontext.SaveChanges();
+                    productdata = new ProductModel
+                    {
+                        product_name = product.product_name,
+                        product_code = product.product_code,
+                        product_image = product.product_image,
+                        product_price = product.product_price,
+                        product_description = product.product_description,
+                        product_user_id = product.product_user_id,
+                        product_created_date = DateTime.UtcNow,
+                        product_row_date = DateTime.UtcNow,
+                        product_item_group_id = product.product_item_group_id,
+                    };
+                    datacontext.Data_tbl_Product.Add(productdata);
+                }
+                else
+                {
+                    productdata = datacontext.Data_tbl_Product.FirstOrDefault(m => m.product_id == product.product_id);
+                    if (productdata != null)
+                    {
+                        productdata.product_name = product.product_name;
+                        productdata.product_code = product.product_code;
+                        productdata.product_image = product.product_image;
+                        productdata.product_price = product.product_price;
+                        productdata.product_description = product.product_description;
+                        productdata.product_user_id = product.product_user_id;
+                        productdata.product_row_date = DateTime.UtcNow;
+                        productdata.product_item_group_id = product.product_item_group_id;
+                    }
+                }
+                    datacontext.SaveChanges();
                 _cache.Remove("product_list");
                 return true;
             }
