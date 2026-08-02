@@ -103,147 +103,334 @@
            PAGE TITLE
         ========================= */
 
-        
-        /* Product Container (Cart Grid) */
-        .product-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        /* Main Layout */
+
+        .product-card {
+            display: flex;
+            align-items: center;
             gap: 25px;
-            padding: 30px;
-            max-width: 1200px;
-            margin: 0 auto 60px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all .25s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
         }
 
+            .product-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0,0,0,.10);
+            }
+        .product-image {
+            width: 170px;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #f7f7f7;
+            border: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .product-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 170px;
+        }
+
+        .product-name {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            color: var(--teal-deep);
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 18px;
+        }
+
+        .product-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .add-cart-btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--teal);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+            .add-cart-btn:hover {
+                background: var(--gold);
+                color: #fff;
+            }
+
+        .cart-page {
+            max-width: 1400px;
+            margin: 30px auto;
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            padding: 0 25px;
+        }
+
+        /* Left Side */
+
+        .cart-products {
+            flex: 3;
+        }
+
+        /* Right Side */
+
+        .cart-summary {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.08);
+        }
+
+            .cart-summary h3 {
+                margin-bottom: 20px;
+                color: var(--teal);
+                font-family: 'Fraunces',serif;
+            }
 
         /* Product Card */
 
         .product-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(7, 40, 38, 0.12);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 12px;
             border: 1px solid var(--sage-line);
         }
 
-
-            .product-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 24px rgba(7, 40, 38, 0.2);
-            }
-
-
-        /* Product Image */
-
         .product-image {
-            width: 100%;
-            height: 240px;
+            width: 180px;
+            height: 180px;
             object-fit: cover;
-            display: block;
-            background: var(--sage);
+            border-radius: 10px;
         }
-
-
-        /* Product Details */
 
         .product-details {
-            padding: 18px 20px 20px;
-        }
-
-
-        .product-name {
-            font-family: 'Fraunces', serif;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--teal-deep);
-            margin-bottom: 8px;
-        }
-
-
-        .product-price {
-            font-size: 19px;
-            font-weight: bold;
-            color: var(--success);
-            margin-bottom: 16px;
-        }
-
-
-        /* =========================
-           BUTTONS
-        ========================= */
-
-        .product-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-
-        .add-cart-btn,
-        .buy-now-btn {
             flex: 1;
-            padding: 11px 14px;
+        }
+
+        .summary-row,
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .summary-total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--gold);
+            color: #fff;
+            border: none;
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            font-size: 16px;
+            font-weight: 600;
         }
 
+        /* ==========================
+   Tablet (<=992px)
+========================== */
 
-        .add-cart-btn {
-            background: transparent;
-            color: var(--teal);
-            border: 2px solid var(--gold);
-        }
+        @media (max-width:992px) {
 
-
-            .add-cart-btn:hover {
-                background: var(--gold);
-                color: white;
+            .cart-page {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
             }
 
+            .cart-products,
+            .cart-summary {
+                width: 100%;
+            }
 
-        .buy-now-btn {
-            background: var(--teal);
-            color: white;
-            border: 2px solid var(--teal);
+            .cart-summary {
+                position: static;
+                order: 2;
+            }
+
+            .product-card {
+                gap: 18px;
+            }
+
+            .product-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .product-name {
+                font-size: 22px;
+            }
+
+            .product-price {
+                font-size: 24px;
+            }
         }
 
 
-            .buy-now-btn:hover {
-                background: var(--teal-deep);
-            }
+        /* ==========================
+   Mobile (<=768px)
+========================== */
 
-
-        /* No Products */
-
-        .no-products {
-            text-align: center;
-            padding: 80px 20px;
-            font-size: 18px;
-            color: #7C8880;
-            grid-column: 1 / -1;
-        }
-
-            .no-products i {
-                font-size: 44px;
-                color: var(--sage-line);
-                display: block;
-                margin-bottom: 16px;
-            }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 768px) {
+        @media (max-width:768px) {
 
             header {
                 padding: 15px 20px;
             }
 
-            .product-container {
-                padding: 20px;
+                header h2 {
+                    font-size: 18px;
+                }
+
+                header button {
+                    padding: 8px 15px;
+                    font-size: 13px;
+                }
+
+            .cart-page {
+                padding: 15px;
+            }
+
+            .product-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 18px;
+            }
+
+            .product-image {
+                width: 220px;
+                height: 220px;
+            }
+
+            .product-details {
+                width: 100%;
+            }
+
+            .product-name {
+                font-size: 20px;
+                margin-top: 10px;
+            }
+
+            .product-price {
+                font-size: 24px;
+                margin: 15px 0;
+            }
+
+            .product-buttons {
+                justify-content: center;
+            }
+
+            .add-cart-btn {
+                width: 100%;
+                padding: 12px;
+            }
+
+            .cart-summary {
+                padding: 18px;
+            }
+
+            .summary-row,
+            .summary-total {
+                font-size: 15px;
+            }
+
+            .summary-total {
+                font-size: 18px;
+            }
+
+            .place-order-btn {
+                width: 100%;
+            }
+        }
+
+
+        /* ==========================
+   Small Mobile (<=480px)
+========================== */
+
+        @media (max-width:480px) {
+
+            header {
+                padding: 12px 15px;
+            }
+
+                header h2 {
+                    font-size: 16px;
+                }
+
+                header button {
+                    padding: 7px 12px;
+                    font-size: 12px;
+                }
+
+            .cart-page {
+                padding: 10px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-image {
+                width: 170px;
+                height: 170px;
+            }
+
+            .product-name {
+                font-size: 18px;
+            }
+
+            .product-price {
+                font-size: 20px;
+            }
+
+            .cart-summary h3 {
+                font-size: 18px;
+            }
+
+            .summary-row,
+            .summary-total {
+                font-size: 14px;
+            }
+
+            .place-order-btn {
+                padding: 13px;
+                font-size: 15px;
             }
         }
     </style>
@@ -260,7 +447,35 @@
         <button onclick="goBack()">Dashboard</button>
     </header>
 
-    <div class="product-container" id="cartContainer"></div>
+    <div class="cart-page">
+
+        <!-- Left Side -->
+        <div id="cartContainer" class="cart-products"></div>
+
+        <!-- Right Side -->
+        <div class="cart-summary">
+
+            <h3>Price Details</h3>
+
+            <div class="summary-row">
+                <span>Total Amount</span>
+                <span id="totalAmount">₹0</span>
+            </div>
+
+            <hr>
+
+            <div class="summary-total">
+                <span>Total Payable</span>
+                <span id="finalAmount">₹0</span>
+            </div>
+
+            <button class="place-order-btn" onclick="placeOrder()">
+                PLACE ORDER
+            </button>
+
+        </div>
+
+    </div>
 
     <script>
 
@@ -339,9 +554,9 @@
                         `;
                     return;
                 }
-
+                let total = 0;
                 products.forEach(item => {
-
+                    total += Number(item.productPrice);
                     container.innerHTML += `
                             <div class="product-card">
 
@@ -364,13 +579,6 @@
                                             <i class="fa-solid fa-trash"></i>
                                             Remove
                                         </button>
-
-                                        <button class="buy-now-btn"
-                                                onclick="buyNow(${item.productID})">
-                                            <i class="fa-solid fa-bolt"></i>
-                                            Buy Now
-                                        </button>
-
                                     </div>
 
                                 </div>
@@ -378,6 +586,11 @@
                             </div>
                         `;
                 });
+                document.getElementById("totalAmount").innerHTML =
+                    "₹ " + total.toFixed(2);
+
+                document.getElementById("finalAmount").innerHTML =
+                    "₹ " + total.toFixed(2);
 
             }
             catch (err) {
@@ -385,7 +598,7 @@
                 container.innerHTML = "<div class='no-products'>Unable to load your cart.</div>";
             }
         }
-
+        
 
         // ============================================
         // REMOVE FROM CART

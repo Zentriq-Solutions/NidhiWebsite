@@ -142,6 +142,125 @@
                 transform: scale(1.1);
                 box-shadow: 0 8px 18px -6px rgba(201,162,39,.55);
             }
+
+        /* =========================
+   TABLE RESPONSIVE
+========================= */
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 14px;
+        }
+
+        /* Tablet */
+
+        @media (max-width: 992px) {
+
+            header {
+                padding: 16px 25px;
+            }
+
+                header h2 {
+                    font-size: 20px;
+                }
+
+            .container {
+                width: 96%;
+                margin: 25px auto;
+            }
+
+            table {
+                min-width: 850px;
+            }
+
+            th,
+            td {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+        }
+
+        /* Mobile */
+
+        @media (max-width: 768px) {
+
+            header {
+                padding: 14px 18px;
+            }
+
+                header h2 {
+                    font-size: 18px;
+                }
+
+                header button {
+                    padding: 8px 14px;
+                    font-size: 13px;
+                }
+
+            .container {
+                width: 98%;
+                margin: 18px auto;
+            }
+
+                .container > h2 {
+                    font-size: 20px;
+                }
+
+            table {
+                min-width: 750px;
+            }
+
+            th {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            td {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            .details-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+        }
+
+        /* Small Mobile */
+
+        @media (max-width: 480px) {
+
+            header {
+                padding: 12px;
+            }
+
+                header h2 {
+                    font-size: 16px;
+                }
+
+                header button {
+                    padding: 7px 12px;
+                    font-size: 12px;
+                }
+
+            table {
+                min-width: 700px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .details-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+            }
+        }
     </style>
 </head>
 
@@ -154,78 +273,78 @@
     </header>
 
     <div class="container">
-
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Item Name</th>
-                    <th>Item Code</th>
-                    <th>Description</th>
-                    <th>Price</th>
-
-                </tr>
-            </thead>
-
-            <tbody id="itemGroupBody">
-            </tbody>
-        </table>
-
-    </div>
-
-    <script>
-
-        function goBack() {
-            window.location.href = "dashboard";
-        }
-
-        window.onload = function () {
-            loadItemGroups();
-        }
-
-        function loadItemGroups() {
-
-            fetch("/api/Product/GetAllProduct")
-                .then(response => response.json())
-                .then(data => {
-
-                    const tbody = document.getElementById("itemGroupBody");
-
-                    tbody.innerHTML = "";
-
-                    data.forEach(item => {
-
-                        tbody.innerHTML += `
+        <div class="table-responsive">
+            <table>
+                <thead>
                     <tr>
-                        <td>${item.productid}</td>
-                        <td>${item.name}</td>
-                        <td>${item.code}</td>
-                        <td>${item.description}</td>
-                        <td>${item.price}</td>
-                        <td>
-            <button class="details-btn"
-                onclick="viewDetails(${item.productid})"
-                title="View Details">
-                👁️
-            </button>
-        </td>
-                    </tr>
-                `;
+                        <th>ID</th>
+                        <th>Item Name</th>
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Price</th>
 
+                    </tr>
+                </thead>
+
+                <tbody id="itemGroupBody">
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+        <script>
+
+            function goBack() {
+                window.location.href = "dashboard";
+            }
+
+            window.onload = function () {
+                loadItemGroups();
+            }
+
+            function loadItemGroups() {
+
+                fetch("/api/Product/GetAllProduct")
+                    .then(response => response.json())
+                    .then(data => {
+
+                        const tbody = document.getElementById("itemGroupBody");
+
+                        tbody.innerHTML = "";
+
+                        data.forEach(item => {
+
+                            tbody.innerHTML += `
+                            <tr>
+                                <td>${item.productid}</td>
+                                <td>${item.name}</td>
+                                <td>${item.code}</td>
+                                <td>${item.description}</td>
+                                <td>${item.price}</td>
+                                <td>
+                    <button class="details-btn"
+                        onclick="viewDetails(${item.productid})"
+                        title="View Details">
+                        👁️
+                    </button>
+                </td>
+                            </tr>
+                        `;
+
+                        });
+
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        alert("Unable to load Item Groups.");
                     });
 
-                })
-                .catch(error => {
-                    console.log(error);
-                    alert("Unable to load Item Groups.");
-                });
+            }
+            function viewDetails(id) {
+                window.location.href = "ProductCreation?id=" + id;
+            }
 
-        }
-        function viewDetails(id) {
-            window.location.href = "ProductCreation?id=" + id;
-        }
-
-    </script>
+        </script>
 
 </body>
 </html>
