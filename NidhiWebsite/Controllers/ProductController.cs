@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
-using System.Reflection.Metadata;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace NidhiWebsite.Controllers
 {
@@ -15,12 +13,32 @@ namespace NidhiWebsite.Controllers
         private readonly IWebHostEnvironment _environment;
         private readonly ApplicationDbContext datacontext;
         private readonly IMemoryCache _cache;
-        public ProductController(IWebHostEnvironment environment, ApplicationDbContext context,IMemoryCache cache)
+
+        // Centralize cache keys so you never typo one when invalidating
+        private const string ProductListCacheKey = "product_list";
+        private const string AllProductCacheKey = "all_product_list";
+        private const string ItemGroupCacheKey = "itemGroups_list";
+        private static string GroupWiseCacheKey(int groupId) => $"product_group_{groupId}";
+
+        public ProductController(IWebHostEnvironment environment, ApplicationDbContext context, IMemoryCache cache)
         {
             _environment = environment;
             datacontext = context;
-            _cache=cache;
+            _cache = cache;
         }
+
+        // ---------- Shared cache helper (avoids repeating the same TryGetValue/Set block everywhere) ----------
+        private async Task<T> GetOrSetCacheAsync<T>(string key, Func<Task<T>> factory, int minutes = 10)
+        {
+            if (_cache.TryGetValue(key, out T cached))
+                return cached;
+
+            var data = await factory();
+            var options = new MemoryCacheEntryOptions().SetAbsoluteExpiration(TimeSpan.FromMinutes(minutes));
+            _cache.Set(key, data, options);
+            return data;
+        }
+
         [HttpPost("AddProduct")]
         public async Task<IActionResult> Create(ProductModel product)
         {
@@ -28,42 +46,24 @@ namespace NidhiWebsite.Controllers
             {
                 if (product.ImageFile != null)
                 {
-                    // Create a unique filename
-                    string fileName = Guid.NewGuid().ToString() +
-                                      Path.GetExtension(product.ImageFile.FileName);
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(product.ImageFile.FileName);
+                    string uploadFolder = Path.Combine(_environment.WebRootPath, "Upload");
 
-                    // Path to Uploads folder
-                    string uploadFolder = Path.Combine(
-                        _environment.WebRootPath,
-                        "Upload");
-
-                    // Create folder if it doesn't exist
                     if (!Directory.Exists(uploadFolder))
-                    {
                         Directory.CreateDirectory(uploadFolder);
-                    }
 
-                    // Full path of the image
                     string filePath = Path.Combine(uploadFolder, fileName);
 
-                    // Save image to disk
                     using (FileStream stream = new FileStream(filePath, FileMode.Create))
                     {
                         await product.ImageFile.CopyToAsync(stream);
                     }
 
-                    // Save filename in database
                     product.product_image = fileName;
                 }
-                var issaved = SaveProduct(product);
-                if (issaved)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest();
-                }
+
+                var issaved = await SaveProductAsync(product);
+                return issaved ? Ok() : BadRequest();
             }
             catch (Exception ex)
             {
@@ -71,32 +71,21 @@ namespace NidhiWebsite.Controllers
             }
         }
 
-        private bool SaveProduct([FromForm] ProductModel product)
+        private async Task<bool> SaveProductAsync(ProductModel product)
         {
             try
             {
-                var allproduct = datacontext.Data_tbl_Product.AsNoTracking().
-                                 Where(l => l.product_id!= 0).
-                                 Select(m => new
-                                 {
-                                     product_id = m.product_id,
-                                     product_name = m.product_name,
-                                     product_code = m.product_code,
-                                 });
-                if (allproduct.Any(l => l.product_name == product.product_name && l.product_id!=product.product_id))
-                {
-                    return false;
-                }
+                // ONE query instead of two - checks both name and code duplication in a single round trip
+                bool isDuplicate = await datacontext.Data_tbl_Product.AsNoTracking()
+                    .Where(l => l.product_id != 0 && l.product_id != product.product_id)
+                    .AnyAsync(l => l.product_name == product.product_name || l.product_code == product.product_code);
 
-                if (allproduct.Any(l => l.product_code == product.product_code && l.product_id != product.product_id))
-                {
+                if (isDuplicate)
                     return false;
-                }
 
-                var productdata = new ProductModel();
                 if (product.product_id == 0)
                 {
-                    productdata = new ProductModel
+                    var productdata = new ProductModel
                     {
                         product_name = product.product_name,
                         product_code = product.product_code,
@@ -112,7 +101,7 @@ namespace NidhiWebsite.Controllers
                 }
                 else
                 {
-                    productdata = datacontext.Data_tbl_Product.FirstOrDefault(m => m.product_id == product.product_id);
+                    var productdata = await datacontext.Data_tbl_Product.FirstOrDefaultAsync(m => m.product_id == product.product_id);
                     if (productdata != null)
                     {
                         productdata.product_name = product.product_name;
@@ -125,8 +114,15 @@ namespace NidhiWebsite.Controllers
                         productdata.product_item_group_id = product.product_item_group_id;
                     }
                 }
-                    datacontext.SaveChanges();
-                _cache.Remove("product_list");
+
+                await datacontext.SaveChangesAsync();
+
+                // Invalidate every cache entry that could now be stale
+                _cache.Remove(ProductListCacheKey);
+                _cache.Remove(AllProductCacheKey);
+                //if (product.product_item_group_id.HasValue)
+                //    _cache.Remove(GroupWiseCacheKey(product.product_item_group_id.Value));
+
                 return true;
             }
             catch (Exception)
@@ -136,27 +132,27 @@ namespace NidhiWebsite.Controllers
         }
 
         [HttpGet("GetProduct")]
-        public IActionResult GetProduct()
+        public async Task<IActionResult> GetProduct()
         {
             try
-            { 
-                const string cacheKey = "product_list";
-                if (!_cache.TryGetValue(cacheKey, out List<ProductForInitailloadingModel> productdata))
+            {
+                var productdata = await GetOrSetCacheAsync(ProductListCacheKey, async () =>
                 {
-                    var path= "/Upload/";
-                productdata = datacontext.Data_tbl_Product.AsNoTracking().
-                    Where(l => l.product_id != 0).
-                                  Select(m => new ProductForInitailloadingModel
-                                  {
-                                      productid = m.product_id,
-                                      name = m.product_name,
-                                      image = path+ m.product_image,
-                                      price = m.product_price,
-                                  }).Take(12).ToList();
-                    var cacheOptions = new MemoryCacheEntryOptions()
-                           .SetAbsoluteExpiration(TimeSpan.FromMinutes(10));
-                    _cache.Set(cacheKey, productdata, cacheOptions);
-                }
+                    var path = "/Upload/";
+                    return await datacontext.Data_tbl_Product.AsNoTracking()
+                        .Where(l => l.product_id != 0)
+                        .OrderByDescending(m => m.product_id)
+                        .Select(m => new ProductForInitailloadingModel
+                        {
+                            productid = m.product_id,
+                            name = m.product_name,
+                            image = path + m.product_image,
+                            price = m.product_price,
+                        })
+                        .Take(12)
+                        .ToListAsync();
+                });
+
                 return Ok(productdata);
             }
             catch (Exception ex)
@@ -166,23 +162,27 @@ namespace NidhiWebsite.Controllers
         }
 
         [HttpGet("GetAllProductItemGroupWise")]
-        public IActionResult GetAllProductItemGroupWise(int itemgroupid)
+        public async Task<IActionResult> GetAllProductItemGroupWise(int itemgroupid)
         {
             try
             {
-                var path = "/Upload/";
-                var productdata = datacontext.Data_tbl_Product.AsNoTracking().
-                    Where(l =>( l.product_id != 0) &&
-                                l.product_item_group_id==itemgroupid).
-                                  Select(m => new
-                                  {
-                                      productid = m.product_id,
-                                      name = m.product_name,
-                                      code = m.product_code,
-                                      image = path + m.product_image,
-                                      price = m.product_price,
-                                      description = m.product_description,
-                                  }).ToArray();
+                var productdata = await GetOrSetCacheAsync(GroupWiseCacheKey(itemgroupid), async () =>
+                {
+                    var path = "/Upload/";
+                    return await datacontext.Data_tbl_Product.AsNoTracking()
+                        .Where(l => l.product_id != 0 && l.product_item_group_id == itemgroupid)
+                        .Select(m => new
+                        {
+                            productid = m.product_id,
+                            name = m.product_name,
+                            code = m.product_code,
+                            image = path + m.product_image,
+                            price = m.product_price,
+                            description = m.product_description,
+                        })
+                        .ToListAsync();
+                });
+
                 return Ok(productdata);
             }
             catch (Exception ex)
@@ -191,14 +191,15 @@ namespace NidhiWebsite.Controllers
             }
         }
 
+        // Not cached - result depends on the specific user's cart, so it's inherently per-request
         [HttpGet("GetProductById")]
-        public IActionResult GetProductById(int productId,int userId)
+        public async Task<IActionResult> GetProductById(int productId, int userId)
         {
             try
             {
                 var path = "/Upload/";
 
-                var product = datacontext.Data_tbl_Product.AsNoTracking()
+                var product = await datacontext.Data_tbl_Product.AsNoTracking()
                     .Where(p => p.product_id == productId)
                     .Select(p => new
                     {
@@ -208,39 +209,43 @@ namespace NidhiWebsite.Controllers
                         description = p.product_description,
                         code = p.product_code,
                         image = path + p.product_image,
-                        iscartitem=p.Data_tbl_Cart.Any(c => c.cart_user_id == userId && c.cart_product_id == productId)
-
-            }).FirstOrDefault();
+                        iscartitem = p.Data_tbl_Cart.Any(c => c.cart_user_id == userId && c.cart_product_id == productId)
+                    })
+                    .FirstOrDefaultAsync();
 
                 if (product == null)
-                {
-                    return NotFound(new{message = "Product not found"});
-                }
+                    return NotFound(new { message = "Product not found" });
 
                 return Ok(product);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new{message = ex.Message});
+                return StatusCode(500, new { message = ex.Message });
             }
         }
 
         [HttpGet("GetAllProduct")]
-        public IActionResult GetAllProduct()
+        public async Task<IActionResult> GetAllProduct()
         {
             try
             {
-                   var productdata = datacontext.Data_tbl_Product.AsNoTracking().
-                        Where(l => l.product_id != 0).
-                                      Select(m => new
-                                      {
-                                          productid = m.product_id,
-                                          name = m.product_name,
-                                          code=m.product_code,
-                                          description=m.product_description,
-                                          price = m.product_price,
-                                      }).ToList();
-                  
+                // This was completely uncached and unbounded - now cached, and still consider
+                // adding paging (skip/take) here once your catalog grows past a few hundred items
+                var productdata = await GetOrSetCacheAsync(AllProductCacheKey, async () =>
+                {
+                    return await datacontext.Data_tbl_Product.AsNoTracking()
+                        .Where(l => l.product_id != 0)
+                        .Select(m => new
+                        {
+                            productid = m.product_id,
+                            name = m.product_name,
+                            code = m.product_code,
+                            description = m.product_description,
+                            price = m.product_price,
+                        })
+                        .ToListAsync();
+                });
+
                 return Ok(productdata);
             }
             catch (Exception ex)
@@ -250,23 +255,50 @@ namespace NidhiWebsite.Controllers
         }
 
         [HttpPost("GetProductByIdForAdmin")]
-        public IActionResult GetProductByIdForAdmin(int productId)
+        public async Task<IActionResult> GetProductByIdForAdmin(int productId)
         {
             try
             {
-                var itemgroup = datacontext.Data_tbl_Product.AsNoTracking().
-                                Where(l => l.product_id == productId).
-                                Select(m => new
-                                {
-                                    product_id = m.product_id,
-                                    product_name = m.product_name,
-                                    product_code = m.product_code,
-                                    product_price = m.product_price,
-                                    product_description = m.product_description,
-                                    product_image = m.product_image,
-                                    product_item_group_id=m.product_item_group_id,
-                                    product_item_group_name=m.Data_tbl_Item_group.item_group_name,
-            }).FirstOrDefault();
+                var itemgroup = await datacontext.Data_tbl_Product.AsNoTracking()
+                    .Where(l => l.product_id == productId)
+                    .Select(m => new
+                    {
+                        product_id = m.product_id,
+                        product_name = m.product_name,
+                        product_code = m.product_code,
+                        product_price = m.product_price,
+                        product_description = m.product_description,
+                        product_image = m.product_image,
+                        product_item_group_id = m.product_item_group_id,
+                        product_item_group_name = m.Data_tbl_Item_group.item_group_name,
+                    })
+                    .FirstOrDefaultAsync();
+
+                return Ok(itemgroup);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("ItemGroupForProvider")]
+        public async Task<IActionResult> GetItemGroupForProvider()
+        {
+            try
+            {
+                var itemgroup = await GetOrSetCacheAsync(ItemGroupCacheKey, async () =>
+                {
+                    return await datacontext.Data_tbl_Item_group.AsNoTracking()
+                        .Where(l => l.item_group_id != 0)
+                        .Select(m => new ItemGroupModelForProvider
+                        {
+                            item_group_id = m.item_group_id,
+                            item_group_name = m.item_group_name,
+                        })
+                        .ToListAsync();
+                });
+
                 return Ok(itemgroup);
             }
             catch (Exception ex)

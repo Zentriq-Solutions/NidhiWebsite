@@ -8,7 +8,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Font Awesome no longer blocks first paint: preload the file, then swap it
+         in as the real stylesheet once it's downloaded. Icons pop in a beat later
+         instead of delaying everything else. The <noscript> fallback covers
+         users with JS disabled. -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
 
     <style>
         :root {
@@ -30,47 +36,18 @@
             font-family: 'Inter', Arial, sans-serif;
         }
 
-        #pageLoader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--cream);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--sage-line);
-            border-top: 5px solid var(--gold);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        #pageLoader p {
-            color: var(--teal);
-            font-weight: 600;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
         body {
             background: var(--cream);
+        }
+
+        /* Lightweight inline loading text used only inside the dynamic sections
+           (item groups / product grid) instead of a full-page blocking overlay */
+        .loading-text {
+            width: 100%;
+            text-align: center;
+            color: #7C8880;
+            padding: 30px 0;
+            font-size: 14px;
         }
 
         .top-header {
@@ -468,7 +445,14 @@
                 width: 100%;
                 height: 340px;
                 object-fit: cover;
+                background: var(--sage);
+                opacity: 0;
+                transition: opacity 0.35s ease;
             }
+
+                .product-card img.loaded {
+                    opacity: 1;
+                }
 
         .card-body {
             padding: 10px;
@@ -494,6 +478,7 @@
             justify-content: center;
             gap: 25px;
             padding: 30px 20px;
+            min-height: 120px;
         }
 
         .item-group-circle {
@@ -524,6 +509,7 @@
                 border-color: var(--gold);
                 box-shadow: 0 8px 20px rgba(7, 40, 38, 0.22);
             }
+
         .wishlist-icon {
             position: absolute;
             top: 12px;
@@ -600,7 +586,13 @@
                 border-radius: 12px;
                 padding: 10px;
                 box-sizing: border-box;
+                opacity: 0;
+                transition: opacity 0.35s ease;
             }
+
+                .pro img.loaded {
+                    opacity: 1;
+                }
 
             .pro .des {
                 padding: 14px 4px 0;
@@ -763,214 +755,240 @@
     </style>
 </head>
 <body>
-    <div id="pageLoader">
-        <div class="loader-spinner"></div>
-        <p>Loading, please wait...</p>
-    </div>
-    <div id="pageContent" style="display:none;">
+    <!-- The full-page blocking loader is gone. Header, carousel and footer are
+         static markup with no data dependency, so they paint immediately.
+         Only the item-group row and product grid show their own small
+         "Loading..." placeholder while their fetches are in flight. -->
 
-        <header class="top-header">
+    <header class="top-header">
 
-            <div class="logo">
-                <img src="/Upload/nidhilogo.png" alt="Logo">
-            </div>
+        <div class="logo">
+            <img src="/Upload/nidhilogo.png" alt="Logo">
+        </div>
 
-            <div class="search-box">
-                <input type="text" placeholder="Search">
-                <span>🔍</span>
-            </div>
+        <div class="search-box">
+            <input type="text" placeholder="Search">
+            <span>🔍</span>
+        </div>
 
-            <div class="menu">
+        <div class="menu">
 
-                <div class="profile">
+            <div class="profile">
 
-                    <button id="profileBtn">
-                        👤
-                        <br>
-                        Profile
-                    </button>
-
-                    <div class="profile-popup" id="profilePopup">
-
-                        <button id="loginBtn" onclick="goToLogin()">Login</button>
-
-                        <button id="registerBtn" onclick="goToRegister()">Register</button>
-
-                        <button id="Additem" onclick="goToAddItem()">Add Item</button>
-
-                        <button id="Additemgroup" onclick="goToAddItemGroup()">Add Item Group</button>
-
-                        <button id="AllItemGroup" onclick="goToAllItemGroup()">Created Item Group</button>
-
-                        <button id="AllItem" onclick="goToAllItem()">Created Item</button>
-
-                        <button id="logoutBtn" onclick="logout()">Logout</button>
-
-                    </div>
-
-                </div>
-
-                <div class="wishlist" onclick="LoginPopUp()">
-                    ❤️
+                <button id="profileBtn">
+                    👤
                     <br>
-                    Wishlist
-                </div>
-
-                <div class="cart" onclick="goToCart()">
-    🛒
-    <br>
-    Cart
-</div>
-
-            </div>
-
-        </header>
-        <!-- Login Popup -->
-        <div id="loginPopup" class="login-popup-overlay">
-
-            <div class="login-popup">
-
-                <!-- Close Button -->
-                <button class="login-popup-close" onclick="closeLoginPopUp()">
-                    &times;
+                    Profile
                 </button>
 
-                <div class="login-popup-icon">
-                    🔐
-                </div>
+                <div class="profile-popup" id="profilePopup">
 
-                <h2>Login Required</h2>
+                    <button id="loginBtn" onclick="goToLogin()">Login</button>
 
-                <p>
-                    Please login to your account to access your
-                    Wishlist and Cart.
-                </p>
+                    <button id="registerBtn" onclick="goToRegister()">Register</button>
 
-                <div class="login-popup-buttons">
+                    <button id="Additem" onclick="goToAddItem()">Add Item</button>
 
-                    <button class="popup-login-btn" onclick="goToLogin()">
-                        Login
-                    </button>
+                    <button id="Additemgroup" onclick="goToAddItemGroup()">Add Item Group</button>
 
-                    <button class="popup-register-btn" onclick="goToRegister()">
-                        Create Account
-                    </button>
+                    <button id="AllItemGroup" onclick="goToAllItemGroup()">Created Item Group</button>
+
+                    <button id="AllItem" onclick="goToAllItem()">Created Item</button>
+
+                    <button id="logoutBtn" onclick="logout()">Logout</button>
 
                 </div>
+
+            </div>
+
+            <div class="wishlist" onclick="LoginPopUp()">
+                ❤️
+                <br>
+                Wishlist
+            </div>
+
+            <div class="cart" onclick="goToCart()">
+                🛒
+                <br>
+                Cart
+            </div>
+
+        </div>
+
+    </header>
+    <!-- Login Popup -->
+    <div id="loginPopup" class="login-popup-overlay">
+
+        <div class="login-popup">
+
+            <!-- Close Button -->
+            <button class="login-popup-close" onclick="closeLoginPopUp()">
+                &times;
+            </button>
+
+            <div class="login-popup-icon">
+                🔐
+            </div>
+
+            <h2>Login Required</h2>
+
+            <p>
+                Please login to your account to access your
+                Wishlist and Cart.
+            </p>
+
+            <div class="login-popup-buttons">
+
+                <button class="popup-login-btn" onclick="goToLogin()">
+                    Login
+                </button>
+
+                <button class="popup-register-btn" onclick="goToRegister()">
+                    Create Account
+                </button>
 
             </div>
 
         </div>
 
-        <main>
-            <section class="carousel-section">
-                <div class="carousel-container">
-                    <div class="carousel-slide active"> <img src="/Upload/33160b6e-882d-4024-b0cb-3b597a5e66ea.jpg" alt="Banner 1"> </div>
-                    <div class="carousel-slide"> <img src="/Upload/8d1918ec-f121-4aa3-9e15-221b7b5ed821.jpg" alt="Banner 2"> </div>
-                    <button class="carousel-btn prev" onclick="changeSlide(-1)"> ❮ </button>
-                    <button class="carousel-btn next" onclick="changeSlide(1)"> ❯ </button>
-                    <div class="carousel-dots"> <span class="dot active" onclick="currentSlide(0)"></span> <span class="dot" onclick="currentSlide(1)"></span> <span class="dot" onclick="currentSlide(2)"></span> </div>
-                </div>
-            </section>
-            <section class="itemgroupwisedata">
-            </section>
-            <div id="productContainer"></div>
-
-            <!--Featured Section-->
-            <section id="product1" class="section-p1">
-                <h2>Featured Products</h2>
-                <p>New & Modern Designs for You</p>
-                <div class="pro-container">
-                    <div class="pro">
-                        <img src="/Upload/products/f1.jpg" alt="">
-                        <div class="des">
-                            <span>nidhi_rental</span>
-                            <h5>Gold Bangle</h5>
-                            <div class="star">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4>&#8377;7,899</h4>
-                        </div>
-                        <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
-                    </div>
-
-                    <div class="pro">
-                        <img src="/Upload/products/f2.jpg" alt="">
-                        <div class="des">
-                            <span>nidhi_rental</span>
-                            <h5>Gold Chain</h5>
-                            <div class="star">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4>&#8377;84,888</h4>
-                        </div>
-                        <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
-                    </div>
-
-                    <div class="pro">
-                        <img src="/Upload/products/f3.jpg" alt="">
-                        <div class="des">
-                            <span>nidhi_rental</span>
-                            <h5>Anklet</h5>
-                            <div class="star">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4>&#8377;29,999</h4>
-                        </div>
-                        <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
-                    </div>
-
-                    <div class="pro">
-                        <img src="/Upload/products/f4.jpg" alt="">
-                        <div class="des">
-                            <span>nidhi_rental</span>
-                            <h5>Gold Chain</h5>
-                            <div class="star">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <h4>&#8377;30,000</h4>
-                        </div>
-                        <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
-                    </div>
-                </div>
-            </section>
-        </main>
     </div>
+
+    <main>
+        <section class="carousel-section">
+            <div class="carousel-container">
+                <!-- First slide is the LCP (largest contentful paint) element - load it eagerly
+                     and mark it high priority. The second slide is off-screen initially, so
+                     it can load lazily without competing for bandwidth. -->
+                <div class="carousel-slide active"> <img src="/Upload/33160b6e-882d-4024-b0cb-3b597a5e66ea.jpg" alt="Banner 1" loading="eager" fetchpriority="high"> </div>
+                <div class="carousel-slide"> <img src="/Upload/8d1918ec-f121-4aa3-9e15-221b7b5ed821.jpg" alt="Banner 2" loading="lazy"> </div>
+                <button class="carousel-btn prev" onclick="changeSlide(-1)"> ❮ </button>
+                <button class="carousel-btn next" onclick="changeSlide(1)"> ❯ </button>
+                <div class="carousel-dots"> <span class="dot active" onclick="currentSlide(0)"></span> <span class="dot" onclick="currentSlide(1)"></span> <span class="dot" onclick="currentSlide(2)"></span> </div>
+            </div>
+        </section>
+        <section class="itemgroupwisedata">
+            <p class="loading-text">Loading categories...</p>
+        </section>
+        <div id="productContainer">
+            <p class="loading-text">Loading products...</p>
+        </div>
+
+        <!--Featured Section-->
+        <section id="product1" class="section-p1">
+            <h2>Featured Products</h2>
+            <p>New & Modern Designs for You</p>
+            <div class="pro-container">
+                <div class="pro">
+                    <img data-src="/Upload/products/f1.jpg" alt="" class="lazy-img">
+                    <div class="des">
+                        <span>nidhi_rental</span>
+                        <h5>Gold Bangle</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>&#8377;7,899</h4>
+                    </div>
+                    <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
+                </div>
+
+                <div class="pro">
+                    <img data-src="/Upload/products/f2.jpg" alt="" class="lazy-img">
+                    <div class="des">
+                        <span>nidhi_rental</span>
+                        <h5>Gold Chain</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>&#8377;84,888</h4>
+                    </div>
+                    <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
+                </div>
+
+                <div class="pro">
+                    <img data-src="/Upload/products/f3.jpg" alt="" class="lazy-img">
+                    <div class="des">
+                        <span>nidhi_rental</span>
+                        <h5>Anklet</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>&#8377;29,999</h4>
+                    </div>
+                    <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
+                </div>
+
+                <div class="pro">
+                    <img data-src="/Upload/products/f4.jpg" alt="" class="lazy-img">
+                    <div class="des">
+                        <span>nidhi_rental</span>
+                        <h5>Gold Chain</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>&#8377;30,000</h4>
+                    </div>
+                    <a href="#"><i class="fas fa-shopping-cart cart"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
     <script>
         let wishlistProducts = [];
-        //#region Page Loading
-        document.addEventListener("DOMContentLoaded", async function () {
-            const pageLoader = document.getElementById("pageLoader");
-            const pageContent = document.getElementById("pageContent");
 
-            try {
-                await Promise.all([
-                    loadItemGroups(),
-                    loadWishList()   // must finish BEFORE loadProducts runs
-                ]);
-                await loadProducts();
-            } catch (error) {
-                console.error("Error loading page data:", error);
-            } finally {
-                pageLoader.style.display = "none";
-                pageContent.style.display = "block";
-            }
+        //#region Lazy image loading
+        // Native loading="lazy" only starts fetching an image once it's right at
+        // the viewport edge - if you scroll faster than the download, you see a
+        // blank/white box flash before the image pops in. This observer starts
+        // the fetch 600px before the image reaches the viewport instead, so by
+        // the time you actually scroll to it, it's already loaded. Images fade
+        // in via the .loaded class rather than popping in abruptly.
+        const lazyImageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute("data-src");
+                }
+                img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+                observer.unobserve(img);
+            });
+        }, {
+            root: null,
+            rootMargin: "600px 0px",
+            threshold: 0
+        });
+
+        function observeLazyImages(container = document) {
+            container.querySelectorAll("img[data-src]").forEach(img => lazyImageObserver.observe(img));
+        }
+        //#endregion Lazy image loading
+
+        //#region Page Loading
+        // Header/carousel/footer are already visible - no full-page gate needed.
+        // Item groups load independently. Products wait only on wishlist (needed
+        // to render correct heart state) - the two together still run in
+        // parallel with item groups rather than after them.
+        document.addEventListener("DOMContentLoaded", function () {
+            observeLazyImages(); // picks up the static featured-section images
+            loadItemGroups();
+            loadWishList().then(loadProducts);
         });
 
         async function loadItemGroups() {
@@ -981,8 +999,11 @@
                 }
                 const itemGroups = await response.json();
                 const container = document.querySelector(".itemgroupwisedata");
-                container.innerHTML = "";
 
+                // Build the HTML once with a DocumentFragment instead of repeated
+                // innerHTML += in a loop (which reparses the whole growing string
+                // on every iteration - O(n^2) for n categories).
+                const fragment = document.createDocumentFragment();
                 itemGroups.forEach(itemGroup => {
                     const circle = document.createElement("div");
                     circle.className = "item-group-circle";
@@ -993,56 +1014,59 @@
                     circle.addEventListener("dblclick", function () {
                         getProductsByItemGroup(this.dataset.itemGroupId);
                     });
-                    container.appendChild(circle);
+                    fragment.appendChild(circle);
                 });
+                container.innerHTML = "";
+                container.appendChild(fragment);
             } catch (error) {
                 console.error("Error loading item groups:", error);
-                document.querySelector(".itemgroupwisedata").innerHTML = "<p>Unable to load item groups.</p>";
+                document.querySelector(".itemgroupwisedata").innerHTML = "<p class=\"loading-text\">Unable to load item groups.</p>";
             }
         }
 
-        function loadProducts() {
-            return fetch("/api/Product/GetProduct")
-                .then(response => {
-                    if (!response.ok) throw new Error("Failed to load products");
-                    return response.json();
-                })
-                .then(products => {
-                    const container = document.getElementById("productContainer");
-                    container.innerHTML = "";
+        async function loadProducts() {
+            try {
+                const response = await fetch("/api/Product/GetProduct");
+                if (!response.ok) throw new Error("Failed to load products");
+                const products = await response.json();
 
-                    if (!products || products.length === 0) {
-                        container.innerHTML = "<p>No products available.</p>";
-                        return;
-                    }
+                const container = document.getElementById("productContainer");
 
-                    products.forEach(product => {
-                        const isWishListed = wishlistProducts.some(
-                            x => x.productid === product.productid);
-                        container.innerHTML += `
-                                <div class="product-card" onclick="openProductDetails(${product.productid})">
+                if (!products || products.length === 0) {
+                    container.innerHTML = "<p class=\"loading-text\">No products available.</p>";
+                    return;
+                }
+
+                // Build one big string and assign innerHTML ONCE instead of
+                // appending inside the loop - this was the biggest cost on
+                // pages with more than a handful of products.
+                const html = products.map(product => {
+                    const isWishListed = wishlistProducts.some(x => x.productid === product.productid);
+                    return `
+                            <div class="product-card" onclick="openProductDetails(${product.productid})">
                                 <div class="wishlist-icon"
-                                 onclick="event.stopPropagation();
-                                 addToWishlist(${product.productid}, this)">
-                                <i class="${isWishListed ? 'fa-solid' : 'fa-regular'} fa-heart"
-                                   style="color:${isWishListed ? 'red' : '#666'}">
-                                </i>
-                            </div>
-                                    <img src="${product.image}" alt="Product Image">
-                                    <div class="card-body">
-                                        <div class="product-name">${product.name}</div>
-                                        <div class="product-price">₹ ${product.price}</div>
-                                    </div>
+                                 onclick="event.stopPropagation(); addToWishlist(${product.productid}, this)">
+                                    <i class="${isWishListed ? 'fa-solid' : 'fa-regular'} fa-heart"
+                                       style="color:${isWishListed ? 'red' : '#666'}">
+                                    </i>
                                 </div>
-                            `;
-                    });
-                })
-                .catch(error => {
-                    console.log(error);
-                    const container = document.getElementById("productContainer");
-                    container.innerHTML = "<p>Unable to load products.</p>";
-                });
+                                <img data-src="${product.image}" alt="Product Image" class="lazy-img">
+                                <div class="card-body">
+                                    <div class="product-name">${product.name}</div>
+                                    <div class="product-price">₹ ${product.price}</div>
+                                </div>
+                            </div>
+                        `;
+                }).join("");
+
+                container.innerHTML = html;
+                observeLazyImages(container);
+            } catch (error) {
+                console.error(error);
+                document.getElementById("productContainer").innerHTML = "<p class=\"loading-text\">Unable to load products.</p>";
+            }
         }
+
         async function loadWishList() {
 
             const userId = getCookie("userId");
@@ -1067,7 +1091,7 @@
             }
         }
         //#endregion Page Loading
-        
+
         async function addToWishlist(productId, element) {
 
             const userId = getCookie("userId");
@@ -1181,8 +1205,7 @@
         function goToAllItem() {
             window.location.href = "AllItem"
         }
-        async function logout()
-        {
+        async function logout() {
             deleteCookie("userId");
             deleteCookie("isAdmin");
             sessionStorage.clear();
@@ -1278,7 +1301,7 @@
             console.log("Normal User");
 
         }
-        
+
 
         /* ============================= */
         /* Carousel JavaScript */
@@ -1409,10 +1432,10 @@
             <h4>Install App</h4>
             <p>From app store or Google play</p>
             <div class="row">
-                <img src="img/pay/app.jpg" alt="">
-                <img src="img/pay/play.jpg" alt="">
+                <img src="img/pay/app.jpg" alt="" loading="lazy">
+                <img src="img/pay/play.jpg" alt="" loading="lazy">
                 <p>Secured Payment Gateway</p>
-                <img src="img/pay/pay.png" alt="">
+                <img src="img/pay/pay.png" alt="" loading="lazy">
             </div>
         </div>
 
