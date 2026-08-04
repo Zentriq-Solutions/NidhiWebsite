@@ -15,6 +15,7 @@ namespace NidhiWebsite.Data
         public DbSet<ProductModel> Data_tbl_Product { get; set; }
         public DbSet<ItemGroupModel> Data_tbl_Item_group { get; set; }
         public DbSet<WishListModel> Data_tbl_Wish_list { get; set; }
+        public DbSet<CartModel> Data_tbl_Cart{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -49,6 +50,19 @@ namespace NidhiWebsite.Data
                 .HasOne(w => w.Data_tbl_Product)
                 .WithMany(p => p.Data_tbl_Wish_list)
                 .HasForeignKey(w => w.wishlist_product_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CartModel>()
+                .HasOne(w => w.Data_tbl_User)
+                .WithMany(u => u.Data_tbl_Cart)
+                .HasForeignKey(w => w.cart_user_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<CartModel>()
+                .HasOne(w => w.Data_tbl_Product)
+                .WithMany(p => p.Data_tbl_Cart)
+                .HasForeignKey(w => w.cart_product_id)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 

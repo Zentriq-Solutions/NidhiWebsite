@@ -1,92 +1,146 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Item Groups</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #EDF1E9;
+            --sage-line: #C6CEC0;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', Arial, sans-serif;
         }
 
         body {
-            background: #f4f4f4;
+            background: var(--cream);
+            color: var(--ink);
         }
 
         header {
-            background: #8f1b1b;
-            color: white;
-            padding: 15px 30px;
+            background: var(--teal);
+            color: var(--cream);
+            padding: 20px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        button {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background: white;
-            color: #8f1b1b;
-            font-weight: bold;
-        }
+            header h2 {
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                font-size: 21px;
+            }
+
+            header button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 7px;
+                cursor: pointer;
+                background: transparent;
+                color: var(--cream);
+                font-weight: 600;
+                font-size: 14px;
+                border: 1.5px solid rgba(246,243,236,0.4);
+                transition: border-color .18s ease, background .18s ease;
+            }
+
+                header button:hover {
+                    border-color: var(--gold);
+                    background: rgba(246,243,236,0.06);
+                }
 
         .container {
-            width: 95%;
-            margin: 30px auto;
+            width: 92%;
+            max-width: 1100px;
+            margin: 36px auto;
         }
 
-        h2 {
-            margin-bottom: 20px;
-            color: #8f1b1b;
-        }
+            .container > h2 {
+                margin-bottom: 18px;
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                color: var(--teal-deep);
+                font-size: 22px;
+            }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,.2);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(7,40,38,.28);
         }
 
         th {
-            background: #8f1b1b;
-            color: white;
-            padding: 12px;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
+            background: var(--teal);
+            color: var(--cream);
+            padding: 14px 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
             text-align: center;
         }
 
-        tr:nth-child(even) {
-            background: #f9f9f9;
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid var(--sage-line);
+            text-align: center;
+            font-size: 14.5px;
+            transition: background .15s ease;
         }
 
-        tr:hover {
-            background: #f1f1f1;
+        tr:last-child td {
+            border-bottom: none;
         }
+
+        tr:nth-child(even) td {
+            background: var(--sage);
+        }
+
+        tr:hover td {
+            background: #FBF0D2;
+        }
+
         .details-btn {
             width: 40px;
             height: 40px;
             border: none;
             border-radius: 50%;
-            background: #8f1b1b;
-            color: white;
+            background: var(--teal);
+            color: var(--cream);
             cursor: pointer;
-            font-size: 18px;
-            transition: .3s;
+            font-size: 16px;
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+            box-shadow: 0 6px 14px -6px rgba(7,40,38,.5);
         }
 
             .details-btn:hover {
-                background: #b22222;
+                background: var(--gold);
                 transform: scale(1.1);
+                box-shadow: 0 8px 18px -6px rgba(201,162,39,.55);
             }
     </style>
 </head>
@@ -104,12 +158,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Item Group Name</th>
                     <th>Item Group Code</th>
                     <th>Description</th>
                     <th>Details</th>
-                    
+
                 </tr>
             </thead>
 
@@ -121,49 +174,48 @@
 
     <script>
 
-function goBack(){
-    window.location.href="dashboard";
-}
+        function goBack() {
+            window.location.href = "dashboard";
+        }
 
-window.onload=function(){
-    loadItemGroups();
-}
+        window.onload = function () {
+            loadItemGroups();
+        }
 
-function loadItemGroups(){
+        function loadItemGroups() {
 
-    fetch("/api/ItemGroup/GetAllItemGroup")
-    .then(response=>response.json())
-    .then(data=>{
+            fetch("/api/ItemGroup/GetAllItemGroup")
+                .then(response => response.json())
+                .then(data => {
 
-        const tbody=document.getElementById("itemGroupBody");
+                    const tbody = document.getElementById("itemGroupBody");
 
-        tbody.innerHTML="";
+                    tbody.innerHTML = "";
 
-        data.forEach(item=>{
+                    data.forEach(item => {
 
-            tbody.innerHTML+=`
-                <tr>
-                    <td>${item.item_group_id}</td>
-                    <td>${item.item_group_name}</td>
-                    <td>${item.item_group_code}</td>
-                    <td>${item.item_group_description}</td>
-                    <td>
-        <button class="details-btn"
-            onclick="viewDetails(${item.item_group_id})"
-            title="View Details">
-            👁️
-        </button>
-    </td>
-                </tr>
-            `;
+                        tbody.innerHTML += `
+                    <tr>
+                        <td>${item.item_group_name}</td>
+                        <td>${item.item_group_code}</td>
+                        <td>${item.item_group_description}</td>
+                        <td>
+            <button class="details-btn"
+                onclick="viewDetails(${item.item_group_id})"
+                title="View Details">
+                👁️
+            </button>
+        </td>
+                    </tr>
+                `;
 
-        });
+                    });
 
-    })
-    .catch(error=>{
-        console.log(error);
-        alert("Unable to load Item Groups.");
-    });
+                })
+                .catch(error => {
+                    console.log(error);
+                    alert("Unable to load Item Groups.");
+                });
 
         }
         function viewDetails(id) {

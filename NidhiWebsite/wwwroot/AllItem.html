@@ -1,0 +1,348 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Item Groups</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #EDF1E9;
+            --sage-line: #C6CEC0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        body {
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+        header {
+            background: var(--teal);
+            color: var(--cream);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+            header h2 {
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                font-size: 21px;
+            }
+
+            header button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 7px;
+                cursor: pointer;
+                background: transparent;
+                color: var(--cream);
+                font-weight: 600;
+                font-size: 14px;
+                border: 1.5px solid rgba(246,243,236,0.4);
+                transition: border-color .18s ease, background .18s ease;
+            }
+
+                header button:hover {
+                    border-color: var(--gold);
+                    background: rgba(246,243,236,0.06);
+                }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 36px auto;
+        }
+
+            .container > h2 {
+                margin-bottom: 18px;
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                color: var(--teal-deep);
+                font-size: 22px;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -20px rgba(7,40,38,.28);
+        }
+
+        th {
+            background: var(--teal);
+            color: var(--cream);
+            padding: 14px 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid var(--sage-line);
+            text-align: center;
+            font-size: 14.5px;
+            transition: background .15s ease;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:nth-child(even) td {
+            background: var(--sage);
+        }
+
+        tr:hover td {
+            background: #FBF0D2;
+        }
+
+        .details-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: var(--teal);
+            color: var(--cream);
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+            box-shadow: 0 6px 14px -6px rgba(7,40,38,.5);
+        }
+
+            .details-btn:hover {
+                background: var(--gold);
+                transform: scale(1.1);
+                box-shadow: 0 8px 18px -6px rgba(201,162,39,.55);
+            }
+
+        /* =========================
+   TABLE RESPONSIVE
+========================= */
+
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 14px;
+        }
+
+        /* Tablet */
+
+        @media (max-width: 992px) {
+
+            header {
+                padding: 16px 25px;
+            }
+
+                header h2 {
+                    font-size: 20px;
+                }
+
+            .container {
+                width: 96%;
+                margin: 25px auto;
+            }
+
+            table {
+                min-width: 850px;
+            }
+
+            th,
+            td {
+                padding: 12px 10px;
+                font-size: 14px;
+            }
+        }
+
+        /* Mobile */
+
+        @media (max-width: 768px) {
+
+            header {
+                padding: 14px 18px;
+            }
+
+                header h2 {
+                    font-size: 18px;
+                }
+
+                header button {
+                    padding: 8px 14px;
+                    font-size: 13px;
+                }
+
+            .container {
+                width: 98%;
+                margin: 18px auto;
+            }
+
+                .container > h2 {
+                    font-size: 20px;
+                }
+
+            table {
+                min-width: 750px;
+            }
+
+            th {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            td {
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            .details-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+        }
+
+        /* Small Mobile */
+
+        @media (max-width: 480px) {
+
+            header {
+                padding: 12px;
+            }
+
+                header h2 {
+                    font-size: 16px;
+                }
+
+                header button {
+                    padding: 7px 12px;
+                    font-size: 12px;
+                }
+
+            table {
+                min-width: 700px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .details-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h2>Item Group List</h2>
+
+        <button onclick="goBack()">Dashboard</button>
+    </header>
+
+    <div class="container">
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Item Code</th>
+                        <th>Description</th>
+                        <th>Price</th>
+
+                    </tr>
+                </thead>
+
+                <tbody id="itemGroupBody">
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+        <script>
+
+            function goBack() {
+                window.location.href = "dashboard";
+            }
+
+            window.onload = function () {
+                loadItemGroups();
+            }
+
+            function loadItemGroups() {
+
+                fetch("/api/Product/GetAllProduct")
+                    .then(response => response.json())
+                    .then(data => {
+
+                        const tbody = document.getElementById("itemGroupBody");
+
+                        tbody.innerHTML = "";
+
+                        data.forEach(item => {
+
+                            tbody.innerHTML += `
+                            <tr>
+                                <td>${item.name}</td>
+                                <td>${item.code}</td>
+                                <td>${item.description}</td>
+                                <td>${item.price}</td>
+                                <td>
+                    <button class="details-btn"
+                        onclick="viewDetails(${item.productid})"
+                        title="View Details">
+                        👁️
+                    </button>
+                </td>
+                            </tr>
+                        `;
+
+                        });
+
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        alert("Unable to load Item Groups.");
+                    });
+
+            }
+            function viewDetails(id) {
+                window.location.href = "ProductCreation?id=" + id;
+            }
+
+        </script>
+
+</body>
+</html>

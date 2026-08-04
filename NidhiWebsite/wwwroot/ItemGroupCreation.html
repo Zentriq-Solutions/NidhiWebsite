@@ -4,99 +4,376 @@
 
     <title>Add Item Group</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #EDF1E9;
+            --sage-line: #C6CEC0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #f2f2f2;
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--cream);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             min-height: 100vh;
+            margin: 0;
+            color: var(--ink);
+            padding: 24px;
         }
 
-        .item_group-box {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
-            width: 400px;
+        .frame {
+            width: 100%;
+            max-width: 860px;
+            margin: 56px auto;
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -20px rgba(7, 40, 38, 0.35);
         }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
+        .panel {
+            background: var(--teal);
+            background-image: radial-gradient(circle at 85% 15%, rgba(201,162,39,0.18), transparent 55%), repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 34px);
+            color: var(--cream);
+            padding: 44px 36px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        input,
+        .panel-top {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .mark {
+            width: 46px;
+            height: 46px;
+            border: 1.5px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fraunces', serif;
+            font-size: 20px;
+            color: var(--gold-bright);
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-family: 'Fraunces', serif;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .brand-sub {
+            font-size: 11.5px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(246,243,236,0.55);
+            margin-top: 2px;
+        }
+
+        .panel-mid {
+            margin-top: 46px;
+        }
+
+            .panel-mid h1 {
+                font-family: 'Fraunces', serif;
+                font-weight: 500;
+                font-size: 28px;
+                line-height: 1.3;
+                margin: 0 0 14px;
+            }
+
+            .panel-mid p {
+                font-size: 14px;
+                line-height: 1.65;
+                color: rgba(246,243,236,0.72);
+                max-width: 28ch;
+                margin: 0;
+            }
+
+        .ledger-entries {
+            margin-top: 34px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+            .ledger-entries .row {
+                display: flex;
+                align-items: baseline;
+                gap: 10px;
+                font-size: 12.5px;
+                color: rgba(246,243,236,0.6);
+            }
+
+                .ledger-entries .row span.no {
+                    font-family: 'Fraunces', serif;
+                    color: var(--gold-bright);
+                    font-size: 13px;
+                }
+
+        .panel-foot {
+            font-size: 11.5px;
+            color: rgba(246,243,236,0.4);
+            letter-spacing: 0.04em;
+        }
+
+        .form-side {
+            padding: 44px 40px 36px;
+        }
+
+            .form-side h2 {
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                font-size: 24px;
+                margin: 0 0 4px;
+                color: var(--teal-deep);
+            }
+
+            .form-side .lede {
+                font-size: 13.5px;
+                color: #6B7570;
+                margin: 0 0 28px;
+            }
+
+        .field {
+            margin-top: 18px;
+        }
+
+            .field:first-of-type {
+                margin-top: 0;
+            }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            color: #7C8880;
+            margin-bottom: 7px;
+        }
+
+        input[type="text"],
         textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
+            padding: 9px 2px;
+            border: none;
+            border-bottom: 1.5px solid var(--sage-line);
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            color: var(--ink);
+            border-radius: 0;
+            transition: border-color 0.18s ease;
         }
 
         textarea {
             resize: vertical;
-            height: 100px;
+            height: 90px;
+            padding-top: 6px;
+        }
+
+            input:focus, textarea:focus {
+                outline: none;
+                border-bottom-color: var(--gold);
+            }
+
+            input::placeholder, textarea::placeholder {
+                color: #B8C0B9;
+            }
+
+        input[type="file"] {
+            width: 100%;
+            font-size: 13px;
+            color: #6B7570;
+            padding: 9px 0;
+            border-bottom: 1.5px solid var(--sage-line);
+        }
+
+        #imagePreview {
+            width: 110px;
+            height: 110px;
+            object-fit: cover;
+            margin-top: 14px;
+            border-radius: 10px;
+            border: 1.5px solid var(--sage-line);
+            display: none;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
         }
 
         button {
-            width: 100%;
-            padding: 10px;
-            background: #007BFF;
-            color: white;
+            padding: 13px 18px;
             border: none;
-            border-radius: 5px;
+            border-radius: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
             cursor: pointer;
+            transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+            font-family: 'Inter', sans-serif;
         }
 
-            button:hover {
-                background: #0056b3;
+            button[onclick="saveItemGroup()"] {
+                flex: 1.4;
+                background: var(--teal);
+                color: var(--cream);
+                box-shadow: 0 8px 18px -8px rgba(11,61,58,0.55);
             }
 
+                button[onclick="saveItemGroup()"]:hover {
+                    background: var(--teal-deep);
+                    transform: translateY(-1px);
+                }
+
+            button[onclick="goBack()"] {
+                flex: 1;
+                background: transparent;
+                color: #7C8880;
+                border: 1.5px solid var(--sage-line);
+            }
+
+                button[onclick="goBack()"]:hover {
+                    border-color: #9AA69C;
+                    color: var(--ink);
+                }
+
         #message {
-            margin-top: 15px;
-            text-align: center;
-            font-weight: bold;
+            text-align: left;
+            margin-top: 16px;
+            font-size: 13.5px;
+            font-weight: 600;
+            min-height: 18px;
+        }
+
+        @media (max-width: 720px) {
+            .frame {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 32px 28px;
+            }
+
+            .panel-mid h1 {
+                font-size: 24px;
+            }
+
+            .ledger-entries {
+                display: none;
+            }
+
+            .form-side {
+                padding: 34px 26px 30px;
+            }
         }
     </style>
 
 </head>
-
 <body>
 
-    <div class="item_group-box">
+    <div class="frame">
 
-        <h2>Add Item Group</h2>
-        <input type="hidden" id="item_group_id" value="0">
+        <div class="panel">
+            <div>
+                <div class="panel-top">
+                    <div class="mark">N</div>
+                    <div>
+                        <div class="brand">Nidhi</div>
+                        <div class="brand-sub">Member Registry</div>
+                    </div>
+                </div>
 
-        <input type="text" id="item_group_name" placeholder="Item Group Name">
+                <div class="panel-mid">
+                    <h1>Every group,<br>a shelf in the catalog.</h1>
+                    <p>Item groups keep your catalog organized — give this one a clear name so products are easy to browse.</p>
+                </div>
+            </div>
 
-        <input type="text" id="item_group_code" placeholder="Item Group Code">
+            <div>
+                <div class="ledger-entries">
+                    <div class="row"><span class="no">01</span> Name &amp; code</div>
+                    <div class="row"><span class="no">02</span> Description</div>
+                    <div class="row"><span class="no">03</span> Cover image</div>
+                </div>
+            </div>
 
-        <textarea id="item_group_description" placeholder="Item Group Description"></textarea>
-
-        <input type="file" id="item_group_image">
-        <input type="hidden" id="item_group_image_name">
-
-        <img id="imagePreview"
-             style="width:150px;height:150px;object-fit:cover;margin-top:10px;display:none;">
-        <div style="display:flex; gap:10px; margin-top:20px;">
-
-            <button type="button" onclick="goBack()" style="background:#6c757d;">
-                Back
-            </button>
-
-            <button onclick="saveItemGroup()">Save Item Group</button>
-
+            <div class="panel-foot">Kept confidential &middot; verified on submit</div>
         </div>
 
+        <div class="form-side">
 
+            <h2>Add item group</h2>
+            <p class="lede">Fill in the details below to create a new group.</p>
 
-        <p id="message"></p>
+            <div class="item_group-box">
+
+                <input type="hidden" id="item_group_id" value="0">
+
+                <div class="field">
+                    <label for="item_group_name">Item Group Name</label>
+                    <input type="text" id="item_group_name" placeholder="e.g. Shirts">
+                </div>
+
+                <div class="field">
+                    <label for="item_group_code">Item Group Code</label>
+                    <input type="text" id="item_group_code" placeholder="e.g. GRP-01">
+                </div>
+
+                <div class="field">
+                    <label for="item_group_description">Item Group Description</label>
+                    <textarea id="item_group_description" placeholder="What belongs in this group..."></textarea>
+                </div>
+
+                <div class="field">
+                    <label for="item_group_image">Item Group Image</label>
+                    <input type="file" id="item_group_image">
+                    <input type="hidden" id="item_group_image_name">
+                    <img id="imagePreview">
+                </div>
+
+                <div class="actions">
+
+                    <button type="button" onclick="goBack()">
+                        Back
+                    </button>
+
+                    <button onclick="saveItemGroup()">Save Item Group</button>
+
+                </div>
+
+                <p id="message"></p>
+
+            </div>
+
+        </div>
 
     </div>
 
@@ -146,11 +423,6 @@
 
             formData.append("item_group_user_id",
                 getCookie("userId"));
-            //formData.append(
-            //    "item_group_image",
-            //    document.getElementById("item_group_image_").value
-            //);
-
             const imageFile =
                 document.getElementById("item_group_image").files[0];
 
@@ -194,10 +466,10 @@
 
                 const error = await response.json();
 
-                document.getElementById("message").innerHTML = 
+                document.getElementById("message").innerHTML =
                     "Failed to Add Product.";
 
-                
+
             }
 
         }
@@ -251,7 +523,7 @@
 
                 const img = document.getElementById("imagePreview");
 
-                img.src =path + item.item_group_image;
+                img.src = path + item.item_group_image;
 
                 img.style.display = "block";
             }

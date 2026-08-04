@@ -1,0 +1,677 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Product Details - Nidhi Jewellery</title>
+
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <style>
+
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #EDF1E9;
+            --sage-line: #C6CEC0;
+            --success: #3E7A4F;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+
+        body {
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: var(--teal);
+            color: var(--cream);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+            header h2 {
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                font-size: 21px;
+            }
+
+            header button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 7px;
+                cursor: pointer;
+                background: transparent;
+                color: var(--cream);
+                font-weight: 600;
+                font-size: 14px;
+                border: 1.5px solid rgba(246,243,236,0.4);
+                transition: border-color .18s ease, background .18s ease;
+            }
+
+                header button:hover {
+                    border-color: var(--gold);
+                    background: rgba(246,243,236,0.06);
+                }
+
+        /* Product Container */
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 130px auto 0;
+        }
+
+
+        /* Product Card */
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+
+            .product-card:hover {
+                transform: translateY(-5px);
+            }
+
+
+        /* Product Image */
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+
+        /* Product Details */
+
+        .product-details {
+            padding: 20px;
+        }
+
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+
+        .product-code {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+
+        /* No Products */
+
+        .no-products {
+            text-align: center;
+            padding: 50px;
+            font-size: 20px;
+            color: #777;
+        }
+
+
+        /* =========================
+           PRODUCT CONTAINER
+        ========================= */
+
+        .product-details-container {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 35px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(7, 40, 38, 0.15);
+        }
+
+
+        /* =========================
+           LEFT IMAGE
+        ========================= */
+
+        .product-image-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+            background: var(--sage);
+            border-radius: 15px;
+            padding: 30px;
+        }
+
+
+            .product-image-section img {
+                width: 100%;
+                height: 500px;
+                object-fit: contain;
+                border-radius: 12px;
+            }
+
+
+        /* =========================
+           RIGHT DETAILS
+        ========================= */
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+
+            .product-info h1 {
+                font-family: 'Fraunces', serif;
+                font-size: 38px;
+                color: var(--teal-deep);
+                margin-bottom: 20px;
+            }
+
+
+        .product-price {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 30px;
+        }
+
+
+        .detail-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--teal-deep);
+            margin-bottom: 8px;
+        }
+
+
+        .product-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #5F6B64;
+            margin-bottom: 25px;
+        }
+
+
+        .product-code {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 35px;
+        }
+
+
+            .product-code strong {
+                color: var(--teal-deep);
+            }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .product-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+
+        .add-cart-btn,
+        .buy-now-btn {
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+
+        .add-cart-btn {
+            background: transparent;
+            color: var(--teal);
+            border: 2px solid var(--gold);
+        }
+
+
+            .add-cart-btn:hover {
+                background: var(--gold);
+                color: white;
+            }
+
+
+        .buy-now-btn {
+            background: var(--teal);
+            color: white;
+            border: 2px solid var(--teal);
+        }
+
+
+            .buy-now-btn:hover {
+                background: var(--teal-deep);
+            }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .top-header {
+                padding: 10px 20px;
+            }
+
+
+            .product-details-container {
+                grid-template-columns: 1fr;
+                margin: 20px;
+                padding: 20px;
+                gap: 30px;
+            }
+
+
+            .product-image-section {
+                min-height: 350px;
+            }
+
+
+                .product-image-section img {
+                    height: 350px;
+                }
+
+
+            .product-info h1 {
+                font-size: 30px;
+            }
+
+
+            .product-buttons {
+                flex-direction: column;
+            }
+
+
+            .add-cart-btn,
+            .buy-now-btn {
+                width: 100%;
+            }
+        }
+
+        .cart-message {
+            margin-top: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--teal);
+            min-height: 20px;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    
+    <header>
+        <button onclick="goBack()">Dashboard</button>
+    </header>
+
+    <div class="product-details-container">
+
+
+        <!-- LEFT SIDE -->
+
+        <div class="product-image-section">
+
+            <img id="productImage"
+                 src=""
+                 alt="Product Image">
+
+        </div>
+
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="product-info">
+
+
+            <!-- Product Name -->
+
+            <h1 id="productName">
+
+                Loading...
+
+            </h1>
+
+
+
+            <!-- Product Price -->
+
+            <div class="product-price">
+
+                ₹ <span id="productPrice"></span>
+
+            </div>
+
+
+
+            <!-- Description -->
+
+            <div class="detail-title">
+
+                Description
+
+            </div>
+
+
+            <div class="product-description"
+                 id="productDescription">
+
+                Loading...
+
+            </div>
+
+
+
+            <!-- Product Code -->
+
+            <div class="product-code">
+
+                <strong>Product Code:</strong>
+
+                <span id="productCode"></span>
+
+            </div>
+
+
+
+            <!-- Buttons -->
+
+            <div class="product-buttons">
+
+                <button id="cartButton" class="add-cart-btn" onclick="cartAction()">
+                   <i id="cartIcon" class="fa-solid fa-cart-shopping"></i> <span id="cartButtonText"> Add to Cart </span>
+                    </button>
+
+                    <button class="buy-now-btn"
+                            onclick="buyNow()">
+
+                        <i class="fa-solid fa-bolt"></i>
+
+                        Buy Now
+
+                    </button>
+
+
+            </div>
+            <div id="cartMessage" class="cart-message"></div>
+
+        </div>
+
+
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "dashboard";
+        }
+        // ============================================
+        // GET PRODUCT ID FROM URL
+        // ============================================
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get("productId");
+        const userId = getCookie("userId")
+        // ============================================
+        // CHECK PRODUCT ID
+        // ============================================
+
+        if (!productId) {
+
+            alert("Product ID not found");
+            window.location.href = "dashboard";
+
+        }
+        document.addEventListener("DOMContentLoaded", async function () {
+
+            loadProductDetails();
+
+        });
+
+
+        // ============================================
+        // LOAD PRODUCT FROM API
+        // ============================================
+
+        async function loadProductDetails() {
+
+            try {
+                // Call your API
+                const response = await fetch(`/api/Product/GetProductById?productId=${productId}&userId=${userId}`);
+
+                if (!response.ok) {
+
+                    throw new Error("Product not found");
+                }
+                // Convert response to JSON
+                const product = await response.json();
+                // DISPLAY PRODUCT
+
+                document.getElementById("productImage").src =product.image;
+                document.getElementById("productName").textContent =product.name;
+                document.getElementById("productPrice").textContent =product.price;
+
+                document.getElementById("productDescription").textContent =product.description ||"";
+
+                document.getElementById("productCode").textContent =product.code ||product.productid;
+                // Store product for buttons
+                window.selectedProduct = product;
+                updateCartButton(product.iscartitem);
+            }
+            catch (error) {
+                alert("Product not found");
+                window.location.href = "dashboard";
+            }
+        }
+
+        // ============================================
+        // ADD TO CART
+        // ============================================
+
+        async function addToCart() {
+
+
+            if (!userId) {
+
+                alert("Please login to add products to cart.");
+
+                window.location.href ="UserLogin";
+                return;
+            }
+            
+            var response = await fetch(`/api/Customer/SaveCart?userId=${userId}&productId=${productId}`, {
+                    method: "POST",
+            });
+            if (!response.ok) {
+                throw new Error("Failed to add product to cart.");
+            }
+            const messageElement = document.getElementById("cartMessage");
+            const message = await response.text();
+            messageElement.textContent = message;
+            messageElement.style.color = "var(--success)";
+            window.selectedProduct.iscartitem = true;
+            updateCartButton(true);
+            setTimeout(() => {messageElement.textContent = "";}, 1000);
+        }
+
+        async function removeFromCart() {
+            try {
+                const response = await fetch(`/api/Customer/CartRemove?userid=${userId}&productid=${productId}`,
+                    {
+                        method: "POST"
+                    });
+                if (!response.ok) {
+                    throw new Error("Failed to remove product from cart.");
+                }
+                window.selectedProduct.iscartitem = false;
+                updateCartButton(false);
+                const messageElement = document.getElementById("cartMessage");
+                messageElement.textContent = "Product removed from cart";
+                messageElement.style.color = "var(--success)";
+                setTimeout(() =>
+                {
+                    messageElement.textContent = "";
+                }, 1000);
+            }
+            catch (error)
+            {
+                alert(error.message);
+            }
+        }
+
+        function updateCartButton(isInCart)
+        {
+            const icon = document.getElementById("cartIcon");
+            const text = document.getElementById("cartButtonText");
+            if (isInCart)
+            { 
+                text.textContent = "Remove";
+                icon.className = "fa-solid fa-trash";
+            }  
+            else
+            {
+                text.textContent = "Add to Cart";
+                icon.className = "fa-solid fa-cart-shopping";
+            }
+        }
+        async function cartAction()
+        {
+            if (!userId) {
+                alert("Please login to manage your cart.");
+                window.location.href = "UserLogin";
+                return;
+            }
+            if (!window.selectedProduct) {
+                alert("Product details are not loaded.");
+                return;
+            }
+            if (window.selectedProduct.iscartitem)
+            {
+                await removeFromCart();
+            }
+            else
+            {
+                await addToCart();
+            }
+        }
+        // ============================================
+        // BUY NOW
+        // ============================================
+
+        function buyNow() {
+            if (!userId) {
+
+                alert("Please login to buy this product.");
+                window.location.href ="UserLogin";
+                return;
+            }
+            alert("Buy Now clicked!");
+        }
+        // GET COOKIE
+        function getCookie(name) {
+
+            const cookies = document.cookie.split(";");
+
+            for (let cookie of cookies) {
+
+                cookie = cookie.trim();
+
+                if (cookie.startsWith(name + "=")) {
+
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+                }
+
+            }
+
+            return null;
+
+        }
+    </script>
+</body>
+</html>

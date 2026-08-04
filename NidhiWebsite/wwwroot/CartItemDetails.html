@@ -1,0 +1,645 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Cart - Nidhi Jewellery</title>
+
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <style>
+
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #EDF1E9;
+            --sage-line: #C6CEC0;
+            --success: #3E7A4F;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+
+        body {
+            background: var(--cream);
+            color: var(--ink);
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: var(--teal);
+            color: var(--cream);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+            header h2 {
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                font-size: 21px;
+            }
+
+            header button {
+                padding: 10px 20px;
+                border: none;
+                border-radius: 7px;
+                cursor: pointer;
+                background: transparent;
+                color: var(--cream);
+                font-weight: 600;
+                font-size: 14px;
+                border: 1.5px solid rgba(246,243,236,0.4);
+                transition: border-color .18s ease, background .18s ease;
+            }
+
+                header button:hover {
+                    border-color: var(--gold);
+                    background: rgba(246,243,236,0.06);
+                }
+
+        /* =========================
+           PAGE TITLE
+        ========================= */
+
+        /* Main Layout */
+
+        .product-card {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            background: #fff;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all .25s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,.05);
+        }
+
+            .product-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0,0,0,.10);
+            }
+        .product-image {
+            width: 170px;
+            height: 170px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #f7f7f7;
+            border: 1px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .product-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 170px;
+        }
+
+        .product-name {
+            font-family: 'Fraunces', serif;
+            font-size: 24px;
+            color: var(--teal-deep);
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 18px;
+        }
+
+        .product-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .add-cart-btn {
+            padding: 12px 28px;
+            border-radius: 8px;
+            border: 2px solid var(--gold);
+            background: transparent;
+            color: var(--teal);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: .3s;
+        }
+
+            .add-cart-btn:hover {
+                background: var(--gold);
+                color: #fff;
+            }
+
+        .cart-page {
+            max-width: 1400px;
+            margin: 30px auto;
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+            padding: 0 25px;
+        }
+
+        /* Left Side */
+
+        .cart-products {
+            flex: 3;
+        }
+
+        /* Right Side */
+
+        .cart-summary {
+            flex: 1;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            position: sticky;
+            top: 100px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.08);
+        }
+
+            .cart-summary h3 {
+                margin-bottom: 20px;
+                color: var(--teal);
+                font-family: 'Fraunces',serif;
+            }
+
+        /* Product Card */
+
+        .product-card {
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--sage-line);
+        }
+
+        .product-image {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .summary-row,
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+
+        .summary-total {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--gold);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* ==========================
+   Tablet (<=992px)
+========================== */
+
+        @media (max-width:992px) {
+
+            .cart-page {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .cart-products,
+            .cart-summary {
+                width: 100%;
+            }
+
+            .cart-summary {
+                position: static;
+                order: 2;
+            }
+
+            .product-card {
+                gap: 18px;
+            }
+
+            .product-image {
+                width: 150px;
+                height: 150px;
+            }
+
+            .product-name {
+                font-size: 22px;
+            }
+
+            .product-price {
+                font-size: 24px;
+            }
+        }
+
+
+        /* ==========================
+   Mobile (<=768px)
+========================== */
+
+        @media (max-width:768px) {
+
+            header {
+                padding: 15px 20px;
+            }
+
+                header h2 {
+                    font-size: 18px;
+                }
+
+                header button {
+                    padding: 8px 15px;
+                    font-size: 13px;
+                }
+
+            .cart-page {
+                padding: 15px;
+            }
+
+            .product-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 18px;
+            }
+
+            .product-image {
+                width: 220px;
+                height: 220px;
+            }
+
+            .product-details {
+                width: 100%;
+            }
+
+            .product-name {
+                font-size: 20px;
+                margin-top: 10px;
+            }
+
+            .product-price {
+                font-size: 24px;
+                margin: 15px 0;
+            }
+
+            .product-buttons {
+                justify-content: center;
+            }
+
+            .add-cart-btn {
+                width: 100%;
+                padding: 12px;
+            }
+
+            .cart-summary {
+                padding: 18px;
+            }
+
+            .summary-row,
+            .summary-total {
+                font-size: 15px;
+            }
+
+            .summary-total {
+                font-size: 18px;
+            }
+
+            .place-order-btn {
+                width: 100%;
+            }
+        }
+
+
+        /* ==========================
+   Small Mobile (<=480px)
+========================== */
+
+        @media (max-width:480px) {
+
+            header {
+                padding: 12px 15px;
+            }
+
+                header h2 {
+                    font-size: 16px;
+                }
+
+                header button {
+                    padding: 7px 12px;
+                    font-size: 12px;
+                }
+
+            .cart-page {
+                padding: 10px;
+            }
+
+            .product-card {
+                padding: 15px;
+            }
+
+            .product-image {
+                width: 170px;
+                height: 170px;
+            }
+
+            .product-name {
+                font-size: 18px;
+            }
+
+            .product-price {
+                font-size: 20px;
+            }
+
+            .cart-summary h3 {
+                font-size: 18px;
+            }
+
+            .summary-row,
+            .summary-total {
+                font-size: 14px;
+            }
+
+            .place-order-btn {
+                padding: 13px;
+                font-size: 15px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+
+    <header>
+        <h2><i class="fa-solid fa-cart-shopping"></i>&nbsp; My Cart</h2>
+        <button onclick="goBack()">Dashboard</button>
+    </header>
+
+    <div class="cart-page">
+
+        <!-- Left Side -->
+        <div id="cartContainer" class="cart-products"></div>
+
+        <!-- Right Side -->
+        <div class="cart-summary">
+
+            <h3>Price Details</h3>
+
+            <div class="summary-row">
+                <span>Total Amount</span>
+                <span id="totalAmount">₹0</span>
+            </div>
+
+            <hr>
+
+            <div class="summary-total">
+                <span>Total Payable</span>
+                <span id="finalAmount">₹0</span>
+            </div>
+
+            <button class="place-order-btn" onclick="placeOrder()">
+                PLACE ORDER
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        // ============================================
+        // COOKIE HELPER
+        // ============================================
+
+        function getCookie(name) {
+
+            const cookies = document.cookie.split(";");
+
+            for (let cookie of cookies) {
+
+                cookie = cookie.trim();
+
+                if (cookie.startsWith(name + "=")) {
+
+                    return decodeURIComponent(cookie.substring(name.length + 1));
+                }
+
+            }
+
+            return null;
+
+        }
+
+        const userId = getCookie("userId");
+
+        function goBack() {
+            window.location.href = "dashboard";
+        }
+
+        // ============================================
+        // LOAD CART ON PAGE LOAD
+        // ============================================
+
+        document.addEventListener("DOMContentLoaded", async function () {
+
+            if (!userId) {
+                alert("Please login to view your cart.");
+                window.location.href = "UserLogin";
+                return;
+            }
+
+            loadCartItems();
+
+        });
+
+
+        // ============================================
+        // LOAD CART FROM API
+        // ============================================
+
+        async function loadCartItems() {
+
+            const container = document.getElementById("cartContainer");
+
+            try {
+
+                const response = await fetch(`/api/Customer/GetAllCartItems?userId=${userId}`);
+
+                if (!response.ok) {
+                    throw new Error("Failed to load cart.");
+                }
+
+                const products = await response.json();
+
+                container.innerHTML = "";
+
+                if (!products || products.length === 0) {
+                    container.innerHTML = `
+                            <div class="no-products">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                Your cart is empty.
+                            </div>
+                        `;
+                    return;
+                }
+                let total = 0;
+                products.forEach(item => {
+                    total += Number(item.productPrice);
+                    container.innerHTML += `
+                            <div class="product-card">
+
+                                <img class="product-image"
+                                     src="${item.productImage}"
+                                     alt="${item.productName}">
+
+                                <div class="product-details">
+
+                                    <div class="product-name">${item.productName}</div>
+
+                                    <div class="product-price">
+                                        &#8377; ${item.productPrice}
+                                    </div>
+
+                                    <div class="product-buttons">
+
+                                        <button class="add-cart-btn"
+                                                onclick="removeFromCart(${item.productID})">
+                                            <i class="fa-solid fa-trash"></i>
+                                            Remove
+                                        </button>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        `;
+                });
+                document.getElementById("totalAmount").innerHTML =
+                    "₹ " + total.toFixed(2);
+
+                document.getElementById("finalAmount").innerHTML =
+                    "₹ " + total.toFixed(2);
+
+            }
+            catch (err) {
+                console.error(err);
+                container.innerHTML = "<div class='no-products'>Unable to load your cart.</div>";
+            }
+        }
+        
+
+        // ============================================
+        // REMOVE FROM CART
+        // ============================================
+
+        async function removeFromCart(productId) {
+
+            try {
+
+                const response = await fetch(`/api/Customer/CartRemove?userid=${userId}&productid=${productId}`, {
+                    method: "POST"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to remove product.");
+                }
+
+                loadCartItems();
+
+            }
+            catch (err) {
+                alert(err.message);
+            }
+        }
+
+
+        // ============================================
+        // BUY NOW
+        // ============================================
+
+        function buyNow(productId) {
+
+            if (!userId) {
+                alert("Please login to buy this product.");
+                window.location.href = "UserLogin";
+                return;
+            }
+
+            alert("Buy Now clicked for product " + productId + "!");
+        }
+
+    </script>
+</body>
+</html>

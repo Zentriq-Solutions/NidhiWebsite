@@ -27,12 +27,41 @@ namespace NidhiWebsite.Models.Entity
         public int wishlistid { get; set; }
 
         public int productid { get; set; }
-
-        public string name { get; set; }
-
-        public string image { get; set; }
-
-        public decimal price { get; set; }
-
     }
+    public class Srvc_GetAllWishList_Model
+    {
+        public int ProductID { get; set; }
+        public string ProductName { get; set; }
+        public decimal ProductPrice { get; set; }
+        public int ProductUserId { get; set; }
+        public string ProductImage { get; set; }
+    }
+
+    public class CartModel
+    {
+        [Key]
+        public int cart_id { get; set; }
+        public DateTime cart_row_date { get; set; }
+
+        public int cart_user_id { get; set; }
+
+        [ForeignKey(nameof(cart_user_id))]
+        [ValidateNever]
+        public virtual User Data_tbl_User { get; set; }
+
+        public int cart_product_id { get; set; }
+
+        [ForeignKey(nameof(cart_product_id))]
+        [ValidateNever]
+        public virtual ProductModel Data_tbl_Product { get; set; }
+    }
+
+    public class Srvc_GetAllCartItems_Model
+    {
+        public int ProductID { get; set; }
+        public string ProductName { get; set; }
+        public decimal ProductPrice { get; set; }
+        public string ProductImage { get; set; }
+    }
+
 }

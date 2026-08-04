@@ -22,7 +22,9 @@ namespace NidhiWebsite.Models.Entity
             = new List<ItemGroupModel>();
         [ValidateNever]
         public ICollection<WishListModel> Data_tbl_Wish_list { get; set; }
-    = new List<WishListModel>();
+            = new List<WishListModel>();
+        public ICollection<CartModel> Data_tbl_Cart { get; set; }
+            = new List<CartModel>();
 
     }
 }

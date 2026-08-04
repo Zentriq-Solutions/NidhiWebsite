@@ -14,19 +14,16 @@ namespace NidhiWebsite.Controllers
             this.datacontext = datacontext;
         }
         [HttpPost("saveuser")]
-        public IActionResult savevouchertypeitems(User data)
+        public async Task<IActionResult> savecustomer(User data)
         {
             try
             {
-                var alluser = datacontext.Data_tbl_User.AsNoTracking().
-                                 Where(l => l.user_id != 0).
-                                 Select(m => new
-                                 {
-                                     user_id = m.user_id,
-                                     user_name = m.user_name,
-                                     user_phone_number = m.user_phone_number,
-                                 });
-                if (alluser.Any(l => l.user_name == data.user_name && l.user_phone_number == data.user_phone_number/* l.product_id != product.product_id*/))
+                bool exists = await datacontext.Data_tbl_User
+                    .AsNoTracking()
+                    .AnyAsync(l => l.user_name == data.user_name
+                                && l.user_phone_number == data.user_phone_number);
+
+                if (exists)
                 {
                     return BadRequest("Name Already Exist");
                 }
@@ -46,7 +43,7 @@ namespace NidhiWebsite.Controllers
 
                 };
                 datacontext.Data_tbl_User.Add(userdata);
-                datacontext.SaveChanges();
+                await  datacontext.SaveChangesAsync();
                 return Ok(userdata);
             }
             catch (Exception ex)
@@ -56,11 +53,11 @@ namespace NidhiWebsite.Controllers
         }
 
         [HttpPost("uservalidation")]
-        public IActionResult UserValidation(AuthenticationModel data)
+        public async Task<IActionResult> UserValidation(AuthenticationModel data)
         {
             try
             {
-                var user = datacontext.Data_tbl_User.FirstOrDefault(x =>
+                var user = await datacontext.Data_tbl_User.FirstOrDefaultAsync(x =>
                     x.user_name == data.user_name);
                 if (user == null)
                 {
