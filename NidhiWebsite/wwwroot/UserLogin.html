@@ -276,7 +276,7 @@
             </div>
 
             <button onclick="login()">Login</button>
-
+            <button onclick="Register()">Register</button>
             <p id="message"></p>
 
         </div>
@@ -341,6 +341,9 @@
             } else {
                 document.getElementById("message").innerHTML = "Invalid Username or Password";
             }
+        }
+        async function Register() {
+            window.location.href = "UserRegister";
         }
     </script>
 </body>
