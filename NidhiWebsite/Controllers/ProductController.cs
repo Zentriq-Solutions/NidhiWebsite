@@ -148,9 +148,7 @@ namespace NidhiWebsite.Controllers
                             name = m.product_name,
                             image = path + m.product_image,
                             price = m.product_price,
-                        })
-                        .Take(12)
-                        .ToListAsync();
+                        }).Take(12).ToListAsync();
                 });
 
                 return Ok(productdata);
@@ -179,8 +177,7 @@ namespace NidhiWebsite.Controllers
                             image = path + m.product_image,
                             price = m.product_price,
                             description = m.product_description,
-                        })
-                        .ToListAsync();
+                        }).ToListAsync();
                 });
 
                 return Ok(productdata);
@@ -211,8 +208,7 @@ namespace NidhiWebsite.Controllers
                         image = path + p.product_image,
                         iscartitem = userId > 0 &&
                              p.Data_tbl_Cart.Any(c => c.cart_user_id == userId)
-                    })
-                    .FirstOrDefaultAsync();
+                    }).FirstOrDefaultAsync();
 
                 if (product == null)
                     return NotFound(new { message = "Product not found" });
@@ -230,8 +226,6 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                // This was completely uncached and unbounded - now cached, and still consider
-                // adding paging (skip/take) here once your catalog grows past a few hundred items
                 var productdata = await GetOrSetCacheAsync(AllProductCacheKey, async () =>
                 {
                     return await datacontext.Data_tbl_Product.AsNoTracking()
@@ -243,8 +237,7 @@ namespace NidhiWebsite.Controllers
                             code = m.product_code,
                             description = m.product_description,
                             price = m.product_price,
-                        })
-                        .ToListAsync();
+                        }).ToListAsync();
                 });
 
                 return Ok(productdata);
@@ -272,9 +265,7 @@ namespace NidhiWebsite.Controllers
                         product_image = m.product_image,
                         product_item_group_id = m.product_item_group_id,
                         product_item_group_name = m.Data_tbl_Item_group.item_group_name,
-                    })
-                    .FirstOrDefaultAsync();
-
+                    }).FirstOrDefaultAsync();
                 return Ok(itemgroup);
             }
             catch (Exception ex)
@@ -296,8 +287,7 @@ namespace NidhiWebsite.Controllers
                         {
                             item_group_id = m.item_group_id,
                             item_group_name = m.item_group_name,
-                        })
-                        .ToListAsync();
+                        }).ToListAsync();
                 });
 
                 return Ok(itemgroup);
