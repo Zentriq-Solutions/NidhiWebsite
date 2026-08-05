@@ -288,7 +288,7 @@
         //    document.cookie =`${name}=${encodeURIComponent(value)};path=/`;
         //}
 
-        function setCookie(name, value, minutes = 10) {
+        function setCookie(name, value, minutes = 30) {
 
             const date = new Date();
             date.setTime(date.getTime() + (minutes * 60 * 1000));
