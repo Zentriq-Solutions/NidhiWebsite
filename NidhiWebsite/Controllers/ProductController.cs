@@ -209,7 +209,8 @@ namespace NidhiWebsite.Controllers
                         description = p.product_description,
                         code = p.product_code,
                         image = path + p.product_image,
-                        iscartitem = p.Data_tbl_Cart.Any(c => c.cart_user_id == userId && c.cart_product_id == productId)
+                        iscartitem = userId > 0 &&
+                             p.Data_tbl_Cart.Any(c => c.cart_user_id == userId)
                     })
                     .FirstOrDefaultAsync();
 

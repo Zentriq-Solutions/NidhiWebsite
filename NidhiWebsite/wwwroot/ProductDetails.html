@@ -523,7 +523,8 @@
 
             try {
                 // Call your API
-                const response = await fetch(`/api/Product/GetProductById?productId=${productId}&userId=${userId}`);
+                const uid = userId || 0;
+                const response = await fetch(`/api/Product/GetProductById?productId=${productId}&userId=${uid}`);
 
                 if (!response.ok) {
 
