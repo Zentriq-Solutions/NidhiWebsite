@@ -24,8 +24,6 @@ namespace NidhiWebsite.Controllers
             _cache = cache;
         }
 
-        // Same helper pattern as ProductController - keep this identical across
-        // controllers if you pull it into a shared base class later.
         private async Task<T> GetOrSetCacheAsync<T>(string key, Func<Task<T>> factory, int minutes = 10)
         {
             if (_cache.TryGetValue(key, out T cached))
@@ -74,8 +72,6 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                // Combined into one query instead of two separate .Any() round trips,
-                // but kept as two checks so we can still report which field collided
                 var duplicate = await datacontext.Data_tbl_Item_group.AsNoTracking()
                     .Where(m => m.item_group_id != data.item_group_id)
                     .Select(m => new { m.item_group_name, m.item_group_code })
@@ -85,7 +81,6 @@ namespace NidhiWebsite.Controllers
                 if (duplicate != null)
                 {
                     if (duplicate.item_group_name == data.item_group_name)
-                        return "Item group name already exist";
                     return "Item group code already exist";
                 }
 
@@ -164,8 +159,7 @@ namespace NidhiWebsite.Controllers
                             item_group_name = m.item_group_name,
                             item_group_code = m.item_group_code,
                             item_group_description = m.item_group_description,
-                        })
-                        .ToListAsync();
+                        }).ToListAsync();
                 });
 
                 return Ok(itemgroup);
@@ -190,8 +184,7 @@ namespace NidhiWebsite.Controllers
                         item_group_code = m.item_group_code,
                         item_group_description = m.item_group_description,
                         item_group_image = m.item_group_image,
-                    })
-                    .FirstOrDefaultAsync();
+                    }).FirstOrDefaultAsync();
 
                 return Ok(itemgroup);
             }
@@ -225,8 +218,7 @@ namespace NidhiWebsite.Controllers
                     {
                         item_group_id = m.item_group_id,
                         item_group_name = m.item_group_name,
-                    })
-                    .ToListAsync();
+                    }).ToListAsync();
             });
         }
     }

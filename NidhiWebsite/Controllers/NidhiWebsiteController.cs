@@ -18,10 +18,8 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                bool exists = await datacontext.Data_tbl_User
-                    .AsNoTracking()
-                    .AnyAsync(l => l.user_name == data.user_name
-                                && l.user_phone_number == data.user_phone_number);
+                bool exists = await datacontext.Data_tbl_User.AsNoTracking()
+                             .AnyAsync(l => l.user_name == data.user_name && l.user_phone_number == data.user_phone_number);
 
                 if (exists)
                 {
@@ -57,8 +55,7 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var user = await datacontext.Data_tbl_User.FirstOrDefaultAsync(x =>
-                    x.user_name == data.user_name);
+                var user = await datacontext.Data_tbl_User.FirstOrDefaultAsync(x =>x.user_name == data.user_name);
                 if (user == null)
                 {
                     return Unauthorized("Invalid username.");

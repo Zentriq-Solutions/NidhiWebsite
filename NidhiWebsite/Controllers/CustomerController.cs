@@ -46,12 +46,10 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var exists = await datacontext.Data_tbl_Wish_list
-                    .AnyAsync(x => x.wishlist_user_id == userId &&
-                              x.wishlist_product_id == productId);
+                var exists = await datacontext.Data_tbl_Wish_list.
+                             AnyAsync(x => x.wishlist_user_id == userId && x.wishlist_product_id == productId);
 
                 if (exists)
-
                 {
                     return Ok(false);
                 }
@@ -78,15 +76,14 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var rowsAffected = await datacontext.Data_tbl_Wish_list
-                        .Where(x => x.wishlist_user_id == userId && x.wishlist_product_id == productId)
-                        .ExecuteDeleteAsync();
+                var rowsAffected = await datacontext.Data_tbl_Wish_list.
+                        Where(x => x.wishlist_user_id == userId && x.wishlist_product_id == productId).
+                        ExecuteDeleteAsync();
 
                 if (rowsAffected == 0)
                 {
                     return NotFound("Wishlist item not found.");
                 }
-
                 return Ok();
             }
             catch (Exception ex)
@@ -100,10 +97,9 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var wishlistdata = await datacontext.Data_tbl_Wish_list
-                    .AsNoTracking()
-                    .Where(w => w.wishlist_user_id == userId)
-                    .Select(m => new Srvc_GetAllWishList_Model
+                var wishlistdata = await datacontext.Data_tbl_Wish_list.AsNoTracking().
+                    Where(w => w.wishlist_user_id == userId).
+                    Select(m => new Srvc_GetAllWishList_Model
                     {
                         ProductID = m.wishlist_product_id,
                         ProductName = m.Data_tbl_Product.product_name,
@@ -127,8 +123,8 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var exists = await datacontext.Data_tbl_Cart.AsNoTracking()
-                 .AnyAsync(x => x.cart_user_id == userId && x.cart_product_id == productId);
+                var exists = await datacontext.Data_tbl_Cart.AsNoTracking().
+                             AnyAsync(x => x.cart_user_id == userId && x.cart_product_id == productId);
 
                 if (exists)
                 {
@@ -158,15 +154,14 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var rowsAffected = await datacontext.Data_tbl_Cart
-            .Where(x => x.cart_user_id == userId && x.cart_product_id == productId)
-            .ExecuteDeleteAsync();
+                var rowsAffected = await datacontext.Data_tbl_Cart.
+                                    Where(x => x.cart_user_id == userId && x.cart_product_id == productId).
+                                    ExecuteDeleteAsync();
 
                 if (rowsAffected == 0)
                 {
                     return NotFound("Cart item not found.");
                 }
-
                 return Ok();
             }
             catch (Exception ex)
@@ -179,15 +174,15 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var cartdata = await datacontext.Data_tbl_Cart.AsNoTracking()
-               .Where(w => w.cart_user_id == userId)
-               .Select(m => new Srvc_GetAllCartItems_Model
-               {
-                   ProductID = m.cart_product_id,
-                   ProductName = m.Data_tbl_Product.product_name,
-                   ProductImage = path + m.Data_tbl_Product.product_image,
-                   ProductPrice = m.Data_tbl_Product.product_price,
-               }).ToListAsync();
+                var cartdata = await datacontext.Data_tbl_Cart.AsNoTracking().
+                                Where(w => w.cart_user_id == userId).
+                                Select(m => new Srvc_GetAllCartItems_Model
+                                   {
+                                       ProductID = m.cart_product_id,
+                                       ProductName = m.Data_tbl_Product.product_name,
+                                       ProductImage = path + m.Data_tbl_Product.product_image,
+                                       ProductPrice = m.Data_tbl_Product.product_price,
+                                   }).ToListAsync();
                 return Ok(cartdata);
             }
             catch (Exception ex)
