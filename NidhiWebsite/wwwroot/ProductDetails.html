@@ -378,6 +378,124 @@
             color: var(--teal);
             min-height: 20px;
         }
+
+
+        /* ============================= */
+        /* Login Popup */
+        /* ============================= */
+
+        .login-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 40, 38, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-popup {
+            position: relative;
+            width: 90%;
+            max-width: 420px;
+            background: var(--cream);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(7, 40, 38, 0.4);
+            animation: popupShow 0.3s ease;
+        }
+
+        @keyframes popupShow {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .login-popup-close {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--teal-deep);
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .login-popup-close:hover {
+                background: var(--sage);
+                color: var(--gold);
+            }
+
+        .login-popup-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--teal);
+            color: var(--gold-bright);
+            font-size: 30px;
+            box-shadow: 0 5px 15px rgba(7, 40, 38, 0.25);
+        }
+
+        .login-popup h2 {
+            font-family: 'Fraunces', serif;
+            color: var(--teal-deep);
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .login-popup p {
+            color: #5F6B64;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .login-popup-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .popup-login-btn,
+        .popup-register-btn {
+            width: 100%;
+            background: transparent;
+            color: var(--teal);
+            border: 2px solid var(--gold);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+            .popup-login-btn:hover,
+            .popup-register-btn:hover {
+                background: var(--gold);
+                color: white;
+            }
     </style>
 
 </head>
@@ -386,10 +504,23 @@
 <body>
 
 
-    
+
     <header>
         <button onclick="goBack()">Dashboard</button>
     </header>
+
+    <div id="loginPopup" class="login-popup-overlay">
+        <div class="login-popup">
+            <button class="login-popup-close" onclick="closeLoginPopUp()">&times;</button>
+            <div class="login-popup-icon">🔐</div>
+            <h2>Login Required</h2>
+            <p>Please login to your account to continue.</p>
+            <div class="login-popup-buttons">
+                <button class="popup-login-btn" onclick="goToLogin()">Login</button>
+                <button class="popup-register-btn" onclick="goToRegister()">Create Account</button>
+            </div>
+        </div>
+    </div>
 
     <div class="product-details-container">
 
@@ -466,17 +597,17 @@
             <div class="product-buttons">
 
                 <button id="cartButton" class="add-cart-btn" onclick="cartAction()">
-                   <i id="cartIcon" class="fa-solid fa-cart-shopping"></i> <span id="cartButtonText"> Add to Cart </span>
-                    </button>
+                    <i id="cartIcon" class="fa-solid fa-cart-shopping"></i> <span id="cartButtonText"> Add to Cart </span>
+                </button>
 
-                    <button class="buy-now-btn"
-                            onclick="buyNow()">
+                <button class="buy-now-btn"
+                        onclick="buyNow()">
 
-                        <i class="fa-solid fa-bolt"></i>
+                    <i class="fa-solid fa-bolt"></i>
 
-                        Buy Now
+                    Buy Now
 
-                    </button>
+                </button>
 
 
             </div>
@@ -488,6 +619,23 @@
     </div>
 
     <script>
+
+        function LoginPopUp() {
+            document.getElementById("loginPopup").style.display = "flex";
+        }
+
+        function closeLoginPopUp() {
+            document.getElementById("loginPopup").style.display = "none";
+        }
+
+        function goToLogin() {
+            window.location.href = "UserLogin";
+        }
+
+        function goToRegister() {
+            window.location.href = "UserRegister";
+        }
+
         function goBack() {
             window.location.href = "dashboard";
         }
@@ -534,13 +682,13 @@
                 const product = await response.json();
                 // DISPLAY PRODUCT
 
-                document.getElementById("productImage").src =product.image;
-                document.getElementById("productName").textContent =product.name;
-                document.getElementById("productPrice").textContent =product.price;
+                document.getElementById("productImage").src = product.image;
+                document.getElementById("productName").textContent = product.name;
+                document.getElementById("productPrice").textContent = product.price;
 
-                document.getElementById("productDescription").textContent =product.description ||"";
+                document.getElementById("productDescription").textContent = product.description || "";
 
-                document.getElementById("productCode").textContent =product.code ||product.productid;
+                document.getElementById("productCode").textContent = product.code || product.productid;
                 // Store product for buttons
                 window.selectedProduct = product;
                 updateCartButton(product.iscartitem);
@@ -560,14 +708,12 @@
 
             if (!userId) {
 
-                alert("Please login to add products to cart.");
-
-                window.location.href ="UserLogin";
+                LoginPopUp();
                 return;
             }
-            
+
             var response = await fetch(`/api/Customer/SaveCart?userId=${userId}&productId=${productId}`, {
-                    method: "POST",
+                method: "POST",
             });
             if (!response.ok) {
                 throw new Error("Failed to add product to cart.");
@@ -578,7 +724,7 @@
             messageElement.style.color = "var(--success)";
             window.selectedProduct.iscartitem = true;
             updateCartButton(true);
-            setTimeout(() => {messageElement.textContent = "";}, 1000);
+            setTimeout(() => { messageElement.textContent = ""; }, 1000);
         }
 
         async function removeFromCart() {
@@ -595,49 +741,40 @@
                 const messageElement = document.getElementById("cartMessage");
                 messageElement.textContent = "Product removed from cart";
                 messageElement.style.color = "var(--success)";
-                setTimeout(() =>
-                {
+                setTimeout(() => {
                     messageElement.textContent = "";
                 }, 1000);
             }
-            catch (error)
-            {
+            catch (error) {
                 alert(error.message);
             }
         }
 
-        function updateCartButton(isInCart)
-        {
+        function updateCartButton(isInCart) {
             const icon = document.getElementById("cartIcon");
             const text = document.getElementById("cartButtonText");
-            if (isInCart)
-            { 
+            if (isInCart) {
                 text.textContent = "Remove";
                 icon.className = "fa-solid fa-trash";
-            }  
-            else
-            {
+            }
+            else {
                 text.textContent = "Add to Cart";
                 icon.className = "fa-solid fa-cart-shopping";
             }
         }
-        async function cartAction()
-        {
+        async function cartAction() {
             if (!userId) {
-                alert("Please login to manage your cart.");
-                window.location.href = "UserLogin";
+                LoginPopUp();
                 return;
             }
             if (!window.selectedProduct) {
                 alert("Product details are not loaded.");
                 return;
             }
-            if (window.selectedProduct.iscartitem)
-            {
+            if (window.selectedProduct.iscartitem) {
                 await removeFromCart();
             }
-            else
-            {
+            else {
                 await addToCart();
             }
         }
@@ -648,8 +785,7 @@
         function buyNow() {
             if (!userId) {
 
-                alert("Please login to buy this product.");
-                window.location.href ="UserLogin";
+                LoginPopUp();
                 return;
             }
             alert("Buy Now clicked!");
