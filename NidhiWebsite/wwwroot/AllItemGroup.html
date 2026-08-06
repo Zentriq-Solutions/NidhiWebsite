@@ -242,12 +242,12 @@
                 const response = await fetch(`/api/ItemGroup/DeleteItemGroup?itemgroupid=${id}`, {
                     method: "POST"
                 });
-
+                const message = await response.text();
                 if (!response.ok) {
-                    throw new Error("Failed to delete Item Group.");
+                    throw new Error(message);
                 }
 
-                alert("Item Group deleted successfully.");
+                alert(message);
 
                 loadItemGroups();
 

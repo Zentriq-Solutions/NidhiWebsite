@@ -46,10 +46,22 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
+                bool isrefcart= await datacontext.Data_tbl_Cart.AnyAsync(x => x.cart_product_id == productid);
+                if (isrefcart)
+                {
+                    return BadRequest("Product is referenced in cart.");
+                }
+                bool isrefwishlist = await datacontext.Data_tbl_Wish_list.AnyAsync(x => x.wishlist_product_id == productid);
+                if (isrefwishlist)
+                {
+                    return BadRequest("Product is referenced in wishlist.");
+                }
                 var itemgroup = await datacontext.Data_tbl_Product.
                                 Where(x => x.product_id == productid).
                                 ExecuteDeleteAsync();
-                return Ok();
+                _cache.Remove(ProductListCacheKey);
+                _cache.Remove(AllProductCacheKey);
+                return Ok("Successfully Deleted Item");
             }
             catch (Exception ex)
             {

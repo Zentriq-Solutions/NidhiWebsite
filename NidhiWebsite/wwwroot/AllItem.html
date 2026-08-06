@@ -281,6 +281,8 @@
                         <th>Item Code</th>
                         <th>Description</th>
                         <th>Price</th>
+                        <th>Details</th>
+                        <th>Delete</th>
 
                     </tr>
                 </thead>
@@ -291,58 +293,91 @@
             </div>
         </div>
 
-        <script>
+    <script>
 
-            function goBack() {
-                window.location.href = "dashboard";
-            }
+        function goBack() {
+            window.location.href = "dashboard";
+        }
 
-            window.onload = function () {
-                loadItemGroups();
-            }
+        window.onload = function () {
+            loadItemGroups();
+        }
 
-            function loadItemGroups() {
+        function loadItemGroups() {
 
-                fetch("/api/Product/GetAllProduct")
-                    .then(response => response.json())
-                    .then(data => {
+            fetch("/api/Product/GetAllProduct")
+                .then(response => response.json())
+                .then(data => {
 
-                        const tbody = document.getElementById("itemGroupBody");
+                    const tbody = document.getElementById("itemGroupBody");
 
-                        tbody.innerHTML = "";
+                    tbody.innerHTML = "";
 
-                        data.forEach(item => {
+                    data.forEach(item => {
 
-                            tbody.innerHTML += `
-                            <tr>
-                                <td>${item.name}</td>
-                                <td>${item.code}</td>
-                                <td>${item.description}</td>
-                                <td>${item.price}</td>
-                                <td>
+                        tbody.innerHTML += `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td>${item.code}</td>
+                                    <td>${item.description}</td>
+                                    <td>${item.price}</td>
+                                    <td>
+                        <button class="details-btn"
+                            onclick="viewDetails(${item.productid})"
+                            title="View Details">
+                            👁️
+                        </button>
+                    </td>
+                    <td>
                     <button class="details-btn"
-                        onclick="viewDetails(${item.productid})"
-                        title="View Details">
-                        👁️
+                    onclick="Delete(${item.productid})"
+                    title="View Details">
+                    🗑️
                     </button>
-                </td>
-                            </tr>
-                        `;
+                    </td>
+                                </tr>
+                            `;
 
-                        });
-
-                    })
-                    .catch(error => {
-                        console.log(error);
-                        alert("Unable to load Item Groups.");
                     });
 
-            }
-            function viewDetails(id) {
-                window.location.href = "ProductCreation?id=" + id;
+                })
+                .catch(error => {
+                    alert("Unable to load Item.");
+                });
+
+        }
+        function viewDetails(id) {
+            window.location.href = "ProductCreation?id=" + id;
+        }
+        async function Delete(id) {
+
+            const confirmDelete = confirm("Are you sure you want to delete this Item?");
+
+            if (!confirmDelete) {
+                return;
             }
 
-        </script>
+            try {
+
+                const response = await fetch(`/api/Product/DeleteProduct?productid=${id}`, {
+                    method: "POST"
+                });
+                const message = await response.text();
+                if (!response.ok) {
+                    throw new Error(message);
+                }
+
+                alert(message);
+
+                loadItemGroups();
+
+            }
+            catch (err) {
+                alert(err.message);
+            }
+        }
+
+    </script>
 
 </body>
 </html>
