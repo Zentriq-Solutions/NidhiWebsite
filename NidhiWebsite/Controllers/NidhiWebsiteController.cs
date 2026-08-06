@@ -53,23 +53,44 @@ namespace NidhiWebsite.Controllers
                 {
                     return BadRequest("Name Already Exist");
                 }
+             
                 data.user_password = BCrypt.Net.BCrypt.HashPassword(data.user_password);
                 var userdata = new User();
-                userdata = new User
+                if (data.user_id==0)
                 {
-                    user_name = data.user_name,
-                    user_password = data.user_password,
-                    user_email = data.user_email,
-                    user_phone_number = data.user_phone_number,
-                    user_place = data.user_place,
-                    user_pincode = data.user_pincode,
-                    user_address = data.user_address,
-                    user_row_date = DateTime.UtcNow,
-                    user_is_admin = data.user_is_admin,
-                    user_full_name=data.user_full_name,
-                };
-                datacontext.Data_tbl_User.Add(userdata);
-                await  datacontext.SaveChangesAsync();
+                    userdata = new User
+                    {
+                        user_name = data.user_name,
+                        user_password = data.user_password,
+                        user_email = data.user_email,
+                        user_phone_number = data.user_phone_number,
+                        user_place = data.user_place,
+                        user_pincode = data.user_pincode,
+                        user_address = data.user_address,
+                        user_row_date = DateTime.UtcNow,
+                        user_is_admin = data.user_is_admin,
+                        user_full_name = data.user_full_name,
+                    };
+                    datacontext.Data_tbl_User.Add(userdata);
+                }
+                else
+                {
+                     userdata = await datacontext.Data_tbl_User.FirstOrDefaultAsync(m => m.user_id == data.user_id);
+                    if (userdata != null)
+                    {
+                        userdata.user_name = data.user_name;
+                        userdata.user_password = data.user_password;
+                        userdata.user_email = data.user_email;
+                        userdata.user_phone_number = data.user_phone_number;
+                        userdata.user_place = data.user_place;
+                        userdata.user_pincode = data.user_pincode;
+                        userdata.user_address = data.user_address;
+                        userdata.user_row_date = DateTime.UtcNow;
+                        userdata.user_is_admin = data.user_is_admin;
+                        userdata.user_full_name = data.user_full_name;
+                    }
+                }
+                await datacontext.SaveChangesAsync();
                 return Ok(userdata);
             }
             catch (Exception ex)
