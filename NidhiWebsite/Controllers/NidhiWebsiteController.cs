@@ -13,6 +13,28 @@ namespace NidhiWebsite.Controllers
         {
             this.datacontext = datacontext;
         }
+
+        #region Delete User
+
+
+        [HttpPost("DeleteUser")]
+        public async Task<IActionResult> Delete(int userId)
+        {
+            try
+            {
+                var itemgroup = await datacontext.Data_tbl_User.
+                                Where(x => x.user_id == userId).
+                                ExecuteDeleteAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
+
         [HttpPost("saveuser")]
         public async Task<IActionResult> savecustomer(User data)
         {

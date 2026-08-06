@@ -38,7 +38,26 @@ namespace NidhiWebsite.Controllers
             _cache.Set(key, data, options);
             return data;
         }
+        #region Delete Product
 
+
+        [HttpPost("DeleteProduct")]
+        public async Task<IActionResult> Delete(int productid)
+        {
+            try
+            {
+                var itemgroup = await datacontext.Data_tbl_Product.
+                                Where(x => x.product_id == productid).
+                                ExecuteDeleteAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
         [HttpPost("AddProduct")]
         public async Task<IActionResult> Create(ProductModel product)
         {

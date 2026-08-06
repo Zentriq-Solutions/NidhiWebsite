@@ -35,6 +35,26 @@ namespace NidhiWebsite.Controllers
             return data;
         }
 
+        #region Delete Item Group
+
+
+        [HttpPost("DeleteItemGroup")]
+        public async Task<IActionResult> Delete(int itemgroupid)
+        {
+            try
+            {
+                var itemgroup = await datacontext.Data_tbl_Item_group.
+                                Where(x => x.item_group_id == itemgroupid).
+                                ExecuteDeleteAsync();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
         #region Item Group Save
         [HttpPost("ItemGroup")]
         public async Task<IActionResult> Create(ItemGroupModel data)
