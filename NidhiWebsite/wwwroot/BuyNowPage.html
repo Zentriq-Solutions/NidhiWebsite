@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Now</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f4f4;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,.1);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #0B3D3A;
+        }
+
+        .row {
+            margin-bottom: 18px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            color: #222;
+            font-size: 16px;
+        }
+
+        .amount {
+            font-size: 30px;
+            color: #0B3D3A;
+            font-weight: bold;
+            margin: 25px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #0B3D3A;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+            button:hover {
+                background: #072826;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h2>Delivery Address</h2>
+
+            <div class="row">
+                <div class="label">Full Name</div>
+                <div class="value" id="name"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Phone Number</div>
+                <div class="value" id="phone"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Email</div>
+                <div class="value" id="email"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Address</div>
+                <div class="value" id="address"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Pincode</div>
+                <div class="value" id="pincode"></div>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Order Summary</h2>
+
+            <div class="amount">
+                ₹ <span id="totalAmount">0</span>
+            </div>
+
+            <button onclick="placeOrder()">
+                Place Order
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const params = new URLSearchParams(window.location.search);
+
+        const productJson = params.get("product");
+        const products = JSON.parse(decodeURIComponent(productJson));
+        const price = params.get("price");
+        const userId = params.get("userId");
+        document.getElementById("totalAmount").textContent = price;
+
+        const productIds = products.map(x => x.productId);
+        loadUser();
+
+        async function loadUser() {
+
+            try {
+
+                const response = await fetch(`/api/NidhiWebsite/userDetails?userId=${userId}`, {
+                    method: "POST"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to load user.");
+                }
+
+                const user = await response.json();
+
+                document.getElementById("name").textContent = user.user_full_name;
+                document.getElementById("phone").textContent = user.user_phone_number;
+                document.getElementById("email").textContent = user.user_email;
+                document.getElementById("address").textContent = user.user_address;
+                document.getElementById("pincode").textContent = user.user_pincode;
+
+            }
+            catch (err) {
+                alert(err.message);
+            }
+
+        }
+
+        function placeOrder() {
+
+            alert("Order Placed Successfully");
+
+        }
+    </script>
+
+</body>
+</html>

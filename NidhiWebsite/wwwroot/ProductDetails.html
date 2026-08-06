@@ -788,7 +788,13 @@
                 LoginPopUp();
                 return;
             }
-            alert("Buy Now clicked!");
+            const products = [
+                { productId: productId }
+            ];
+
+            const jsonData = encodeURIComponent(JSON.stringify(products));
+            const price = window.selectedProduct.price;
+            window.location.href = `BuyNowPage?product=${jsonData}&price=${encodeURIComponent(price)}&userId=${userId}`;
         }
         // GET COOKIE
         function getCookie(name) {

@@ -469,7 +469,7 @@
                 <span id="finalAmount">₹0</span>
             </div>
 
-            <button class="place-order-btn" onclick="placeOrder()">
+            <button class="place-order-btn" onclick="buyNow()">
                 PLACE ORDER
             </button>
 
@@ -478,11 +478,12 @@
     </div>
 
     <script>
-
+        
         // ============================================
         // COOKIE HELPER
         // ============================================
-
+        let total = 0;
+        let cartProductids = [];
         function getCookie(name) {
 
             const cookies = document.cookie.split(";");
@@ -532,7 +533,8 @@
         async function loadCartItems() {
 
             const container = document.getElementById("cartContainer");
-
+            total = 0;
+            cartProductids = [];
             try {
 
                 const response = await fetch(`/api/Customer/GetAllCartItems?userId=${userId}`);
@@ -554,9 +556,10 @@
                         `;
                     return;
                 }
-                let total = 0;
+                
                 products.forEach(item => {
                     total += Number(item.productPrice);
+                    cartProductids.push({productId: item.productID});
                     container.innerHTML += `
                             <div class="product-card">
 
@@ -629,15 +632,16 @@
         // BUY NOW
         // ============================================
 
-        function buyNow(productId) {
+        function buyNow() {
 
             if (!userId) {
                 alert("Please login to buy this product.");
                 window.location.href = "UserLogin";
                 return;
             }
+            const jsonData = encodeURIComponent(JSON.stringify(cartProductids));
 
-            alert("Buy Now clicked for product " + productId + "!");
+            window.location.href =`BuyNowPage?product=${jsonData}&price=${total}&userId=${userId}`;
         }
 
     </script>
