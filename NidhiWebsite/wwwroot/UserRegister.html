@@ -429,9 +429,29 @@
                     document.getElementById("message").style.color = "green";
 
                     document.getElementById("registerForm").reset();
+
+                    const params = new URLSearchParams(window.location.search);
+
+                    const userId = params.get("userId");
+                    const price = params.get("price");
+                    const product = params.get("product");
+                    const from = params.get("from");
+
                     setTimeout(function () {
-                        window.location.href = "UserLogin";
+
+                        if (from === "BuyNowPage") {
+
+                            window.location.href =
+                                `BuyNowPage?userId=${userId}&price=${price}&product=${product}`;
+
+                        } else {
+
+                            window.location.href = "UserLogin";
+
+                        }
+
                     }, 3000);
+                    
                 }
                 else {
 

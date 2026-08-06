@@ -432,7 +432,9 @@
         
         function goToUpdateAddress() {
 
-            window.location.href = "UserRegister?userId=" + userId;
+          
+            window.location.href =
+                `UserRegister?userId=${userId}&price=${price}&product=${encodeURIComponent(productJson)}&from=BuyNowPage`;
 
         }
     </script>
