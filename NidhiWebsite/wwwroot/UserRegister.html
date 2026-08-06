@@ -340,7 +340,10 @@
                     <label for="userpassword">Password</label>
                     <input type="password" id="userpassword" placeholder="••••••••" required>
                 </div>
-
+                <div class="field">
+                    <label for="fullname">Fullname</label>
+                    <input type="text" id="fullname" placeholder="" required>
+                </div>
                 <div class="field">
                     <label for="email">Email</label>
                     <input type="email" id="email" placeholder="you@example.com" required>
@@ -400,6 +403,7 @@
                 user_pincode: document.getElementById("pincode").value,
                 user_address: document.getElementById("address").value,
                 user_admin: false,
+                user_full_name: document.getElementById("fullname").value,
             };
 
             try {

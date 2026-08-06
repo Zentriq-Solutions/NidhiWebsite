@@ -38,7 +38,7 @@ namespace NidhiWebsite.Controllers
                     user_address = data.user_address,
                     user_row_date = DateTime.UtcNow,
                     user_is_admin = data.user_is_admin,
-
+                    user_full_name=data.user_full_name,
                 };
                 datacontext.Data_tbl_User.Add(userdata);
                 await  datacontext.SaveChangesAsync();
@@ -79,5 +79,26 @@ namespace NidhiWebsite.Controllers
             }
         }
 
+        [HttpPost("userDetails")]
+        public async Task<IActionResult> UserDetails(int userId)
+        {
+            try
+            {
+                var userdata=await datacontext.Data_tbl_User.Where(l=> l.user_id == userId).
+                             Select(m=>new
+                             {
+                                 user_full_name=m.user_full_name,
+                                 user_address = m.user_address,
+                                 user_email = m.user_email,
+                                 user_phone_number = m.user_phone_number,
+                                 user_pincode = m.user_pincode,
+                             }).FirstOrDefaultAsync();
+                return Ok(userdata);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
