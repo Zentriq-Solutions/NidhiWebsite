@@ -131,7 +131,8 @@ namespace NidhiWebsite.Controllers
                 var userdata=await datacontext.Data_tbl_User.Where(l=> l.user_id == userId).
                              Select(m=>new
                              {
-                                 user_full_name=m.user_full_name,
+                                 user_id=m.user_id,
+                                 user_full_name =m.user_full_name,
                                  user_address = m.user_address,
                                  user_email = m.user_email,
                                  user_phone_number = m.user_phone_number,
