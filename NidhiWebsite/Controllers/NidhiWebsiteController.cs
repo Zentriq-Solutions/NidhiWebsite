@@ -40,8 +40,14 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
+                //bool exists = await datacontext.Data_tbl_User.AsNoTracking()
+                //             .AnyAsync(l => l.user_name == data.user_name && l.user_phone_number == data.user_phone_number);
+
                 bool exists = await datacontext.Data_tbl_User.AsNoTracking()
-                             .AnyAsync(l => l.user_name == data.user_name && l.user_phone_number == data.user_phone_number);
+                                .AnyAsync(l =>
+                                    l.user_name == data.user_name &&
+                                    l.user_phone_number == data.user_phone_number &&
+                                    l.user_id != data.user_id);
 
                 if (exists)
                 {
@@ -114,6 +120,8 @@ namespace NidhiWebsite.Controllers
                                  user_email = m.user_email,
                                  user_phone_number = m.user_phone_number,
                                  user_pincode = m.user_pincode,
+                                 user_name = m.user_name,
+                                 user_place = m.user_place,
                              }).FirstOrDefaultAsync();
                 return Ok(userdata);
             }

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+﻿<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -170,6 +170,269 @@
         function placeOrder() {
 
             alert("Order Placed Successfully");
+
+        }
+    </script>
+
+</body>
+</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Now</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #EDF1E9;
+            --sage-line: #C6CEC0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        body {
+            background: var(--cream);
+            padding: 40px;
+            color: var(--ink);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 20px 40px -20px rgba(7,40,38,.25);
+            border: 1px solid var(--sage-line);
+        }
+
+        .card-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            color: var(--teal-deep);
+            font-size: 21px;
+        }
+
+        .update-btn {
+            padding: 8px 16px;
+            background: transparent;
+            color: var(--teal);
+            border: 1.5px solid var(--sage-line);
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: border-color .18s ease, color .18s ease, background .18s ease;
+        }
+
+            .update-btn:hover {
+                border-color: var(--gold);
+                color: var(--teal-deep);
+                background: var(--sage);
+            }
+
+        .row {
+            margin-bottom: 18px;
+        }
+
+        .label {
+            font-weight: 600;
+            font-size: 11px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #7C8880;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            color: var(--ink);
+            font-size: 16px;
+        }
+
+        .amount {
+            font-family: 'Fraunces', serif;
+            font-size: 30px;
+            color: var(--teal-deep);
+            font-weight: 600;
+            margin: 25px 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--teal);
+            color: var(--cream);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            box-shadow: 0 8px 18px -8px rgba(11,61,58,.55);
+            transition: background .15s ease, transform .12s ease;
+        }
+
+            button:hover {
+                background: var(--teal-deep);
+                transform: translateY(-1px);
+            }
+
+        @media (max-width: 680px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div class="card">
+
+            <div class="card-head">
+                <h2>Delivery Address</h2>
+                <button class="update-btn" onclick="goToUpdateAddress()">Update</button>
+            </div>
+
+            <div class="row">
+                <div class="label">Full Name</div>
+                <div class="value" id="name"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Phone Number</div>
+                <div class="value" id="phone"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Email</div>
+                <div class="value" id="email"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Address</div>
+                <div class="value" id="address"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Pincode</div>
+                <div class="value" id="pincode"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Username</div>
+                <div class="value" id="username"></div>
+            </div>
+
+            <div class="row">
+                <div class="label">Place</div>
+                <div class="value" id="place"></div>
+            </div>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Order Summary</h2>
+
+            <div class="amount">
+                ₹ <span id="totalAmount">0</span>
+            </div>
+
+            <button onclick="placeOrder()">
+                Place Order
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const params = new URLSearchParams(window.location.search);
+
+        const productJson = params.get("product");
+        const products = JSON.parse(decodeURIComponent(productJson));
+        const price = params.get("price");
+        const userId = params.get("userId");
+        document.getElementById("totalAmount").textContent = price;
+
+        const productIds = products.map(x => x.productId);
+        loadUser();
+
+        async function loadUser() {
+           
+
+            try {
+
+                const response = await fetch(`/api/NidhiWebsite/userDetails?userId=${userId}`, {
+                    method: "POST"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to load user.");
+                }
+
+                const user = await response.json();
+
+                document.getElementById("username").textContent = user.user_name;
+                document.getElementById("name").textContent = user.user_full_name;
+                document.getElementById("phone").textContent = user.user_phone_number;
+                document.getElementById("email").textContent = user.user_email;
+                document.getElementById("address").textContent = user.user_address;
+                document.getElementById("place").textContent = user.user_place;
+                document.getElementById("pincode").textContent = user.user_pincode;
+
+
+            }
+            catch (err) {
+                alert(err.message);
+            }
+
+        }
+
+        function placeOrder() {
+
+            alert("Order Placed Successfully");
+
+        }
+
+        
+        
+        function goToUpdateAddress() {
+
+            window.location.href = "UserRegister?userId=" + userId;
 
         }
     </script>

@@ -331,6 +331,8 @@
 
             <form id="registerForm">
 
+                <input type="hidden" id="user_id" value="0">
+
                 <div class="field">
                     <label for="username">Username</label>
                     <input type="text" id="username" placeholder="e.g. anjali.rao" required>
@@ -395,6 +397,7 @@
 
             const userData = {
 
+                user_id: parseInt(document.getElementById("user_id").value) || 0,
                 user_name: document.getElementById("username").value,
                 user_password: document.getElementById("userpassword").value,
                 user_email: document.getElementById("email").value,
@@ -448,6 +451,70 @@
             }
 
         });
+
+
+        window.onload = function () {
+
+            const params = new URLSearchParams(window.location.search);
+
+            const userId = params.get("userId");
+
+            if (userId != null) {
+
+                loadUser(userId);
+
+            }
+
+        }
+
+        async function loadUser(userId) {
+
+            const response = await fetch(
+                "/api/NidhiWebsite/userDetails?userId=" + userId,
+                {
+                    method: "POST"
+                });
+
+            if (!response.ok) {
+
+                alert("Unable to load user.");
+
+                return;
+
+            }
+
+            const user = await response.json();
+
+            document.getElementById("user_id").value = user.user_id;
+
+            document.getElementById("username").value =
+                user.user_name;
+
+            document.getElementById("userpassword").value =
+                user.user_password;
+
+            document.getElementById("fullname").value =
+                user.user_full_name;
+
+            document.getElementById("email").value =
+                user.user_email;
+
+            document.getElementById("phonenumber").value =
+                user.user_phone_number;
+
+            document.getElementById("place").value =
+                user.user_place;
+
+            document.getElementById("pincode").value =
+                user.user_pincode;
+
+            document.getElementById("address").value =
+                user.user_address;
+
+            document.querySelector("#registerForm button[type='submit']")
+                .textContent = "Update";
+
+        }
 
     </script>
 
