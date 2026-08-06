@@ -43,10 +43,18 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
+                bool reference=await datacontext.Data_tbl_Product.AsNoTracking().
+                                     AnyAsync(l=>l.product_item_group_id == itemgroupid);
+                if (reference)
+                {
+                    return Ok("Reference Exist");
+                }
                 var itemgroup = await datacontext.Data_tbl_Item_group.
                                 Where(x => x.item_group_id == itemgroupid).
                                 ExecuteDeleteAsync();
-                return Ok();
+                _cache.Remove(ItemGroupListCacheKey);
+                _cache.Remove(AllItemGroupCacheKey);
+                return Ok("Successfully Deleted Item Group");
             }
             catch (Exception ex)
             {
