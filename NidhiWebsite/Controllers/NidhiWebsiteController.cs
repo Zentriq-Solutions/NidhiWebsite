@@ -40,14 +40,9 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                //bool exists = await datacontext.Data_tbl_User.AsNoTracking()
-                //             .AnyAsync(l => l.user_name == data.user_name && l.user_phone_number == data.user_phone_number);
-
+              
                 bool exists = await datacontext.Data_tbl_User.AsNoTracking()
-                                .AnyAsync(l =>
-                                    l.user_name == data.user_name &&
-                                    l.user_phone_number == data.user_phone_number &&
-                                    l.user_id != data.user_id);
+                                .AnyAsync(l =>l.user_name == data.user_name && l.user_phone_number == data.user_phone_number && l.user_id != data.user_id);
 
                 if (exists)
                 {
