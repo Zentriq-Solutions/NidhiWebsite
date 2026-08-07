@@ -74,7 +74,7 @@ namespace NidhiWebsite.Controllers
                     if (userdata != null)
                     {
                         userdata.user_name = data.user_name;
-                        userdata.user_password = data.user_password;
+                        //userdata.user_password = data.user_password;
                         userdata.user_email = data.user_email;
                         userdata.user_phone_number = data.user_phone_number;
                         userdata.user_place = data.user_place;
