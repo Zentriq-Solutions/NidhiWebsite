@@ -190,6 +190,79 @@ namespace NidhiWebsite.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #region Report
+        [HttpGet("MostWishListProductReport")]
+        public async Task<IActionResult> GetMostWishListProductReport()
+        {
+            try
+            {
+                var collect = await datacontext.Data_tbl_Wish_list.AsNoTracking().
+                                    Where(l=>l.wishlist_product_id!=0).
+                                Select(m => new
+                                {
+                                    ProductID = m.wishlist_product_id,
+                                    ProductName = m.Data_tbl_Product.product_name,
+                                    ProductCode = m.Data_tbl_Product.product_code,
+                                    ProductPrice = m.Data_tbl_Product.product_price,
+                                }).GroupBy(l => new 
+                                {
+                                    ProductID = l.ProductID,
+                                    ProductName = l.ProductName,
+                                    ProductCode = l.ProductCode,
+                                    ProductPrice = l.ProductPrice,
+                                }).Select(k=>new
+                                {
+                                    ProductID = k.Key.ProductID,
+                                    ProductName = k.Key.ProductName,
+                                    ProductCode = k.Key.ProductCode,
+                                    ProductPrice = k.Key.ProductPrice,
+                                    TotalNumber= k.Count(),
+                                }).OrderByDescending(j => j.TotalNumber).ToListAsync();
+                return Ok(collect);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("MostCartProductReport")]
+        public async Task<IActionResult> GetMostCartProductReport()
+        {
+            try
+            {
+                var collect = await datacontext.Data_tbl_Cart.AsNoTracking().
+                    Where(l => l.cart_product_id != 0).
+                                Select(m => new
+                                {
+                                    ProductID = m.cart_product_id,
+                                    ProductName = m.Data_tbl_Product.product_name,
+                                    ProductCode = m.Data_tbl_Product.product_code,
+                                    ProductPrice = m.Data_tbl_Product.product_price,
+                                }).GroupBy(l => new
+                                {
+                                    ProductID = l.ProductID,
+                                    ProductName = l.ProductName,
+                                    ProductCode = l.ProductCode,
+                                    ProductPrice = l.ProductPrice,
+                                }).Select(k => new
+                                {
+                                    ProductID = k.Key.ProductID,
+                                    ProductName = k.Key.ProductName,
+                                    ProductCode = k.Key.ProductCode,
+                                    ProductPrice = k.Key.ProductPrice,
+                                    TotalNumber = k.Count(),
+                                }).OrderByDescending(j=>j.TotalNumber).ToListAsync();
+                return Ok(collect);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }

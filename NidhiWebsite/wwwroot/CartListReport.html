@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Most Cart Added Products - Nidhi Jewellery</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #EDF1E9;
+            --sage-line: #C6CEC0;
+            --success: #3E7A4F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
+
+        body {
+            background: var(--cream);
+        }
+
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--teal);
+            color: var(--cream);
+            padding: 15px 40px;
+        }
+
+            .top-header .logo img {
+                width: 130px;
+                height: 80px;
+                border-radius: 10px;
+            }
+
+            .top-header .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .top-header a {
+                color: var(--cream);
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 15px;
+                border: 2px solid var(--gold);
+                padding: 8px 16px;
+                border-radius: 6px;
+                transition: 0.2s;
+            }
+
+                .top-header a:hover {
+                    background: var(--gold);
+                    color: white;
+                }
+
+        .fetch-btn {
+            background: var(--gold);
+            color: var(--teal-deep);
+            border: 2px solid var(--gold);
+            font-weight: 700;
+            font-size: 15px;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+            .fetch-btn:hover {
+                background: var(--gold-bright);
+                border-color: var(--gold-bright);
+            }
+
+            .fetch-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+        main {
+            padding: 40px 30px;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Fraunces', serif;
+            font-weight: 600;
+            font-size: 30px;
+            color: var(--teal-deep);
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7C8880;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .table-wrap {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0px 4px 15px rgba(7, 40, 38, 0.12);
+            border: 1px solid var(--sage-line);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            display: none;
+        }
+
+        thead {
+            background: var(--teal);
+        }
+
+        th {
+            text-align: left;
+            color: var(--cream);
+            padding: 14px 16px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--ink);
+            border-bottom: 1px solid var(--sage-line);
+        }
+
+        tbody tr:hover {
+            background: var(--sage);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--sage);
+            color: var(--teal-deep);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .price-cell {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .count-cell {
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .loading-text {
+            text-align: center;
+            color: #7C8880;
+            padding: 40px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="top-header">
+        <div class="logo">
+            <img src="/Upload/nidhilogo.png" alt="Logo">
+        </div>
+        <div class="header-actions">
+            <button class="fetch-btn" id="fetchBtn" onclick="loadReport()">Fetch</button>
+            <a href="dashboard">&larr; Back to Home</a>
+        </div>
+    </header>
+
+    <main>
+        <h1>Most Cart Added Products</h1>
+        <p class="subtitle">Products ranked by number of times added to customer carts</p>
+
+        <div class="table-wrap">
+            <table id="reportTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Product Code</th>
+                        <th>Price</th>
+                        <th>Cart Count</th>
+                    </tr>
+                </thead>
+                <tbody id="reportBody"></tbody>
+            </table>
+            <p class="loading-text" id="reportStatus">Click "Fetch" to load the report.</p>
+        </div>
+    </main>
+
+    <script>
+        async function loadReport() {
+            const fetchBtn = document.getElementById("fetchBtn");
+            const status = document.getElementById("reportStatus");
+            const table = document.getElementById("reportTable");
+            const body = document.getElementById("reportBody");
+
+            fetchBtn.disabled = true;
+            table.style.display = "none";
+            status.style.display = "block";
+            status.textContent = "Loading report...";
+
+            try {
+                const response = await fetch("/api/Customer/MostCartProductReport");
+                if (!response.ok) throw new Error("Failed to load report");
+
+                const data = await response.json();
+
+                if (!data || data.length === 0) {
+                    status.textContent = "No cart data available yet.";
+                    return;
+                }
+
+                body.innerHTML = data.map((row, i) => `
+                    <tr>
+                        <td><span class="rank-badge">${i + 1}</span></td>
+                        <td>${row.productName ?? "-"}</td>
+                        <td>${row.productCode ?? "-"}</td>
+                        <td class="price-cell">&#8377; ${row.productPrice}</td>
+                        <td class="count-cell">${row.totalNumber}</td>
+                    </tr>
+                `).join("");
+
+                status.style.display = "none";
+                table.style.display = "table";
+            } catch (error) {
+                console.error(error);
+                status.textContent = "Unable to load report.";
+            } finally {
+                fetchBtn.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+</html>

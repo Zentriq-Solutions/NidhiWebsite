@@ -790,6 +790,19 @@
 
             </div>
 
+            <div class="profile" id="reportMenu" style="display:none;">
+                <button id="reportBtn">
+                    📊
+                    <br>
+                    Report
+                </button>
+
+                <div class="profile-popup" id="reportPopup">
+                    <button onclick="goToMostWishlistReport()">Most Wishlisted Products</button>
+                    <button onclick="goToMostCartReport()">Most Cart Added Products</button>
+                </div>
+            </div>
+
             <div class="wishlist" onclick="LoginPopUp()">
                 ❤️
                 <br>
@@ -1172,12 +1185,19 @@
                     ? "none"
                     : "block";
         };
+        reportBtn.onclick = function () {
+            reportPopup.style.display =
+                reportPopup.style.display === "block"
+                    ? "none"
+                    : "block";
+        };
 
         window.onclick = function (e) {
 
             if (!e.target.closest(".profile")) {
 
                 popup.style.display = "none";
+                reportPopup.style.display = "none";
             }
 
         };
@@ -1257,6 +1277,7 @@
                 AllItemGroup.style.display = "block";
                 Additemgroup.style.display = "block";
                 AllItem.style.display = "block";
+                reportMenu.style.display = "block";
 
             }
             else {
@@ -1264,6 +1285,7 @@
                 AllItemGroup.style.display = "none";
                 Additemgroup.style.display = "none";
                 AllItem.style.display = "none";
+                reportMenu.style.display = "none";
             }
 
         }
@@ -1277,6 +1299,7 @@
             AllItemGroup.style.display = "none";
             Additemgroup.style.display = "none";
             AllItem.style.display = "none";
+            reportMenu.style.display = "none";
         }
 
         // Check Admin
@@ -1375,7 +1398,13 @@
             }
         } // Load item groups when page loads
 
+        function goToMostWishlistReport() {
+            window.location.href = "WishListReport";
+        }
 
+        function goToMostCartReport() {
+            window.location.href = "CartListReport";
+        }
 
     </script>
 
