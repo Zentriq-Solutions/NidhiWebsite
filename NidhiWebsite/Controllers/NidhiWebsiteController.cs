@@ -81,7 +81,7 @@ namespace NidhiWebsite.Controllers
                         userdata.user_pincode = data.user_pincode;
                         userdata.user_address = data.user_address;
                         userdata.user_row_date = DateTime.UtcNow;
-                        userdata.user_is_admin = data.user_is_admin;
+                        //userdata.user_is_admin = data.user_is_admin;
                         userdata.user_full_name = data.user_full_name;
                     }
                 }
