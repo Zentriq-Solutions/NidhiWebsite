@@ -177,12 +177,12 @@ namespace NidhiWebsite.Controllers
                 var cartdata = await datacontext.Data_tbl_Cart.AsNoTracking().
                                 Where(w => w.cart_user_id == userId).
                                 Select(m => new Srvc_GetAllCartItems_Model
-                                   {
-                                       ProductID = m.cart_product_id,
-                                       ProductName = m.Data_tbl_Product.product_name,
-                                       ProductImage = path + m.Data_tbl_Product.product_image,
-                                       ProductPrice = m.Data_tbl_Product.product_price,
-                                   }).ToListAsync();
+                                {
+                                    ProductID = m.cart_product_id,
+                                    ProductName = m.Data_tbl_Product.product_name,
+                                    ProductImage = path + m.Data_tbl_Product.product_image,
+                                    ProductPrice = m.Data_tbl_Product.product_price,
+                                }).ToListAsync();
                 return Ok(cartdata);
             }
             catch (Exception ex)
@@ -190,6 +190,10 @@ namespace NidhiWebsite.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        #endregion
+
         #region Report
         [HttpGet("MostWishListProductReport")]
         public async Task<IActionResult> GetMostWishListProductReport()
@@ -197,26 +201,26 @@ namespace NidhiWebsite.Controllers
             try
             {
                 var collect = await datacontext.Data_tbl_Wish_list.AsNoTracking().
-                                    Where(l=>l.wishlist_product_id!=0).
+                                    Where(l => l.wishlist_product_id != 0).
                                 Select(m => new
                                 {
                                     ProductID = m.wishlist_product_id,
                                     ProductName = m.Data_tbl_Product.product_name,
                                     ProductCode = m.Data_tbl_Product.product_code,
                                     ProductPrice = m.Data_tbl_Product.product_price,
-                                }).GroupBy(l => new 
+                                }).GroupBy(l => new
                                 {
                                     ProductID = l.ProductID,
                                     ProductName = l.ProductName,
                                     ProductCode = l.ProductCode,
                                     ProductPrice = l.ProductPrice,
-                                }).Select(k=>new
+                                }).Select(k => new
                                 {
                                     ProductID = k.Key.ProductID,
                                     ProductName = k.Key.ProductName,
                                     ProductCode = k.Key.ProductCode,
                                     ProductPrice = k.Key.ProductPrice,
-                                    TotalNumber= k.Count(),
+                                    TotalNumber = k.Count(),
                                 }).OrderByDescending(j => j.TotalNumber).ToListAsync();
                 return Ok(collect);
             }
@@ -252,7 +256,7 @@ namespace NidhiWebsite.Controllers
                                     ProductCode = k.Key.ProductCode,
                                     ProductPrice = k.Key.ProductPrice,
                                     TotalNumber = k.Count(),
-                                }).OrderByDescending(j=>j.TotalNumber).ToListAsync();
+                                }).OrderByDescending(j => j.TotalNumber).ToListAsync();
                 return Ok(collect);
             }
             catch (Exception ex)
@@ -260,8 +264,6 @@ namespace NidhiWebsite.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        #endregion
 
         #endregion
     }
