@@ -1,254 +1,433 @@
 ﻿<!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Item Groups</title>
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Products</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
+                :root {
+                    --ink: #1B2521;
+                    --teal: #0B3D3A;
+                    --teal-deep: #072826;
+                    --teal-soft: #124F4A;
+                    --gold: #C9A227;
+                    --gold-bright: #E0B93A;
+                    --cream: #F6F3EC;
+                    --sage: #F1F4EE;
+                    --sage-line: #E1E7DC;
+                    --danger: #B3452F;
+                    --danger-bright: #D45A3F;
+                }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-        }
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Inter', Arial, sans-serif;
+                }
 
-        /* Product Container */
-        .product-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            padding: 30px;
-            max-width: 1200px;
-            margin: 130px auto 0;
-        }
+                body {
+                    background: linear-gradient(180deg, #FBF9F3 0%, var(--cream) 260px);
+                    color: var(--ink);
+                    min-height: 100vh;
+                }
 
+                header {
+                    background: linear-gradient(120deg, var(--teal-deep), var(--teal) 70%);
+                    color: var(--cream);
+                    padding: 22px 44px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    position: sticky;
+                    top: 0;
+                    z-index: 100;
+                    box-shadow: 0 10px 30px -14px rgba(7, 40, 38, 0.55);
+                }
 
-        /* Product Card */
+                    header h2 {
+                        font-family: 'Fraunces', serif;
+                        font-weight: 600;
+                        font-size: 22px;
+                        letter-spacing: .01em;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
 
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
+                        header h2::before {
+                            content: "";
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 50%;
+                            background: var(--gold-bright);
+                            box-shadow: 0 0 0 4px rgba(224, 185, 58, 0.22);
+                        }
 
+                    header button {
+                        padding: 10px 22px;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        background: rgba(246, 243, 236, 0.08);
+                        color: var(--cream);
+                        font-weight: 600;
+                        font-size: 13.5px;
+                        letter-spacing: .02em;
+                        border: 1.5px solid rgba(246, 243, 236, 0.35);
+                        transition: border-color .2s ease, background .2s ease, transform .2s ease;
+                    }
 
-            .product-card:hover {
-                transform: translateY(-5px);
-            }
+                        header button:hover {
+                            border-color: var(--gold-bright);
+                            background: rgba(224, 185, 58, 0.14);
+                            transform: translateY(-1px);
+                        }
 
+                .container {
+                    width: 92%;
+                    max-width: 1100px;
+                    margin: 40px auto;
+                }
 
-        /* Product Image */
+                    .container > h2 {
+                        margin-bottom: 20px;
+                        font-family: 'Fraunces', serif;
+                        font-weight: 600;
+                        color: var(--teal-deep);
+                        font-size: 23px;
+                    }
 
-        .product-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            display: block;
-        }
+                .table-card {
+                    background: white;
+                    border-radius: 16px;
+                    overflow: hidden;
+                    box-shadow: 0 24px 50px -26px rgba(7, 40, 38, 0.32), 0 2px 6px rgba(7, 40, 38, 0.06);
+                    border: 1px solid var(--sage-line);
+                }
 
+                .table-responsive {
+                    width: 100%;
+                    overflow-x: auto;
+                }
 
-        /* Product Details */
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
 
-        .product-details {
-            padding: 20px;
-        }
+                th {
+                    background: var(--teal);
+                    color: var(--cream);
+                    padding: 16px 14px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    letter-spacing: .08em;
+                    text-transform: uppercase;
+                    text-align: center;
+                    position: relative;
+                }
 
+                    th:not(:last-child)::after {
+                        content: "";
+                        position: absolute;
+                        right: 0;
+                        top: 30%;
+                        height: 40%;
+                        width: 1px;
+                        background: rgba(246, 243, 236, 0.15);
+                    }
 
-        .product-name {
-            font-size: 20px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-        }
+                td {
+                    padding: 15px 14px;
+                    border-bottom: 1px solid var(--sage-line);
+                    text-align: center;
+                    font-size: 14.5px;
+                    color: var(--ink);
+                    transition: background .15s ease;
+                }
 
+                tr:last-child td {
+                    border-bottom: none;
+                }
 
-        .product-code {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 10px;
-        }
+                tr:nth-child(even) td {
+                    background: var(--sage);
+                }
 
+                tr:hover td {
+                    background: #FBF0D2;
+                }
 
-        .product-price {
-            font-size: 20px;
-            font-weight: bold;
-            color: #e67e22;
-            margin-bottom: 10px;
-        }
+                .details-btn {
+                    width: 38px;
+                    height: 38px;
+                    border: none;
+                    border-radius: 50%;
+                    background: var(--teal-soft);
+                    color: var(--cream);
+                    cursor: pointer;
+                    font-size: 15px;
+                    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+                    box-shadow: 0 6px 14px -6px rgba(7, 40, 38, 0.5);
+                }
 
+                    .details-btn:hover {
+                        background: var(--gold);
+                        transform: scale(1.1);
+                        box-shadow: 0 8px 18px -6px rgba(201, 162, 39, 0.55);
+                    }
 
-        .product-description {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.5;
-        }
+                .delete-btn {
+                    background: var(--danger);
+                }
 
+                    .delete-btn:hover {
+                        background: var(--danger-bright);
+                        box-shadow: 0 8px 18px -6px rgba(212, 90, 63, 0.5);
+                    }
 
-        /* No Products */
+                .empty-state {
+                    text-align: center;
+                    padding: 60px 20px;
+                    color: #8A8F86;
+                    font-size: 15px;
+                }
 
-        .no-products {
-            text-align: center;
-            padding: 50px;
-            font-size: 20px;
-            color: #777;
-        }
+                /* =========================
+           RESPONSIVE
+        ========================= */
 
+                @media (max-width: 992px) {
 
+                    header {
+                        padding: 16px 25px;
+                    }
+
+                        header h2 {
+                            font-size: 20px;
+                        }
+
+                    .container {
+                        width: 96%;
+                        margin: 28px auto;
+                    }
+
+                    table {
+                        min-width: 850px;
+                    }
+
+                    th, td {
+                        padding: 13px 10px;
+                        font-size: 14px;
+                    }
+                }
+
+                @media (max-width: 768px) {
+
+                    header {
+                        padding: 14px 18px;
+                    }
+
+                        header h2 {
+                            font-size: 18px;
+                        }
+
+                        header button {
+                            padding: 8px 16px;
+                            font-size: 13px;
+                        }
+
+                    .container {
+                        width: 98%;
+                        margin: 20px auto;
+                    }
+
+                        .container > h2 {
+                            font-size: 20px;
+                        }
+
+                    table {
+                        min-width: 750px;
+                    }
+
+                    th {
+                        font-size: 11.5px;
+                        padding: 11px;
+                    }
+
+                    td {
+                        font-size: 13px;
+                        padding: 11px;
+                    }
+
+                    .details-btn {
+                        width: 34px;
+                        height: 34px;
+                        font-size: 13px;
+                    }
+                }
+
+                @media (max-width: 480px) {
+
+                    header {
+                        padding: 12px;
+                    }
+
+                        header h2 {
+                            font-size: 16px;
+                        }
+
+                        header button {
+                            padding: 7px 13px;
+                            font-size: 12px;
+                        }
+
+                    table {
+                        min-width: 700px;
+                    }
+
+                    th, td {
+                        padding: 9px;
+                        font-size: 12px;
+                    }
+
+                    .details-btn {
+                        width: 30px;
+                        height: 30px;
+                        font-size: 12px;
+                    }
+                }
     </style>
-
 </head>
-
 
 <body>
 
-    <!-- Common Header will be loaded here -->
-    <div id="headerContainer"></div>
+    <header>
+        <h2>Item Group List</h2>
+        <button onclick="goBack()">Dashboard</button>
+    </header>
 
+    <div class="container">
+        <div class="table-card">
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Item Code</th>
+                            <th>Description</th>
+                            <th>Price</th>
+                            <th>Details</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
 
-    <!-- Product List -->
-    <div class="product-container"
-         id="productContainer">
-
+                    <tbody id="itemGroupBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
-
-    <script src="Js/Headerjavascript.js"></script>
 
     <script>
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            async function () {
+        function goBack() {
+            window.location.href = "dashboard";
+        }
 
-                // Load common header first
-                await loadHeader();
+        window.onload = function () {
+            loadItemGroups();
+        }
 
-                // Load products
-                loadProducts();
+        function loadItemGroups() {
 
-            }
-        );
+            fetch("/api/Product/GetAllProduct")
+                .then(response => response.json())
+                .then(data => {
 
+                    const tbody = document.getElementById("itemGroupBody");
 
-        function loadProducts() {
+                    tbody.innerHTML = "";
 
-            const storedProducts =
-                sessionStorage.getItem(
-                    "itemGroupProducts"
-                );
+                    if (!data || data.length === 0) {
+                        tbody.innerHTML = `
+                                <tr>
+                                    <td colspan="6" class="empty-state">No item groups found.</td>
+                                </tr>
+                            `;
+                        return;
+                    }
 
+                    data.forEach(item => {
 
-            const container =
-                document.getElementById(
-                    "productContainer"
-                );
+                        tbody.innerHTML += `
+                                    <tr>
+                                        <td>${item.name}</td>
+                                        <td>${item.code}</td>
+                                        <td>${item.description}</td>
+                                        <td>${item.price}</td>
+                                        <td>
+                            <button class="details-btn"
+                                onclick="viewDetails(${item.productid})"
+                                title="View Details">
+                                👁️
+                            </button>
+                        </td>
+                        <td>
+                        <button class="details-btn delete-btn"
+                        onclick="Delete(${item.productid})"
+                        title="Delete Item">
+                        🗑️
+                        </button>
+                        </td>
+                                    </tr>
+                                `;
 
+                    });
 
-            if (!storedProducts) {
+                })
+                .catch(error => {
+                    alert("Unable to load Item.");
+                });
 
-                container.innerHTML = `
-                        <div class="no-products">
-                            No products found.
-                        </div>
-                    `;
+        }
+        function viewDetails(id) {
+            window.location.href = "ProductCreation?id=" + id;
+        }
+        async function Delete(id) {
 
+            const confirmDelete = confirm("Are you sure you want to delete this Item?");
+
+            if (!confirmDelete) {
                 return;
-
             }
 
+            try {
 
-            const products =
-                JSON.parse(
-                    storedProducts
-                );
+                const response = await fetch(`/api/Product/DeleteProduct?productid=${id}`, {
+                    method: "POST"
+                });
+                const message = await response.text();
+                if (!response.ok) {
+                    throw new Error(message);
+                }
 
+                alert(message);
 
-            if (
-                !products ||
-                products.length === 0
-            ) {
-
-                container.innerHTML = `
-                        <div class="no-products">
-                            No products found
-                            for this item group.
-                        </div>
-                    `;
-
-                return;
+                loadItemGroups();
 
             }
-
-
-            container.innerHTML = "";
-
-
-            products.forEach(product => {
-
-                const card =
-                    document.createElement("div");
-
-
-                card.className =
-                    "product-card";
-
-
-                card.innerHTML = `
-
-                        <img
-                            class="product-image"
-                            src="${product.image}"
-                            alt="${product.name}"
-                            onerror="
-                                this.src =
-                                'images/no-image.png'
-                            "
-                        >
-
-                        <div class="product-details">
-
-                            <div class="product-name">
-                                ${product.name}
-                            </div>
-
-                            <div class="product-code">
-                                Product Code:
-                                ${product.code}
-                            </div>
-
-                            <div class="product-price">
-                                $${product.price}
-                            </div>
-
-                            <div class="product-description">
-                                ${product.description || ""}
-                            </div>
-
-                        </div>
-
-                    `;
-
-
-                container.appendChild(card);
-
-            });
-
+            catch (err) {
+                alert(err.message);
+            }
         }
 
     </script>
 
 </body>
-
 </html>
