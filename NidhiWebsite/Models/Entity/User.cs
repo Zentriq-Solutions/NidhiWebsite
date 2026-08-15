@@ -28,4 +28,14 @@ namespace NidhiWebsite.Models.Entity
             = new List<CartModel>();
 
     }
+    public class Srvc_UpdateUser_Model
+    {
+        public int user_id { get; set; }
+        public string user_email { get; set; }
+        public string user_phone_number { get; set; }
+        public string user_place { get; set; }
+        public int user_pincode { get; set; }
+        public string user_address { get; set; }
+        public string user_full_name { get; set; }
+    }
 }

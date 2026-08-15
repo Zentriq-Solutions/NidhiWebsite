@@ -1,184 +1,4 @@
-﻿<!--<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buy Now</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: #f4f4f4;
-            padding: 40px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 25px;
-        }
-
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,.1);
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #0B3D3A;
-        }
-
-        .row {
-            margin-bottom: 18px;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #555;
-            margin-bottom: 5px;
-        }
-
-        .value {
-            color: #222;
-            font-size: 16px;
-        }
-
-        .amount {
-            font-size: 30px;
-            color: #0B3D3A;
-            font-weight: bold;
-            margin: 25px 0;
-        }
-
-        button {
-            width: 100%;
-            padding: 15px;
-            background: #0B3D3A;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 17px;
-        }
-
-            button:hover {
-                background: #072826;
-            }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-
-        <div class="card">
-
-            <h2>Delivery Address</h2>
-
-            <div class="row">
-                <div class="label">Full Name</div>
-                <div class="value" id="name"></div>
-            </div>
-
-            <div class="row">
-                <div class="label">Phone Number</div>
-                <div class="value" id="phone"></div>
-            </div>
-
-            <div class="row">
-                <div class="label">Email</div>
-                <div class="value" id="email"></div>
-            </div>
-
-            <div class="row">
-                <div class="label">Address</div>
-                <div class="value" id="address"></div>
-            </div>
-
-            <div class="row">
-                <div class="label">Pincode</div>
-                <div class="value" id="pincode"></div>
-            </div>
-
-        </div>
-
-        <div class="card">
-
-            <h2>Order Summary</h2>
-
-            <div class="amount">
-                ₹ <span id="totalAmount">0</span>
-            </div>
-
-            <button onclick="placeOrder()">
-                Place Order
-            </button>
-
-        </div>
-
-    </div>
-
-    <script>
-
-        const params = new URLSearchParams(window.location.search);
-
-        const productJson = params.get("product");
-        const products = JSON.parse(decodeURIComponent(productJson));
-        const price = params.get("price");
-        const userId = params.get("userId");
-        document.getElementById("totalAmount").textContent = price;
-
-        const productIds = products.map(x => x.productId);
-        loadUser();
-
-        async function loadUser() {
-
-            try {
-
-                const response = await fetch(`/api/NidhiWebsite/userDetails?userId=${userId}`, {
-                    method: "POST"
-                });
-
-                if (!response.ok) {
-                    throw new Error("Failed to load user.");
-                }
-
-                const user = await response.json();
-
-                document.getElementById("name").textContent = user.user_full_name;
-                document.getElementById("phone").textContent = user.user_phone_number;
-                document.getElementById("email").textContent = user.user_email;
-                document.getElementById("address").textContent = user.user_address;
-                document.getElementById("pincode").textContent = user.user_pincode;
-
-            }
-            catch (err) {
-                alert(err.message);
-            }
-
-        }
-
-        function placeOrder() {
-
-            alert("Order Placed Successfully");
-
-        }
-    </script>
-
-</body>
-</html>-->
-
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -312,6 +132,127 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 40, 38, 0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+            .modal-overlay.active {
+                display: flex;
+            }
+
+        .modal-box {
+            background: white;
+            width: 92%;
+            max-width: 420px;
+            border-radius: 14px;
+            padding: 25px;
+            box-shadow: 0 20px 40px -20px rgba(7,40,38,.35);
+            border: 1px solid var(--sage-line);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+            .modal-box h2 {
+                margin-bottom: 18px;
+            }
+
+        .modal-field {
+            margin-bottom: 14px;
+        }
+
+            .modal-field label {
+                display: block;
+                font-weight: 600;
+                font-size: 11px;
+                letter-spacing: .08em;
+                text-transform: uppercase;
+                color: #7C8880;
+                margin-bottom: 6px;
+            }
+
+            .modal-field input,
+            .modal-field textarea {
+                width: 100%;
+                padding: 10px 12px;
+                border: 1.5px solid var(--sage-line);
+                border-radius: 7px;
+                font-size: 14px;
+                color: var(--ink);
+                font-family: inherit;
+                resize: vertical;
+            }
+
+                .modal-field input:focus,
+                .modal-field textarea:focus {
+                    outline: none;
+                    border-color: var(--gold);
+                }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+            .modal-actions button {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+        .btn-cancel {
+            background: transparent !important;
+            color: var(--teal) !important;
+            border: 1.5px solid var(--sage-line) !important;
+            box-shadow: none !important;
+        }
+
+            .btn-cancel:hover {
+                background: var(--sage) !important;
+                transform: none !important;
+            }
+
+        .toast-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 40, 38, 0.45);
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+        }
+
+            .toast-overlay.active {
+                display: flex;
+            }
+
+        .toast-box {
+            background: white;
+            width: 92%;
+            max-width: 340px;
+            border-radius: 14px;
+            padding: 28px 25px;
+            text-align: center;
+            box-shadow: 0 20px 40px -20px rgba(7,40,38,.35);
+            border: 1px solid var(--sage-line);
+        }
+
+        .toast-message {
+            font-size: 15px;
+            color: var(--ink);
+            margin-bottom: 18px;
+        }
+
+        .toast-box button {
+            padding: 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -349,12 +290,6 @@
                 <div class="label">Pincode</div>
                 <div class="value" id="pincode"></div>
             </div>
-
-            <div class="row">
-                <div class="label">Username</div>
-                <div class="value" id="username"></div>
-            </div>
-
             <div class="row">
                 <div class="label">Place</div>
                 <div class="value" id="place"></div>
@@ -378,6 +313,48 @@
 
     </div>
 
+    <div class="modal-overlay" id="addressModal">
+        <div class="modal-box">
+            <h2>Update Address</h2>
+
+            <div class="modal-field">
+                <label>Full Name</label>
+                <input type="text" id="ua_fullName" />
+            </div>
+            <div class="modal-field">
+                <label>Phone Number</label>
+                <input type="text" id="ua_phone" maxlength="10" />
+            </div>
+            <div class="modal-field">
+                <label>Email</label>
+                <input type="email" id="ua_email" />
+            </div>
+            <div class="modal-field">
+                <label>Address</label>
+                <textarea id="ua_address" rows="2"></textarea>
+            </div>
+            <div class="modal-field">
+                <label>Pincode</label>
+                <input type="text" id="ua_pincode" maxlength="6" />
+            </div>
+            <div class="modal-field">
+                <label>Place</label>
+                <input type="text" id="ua_place" />
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeAddressModal()">Cancel</button>
+                <button onclick="submitAddressUpdate()">Save</button>
+            </div>
+        </div>
+    </div>
+    <div class="toast-overlay" id="toastOverlay">
+        <div class="toast-box">
+            <div class="toast-message" id="toastMessage"></div>
+            <button onclick="closeToast()">OK</button>
+        </div>
+    </div>
+
     <script>
 
         const params = new URLSearchParams(window.location.search);
@@ -392,7 +369,6 @@
         loadUser();
 
         async function loadUser() {
-           
 
             try {
 
@@ -406,14 +382,12 @@
 
                 const user = await response.json();
 
-                document.getElementById("username").textContent = user.user_name;
                 document.getElementById("name").textContent = user.user_full_name;
                 document.getElementById("phone").textContent = user.user_phone_number;
                 document.getElementById("email").textContent = user.user_email;
                 document.getElementById("address").textContent = user.user_address;
                 document.getElementById("place").textContent = user.user_place;
                 document.getElementById("pincode").textContent = user.user_pincode;
-
 
             }
             catch (err) {
@@ -423,19 +397,65 @@
         }
 
         function placeOrder() {
-
             alert("Order Placed Successfully");
-
         }
 
-        
-        
         function goToUpdateAddress() {
+            document.getElementById("ua_fullName").value = document.getElementById("name").textContent;
+            document.getElementById("ua_phone").value = document.getElementById("phone").textContent;
+            document.getElementById("ua_email").value = document.getElementById("email").textContent;
+            document.getElementById("ua_address").value = document.getElementById("address").textContent;
+            document.getElementById("ua_pincode").value = document.getElementById("pincode").textContent;
+            document.getElementById("ua_place").value = document.getElementById("place").textContent;
 
-          
-            window.location.href =
-                `UserRegister?userId=${userId}&price=${price}&product=${encodeURIComponent(productJson)}&from=BuyNowPage`;
+            document.getElementById("addressModal").classList.add("active");
+        }
 
+        function closeAddressModal() {
+            document.getElementById("addressModal").classList.remove("active");
+        }
+
+        async function submitAddressUpdate() {
+
+            const data = {
+                user_id: userId,
+                user_full_name: document.getElementById("ua_fullName").value.trim(),
+                user_phone_number: document.getElementById("ua_phone").value.trim(),
+                user_email: document.getElementById("ua_email").value.trim(),
+                user_address: document.getElementById("ua_address").value.trim(),
+                user_pincode: parseInt(document.getElementById("ua_pincode").value.trim(), 10),
+                user_place: document.getElementById("ua_place").value.trim()
+            };
+
+            if (!data.user_full_name || !data.user_phone_number || !data.user_email || !data.user_address || !data.user_pincode || !data.user_place) {
+                alert("Please fill all fields.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/NidhiWebsite/AddressUpdate`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to update address.");
+                }
+                closeAddressModal();
+                showToast("Address updated successfully!");
+
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+        function showToast(message) {
+            document.getElementById("toastMessage").textContent = message;
+            document.getElementById("toastOverlay").classList.add("active");
+        }
+
+        function closeToast() {
+            document.getElementById("toastOverlay").classList.remove("active");
         }
     </script>
 

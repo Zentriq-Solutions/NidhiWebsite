@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NidhiWebsite.Data;
 using NidhiWebsite.Models.Entity;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace NidhiWebsite.Controllers
 {
     [Route("api/[controller]")]
@@ -40,18 +41,18 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-              
+
                 bool exists = await datacontext.Data_tbl_User.AsNoTracking()
-                                .AnyAsync(l =>l.user_name == data.user_name && l.user_phone_number == data.user_phone_number && l.user_id != data.user_id);
+                                .AnyAsync(l => l.user_name == data.user_name && l.user_phone_number == data.user_phone_number && l.user_id != data.user_id);
 
                 if (exists)
                 {
                     return BadRequest("Name Already Exist");
                 }
-             
+
                 data.user_password = BCrypt.Net.BCrypt.HashPassword(data.user_password);
                 var userdata = new User();
-                if (data.user_id==0)
+                if (data.user_id == 0)
                 {
                     userdata = new User
                     {
@@ -70,7 +71,7 @@ namespace NidhiWebsite.Controllers
                 }
                 else
                 {
-                     userdata = await datacontext.Data_tbl_User.FirstOrDefaultAsync(m => m.user_id == data.user_id);
+                    userdata = await datacontext.Data_tbl_User.FirstOrDefaultAsync(m => m.user_id == data.user_id);
                     if (userdata != null)
                     {
                         userdata.user_name = data.user_name;
@@ -99,7 +100,7 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var user = await datacontext.Data_tbl_User.FirstOrDefaultAsync(x =>x.user_name == data.user_name);
+                var user = await datacontext.Data_tbl_User.FirstOrDefaultAsync(x => x.user_name == data.user_name);
                 if (user == null)
                 {
                     return Unauthorized("Invalid username.");
@@ -107,15 +108,15 @@ namespace NidhiWebsite.Controllers
                 bool isvalidate = BCrypt.Net.BCrypt.Verify(
                                 data.user_password,
                                 user.user_password);
-               if (!isvalidate)
+                if (!isvalidate)
                 {
                     return Unauthorized("Invalid username or password.");
                 }
-                   return Ok(new
-                   {
-                       user.user_is_admin,
-                       user.user_id
-                   });
+                return Ok(new
+                {
+                    user.user_is_admin,
+                    user.user_id
+                });
             }
             catch (Exception ex)
             {
@@ -128,18 +129,44 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                var userdata=await datacontext.Data_tbl_User.Where(l=> l.user_id == userId).
-                             Select(m=>new
+                var userdata = await datacontext.Data_tbl_User.Where(l => l.user_id == userId).
+                             Select(m => new
                              {
-                                 user_id=m.user_id,
-                                 user_full_name =m.user_full_name,
+                                 user_id = m.user_id,
+                                 user_full_name = m.user_full_name,
                                  user_address = m.user_address,
                                  user_email = m.user_email,
                                  user_phone_number = m.user_phone_number,
                                  user_pincode = m.user_pincode,
-                                 user_name = m.user_name,
                                  user_place = m.user_place,
                              }).FirstOrDefaultAsync();
+                return Ok(userdata);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("AddressUpdate")]
+        public async Task<IActionResult> AddressUpdate(Srvc_UpdateUser_Model data)
+        {
+            try
+            {
+                var userdata = new User();
+                userdata = await datacontext.Data_tbl_User.FirstOrDefaultAsync(m => m.user_id == data.user_id);
+                if (userdata == null)
+                {
+                    return NotFound("User not found.");
+                }
+                userdata.user_email = data.user_email;
+                userdata.user_phone_number = data.user_phone_number;
+                userdata.user_place = data.user_place;
+                userdata.user_pincode = data.user_pincode;
+                userdata.user_address = data.user_address;
+                userdata.user_row_date = DateTime.UtcNow;
+                userdata.user_full_name = data.user_full_name;
+                await datacontext.SaveChangesAsync();
                 return Ok(userdata);
             }
             catch (Exception ex)
