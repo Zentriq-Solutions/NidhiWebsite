@@ -29,7 +29,7 @@
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <link rel="stylesheet" href="/Shared/layout.css">
 
     <style>
 
@@ -58,47 +58,6 @@
             background: var(--cream);
             color: var(--ink);
         }
-
-
-        /* =========================
-           HEADER
-        ========================= */
-
-        header {
-            background: var(--teal);
-            color: var(--cream);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-            header h2 {
-                font-family: 'Fraunces', serif;
-                font-weight: 600;
-                font-size: 21px;
-            }
-
-            header button {
-                padding: 10px 20px;
-                border: none;
-                border-radius: 7px;
-                cursor: pointer;
-                background: transparent;
-                color: var(--cream);
-                font-weight: 600;
-                font-size: 14px;
-                border: 1.5px solid rgba(246,243,236,0.4);
-                transition: border-color .18s ease, background .18s ease;
-            }
-
-                header button:hover {
-                    border-color: var(--gold);
-                    background: rgba(246,243,236,0.06);
-                }
 
         /* Product Container */
         .product-container {
@@ -505,9 +464,7 @@
 
 
 
-    <header>
-        <button onclick="goBack()">Dashboard</button>
-    </header>
+    <header class="top-header" id="layout"></header>
 
     <div id="loginPopup" class="login-popup-overlay">
         <div class="login-popup">
@@ -617,7 +574,7 @@
 
 
     </div>
-
+    <script src="/Shared/layout.js"></script>
     <script>
 
         function LoginPopUp() {
@@ -636,9 +593,6 @@
             window.location.href = "UserRegister";
         }
 
-        function goBack() {
-            window.location.href = "dashboard";
-        }
         // ============================================
         // GET PRODUCT ID FROM URL
         // ============================================
@@ -816,6 +770,32 @@
             return null;
 
         }
+        fetch("/Shared/Layout.html")
+
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Unable to load Layout.html"
+                    );
+                }
+                return response.text();
+
+            })
+
+            .then(data => {
+
+                document.getElementById("layout")
+                    .innerHTML = data;
+                initializeLayout();
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+            });
     </script>
 </body>
 </html>

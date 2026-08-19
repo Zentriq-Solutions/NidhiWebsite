@@ -8,309 +8,226 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="/Shared/layout.css">
     <style>
-                :root {
-                    --ink: #1B2521;
-                    --teal: #0B3D3A;
-                    --teal-deep: #072826;
-                    --teal-soft: #124F4A;
-                    --gold: #C9A227;
-                    --gold-bright: #E0B93A;
-                    --cream: #F6F3EC;
-                    --sage: #F1F4EE;
-                    --sage-line: #E1E7DC;
-                    --danger: #B3452F;
-                    --danger-bright: #D45A3F;
-                }
+        :root {
+            --ink: #1B2521;
+            --teal: #0B3D3A;
+            --teal-deep: #072826;
+            --teal-soft: #124F4A;
+            --gold: #C9A227;
+            --gold-bright: #E0B93A;
+            --cream: #F6F3EC;
+            --sage: #F1F4EE;
+            --sage-line: #E1E7DC;
+            --danger: #B3452F;
+            --danger-bright: #D45A3F;
+        }
 
-                * {
-                    margin: 0;
-                    padding: 0;
-                    box-sizing: border-box;
-                    font-family: 'Inter', Arial, sans-serif;
-                }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', Arial, sans-serif;
+        }
 
-                body {
-                    background: linear-gradient(180deg, #FBF9F3 0%, var(--cream) 260px);
-                    color: var(--ink);
-                    min-height: 100vh;
-                }
+        body {
+            background: linear-gradient(180deg, #FBF9F3 0%, var(--cream) 260px);
+            color: var(--ink);
+            min-height: 100vh;
+        }
 
-                header {
-                    background: linear-gradient(120deg, var(--teal-deep), var(--teal) 70%);
-                    color: var(--cream);
-                    padding: 22px 44px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    position: sticky;
-                    top: 0;
-                    z-index: 100;
-                    box-shadow: 0 10px 30px -14px rgba(7, 40, 38, 0.55);
-                }
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 40px auto;
+        }
 
-                    header h2 {
-                        font-family: 'Fraunces', serif;
-                        font-weight: 600;
-                        font-size: 22px;
-                        letter-spacing: .01em;
-                        display: flex;
-                        align-items: center;
-                        gap: 10px;
-                    }
+            .container > h2 {
+                margin-bottom: 20px;
+                font-family: 'Fraunces', serif;
+                font-weight: 600;
+                color: var(--teal-deep);
+                font-size: 23px;
+            }
 
-                        header h2::before {
-                            content: "";
-                            width: 8px;
-                            height: 8px;
-                            border-radius: 50%;
-                            background: var(--gold-bright);
-                            box-shadow: 0 0 0 4px rgba(224, 185, 58, 0.22);
-                        }
+        .table-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 24px 50px -26px rgba(7, 40, 38, 0.32), 0 2px 6px rgba(7, 40, 38, 0.06);
+            border: 1px solid var(--sage-line);
+        }
 
-                    header button {
-                        padding: 10px 22px;
-                        border-radius: 8px;
-                        cursor: pointer;
-                        background: rgba(246, 243, 236, 0.08);
-                        color: var(--cream);
-                        font-weight: 600;
-                        font-size: 13.5px;
-                        letter-spacing: .02em;
-                        border: 1.5px solid rgba(246, 243, 236, 0.35);
-                        transition: border-color .2s ease, background .2s ease, transform .2s ease;
-                    }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
 
-                        header button:hover {
-                            border-color: var(--gold-bright);
-                            background: rgba(224, 185, 58, 0.14);
-                            transform: translateY(-1px);
-                        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-                .container {
-                    width: 92%;
-                    max-width: 1100px;
-                    margin: 40px auto;
-                }
+        th {
+            background: var(--teal);
+            color: var(--cream);
+            padding: 16px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            text-align: center;
+            position: relative;
+        }
 
-                    .container > h2 {
-                        margin-bottom: 20px;
-                        font-family: 'Fraunces', serif;
-                        font-weight: 600;
-                        color: var(--teal-deep);
-                        font-size: 23px;
-                    }
+            th:not(:last-child)::after {
+                content: "";
+                position: absolute;
+                right: 0;
+                top: 30%;
+                height: 40%;
+                width: 1px;
+                background: rgba(246, 243, 236, 0.15);
+            }
 
-                .table-card {
-                    background: white;
-                    border-radius: 16px;
-                    overflow: hidden;
-                    box-shadow: 0 24px 50px -26px rgba(7, 40, 38, 0.32), 0 2px 6px rgba(7, 40, 38, 0.06);
-                    border: 1px solid var(--sage-line);
-                }
+        td {
+            padding: 15px 14px;
+            border-bottom: 1px solid var(--sage-line);
+            text-align: center;
+            font-size: 14.5px;
+            color: var(--ink);
+            transition: background .15s ease;
+        }
 
-                .table-responsive {
-                    width: 100%;
-                    overflow-x: auto;
-                }
+        tr:last-child td {
+            border-bottom: none;
+        }
 
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
+        tr:nth-child(even) td {
+            background: var(--sage);
+        }
 
-                th {
-                    background: var(--teal);
-                    color: var(--cream);
-                    padding: 16px 14px;
-                    font-size: 12px;
-                    font-weight: 600;
-                    letter-spacing: .08em;
-                    text-transform: uppercase;
-                    text-align: center;
-                    position: relative;
-                }
+        tr:hover td {
+            background: #FBF0D2;
+        }
 
-                    th:not(:last-child)::after {
-                        content: "";
-                        position: absolute;
-                        right: 0;
-                        top: 30%;
-                        height: 40%;
-                        width: 1px;
-                        background: rgba(246, 243, 236, 0.15);
-                    }
+        .details-btn {
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 50%;
+            background: var(--teal-soft);
+            color: var(--cream);
+            cursor: pointer;
+            font-size: 15px;
+            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+            box-shadow: 0 6px 14px -6px rgba(7, 40, 38, 0.5);
+        }
 
-                td {
-                    padding: 15px 14px;
-                    border-bottom: 1px solid var(--sage-line);
-                    text-align: center;
-                    font-size: 14.5px;
-                    color: var(--ink);
-                    transition: background .15s ease;
-                }
+            .details-btn:hover {
+                background: var(--gold);
+                transform: scale(1.1);
+                box-shadow: 0 8px 18px -6px rgba(201, 162, 39, 0.55);
+            }
 
-                tr:last-child td {
-                    border-bottom: none;
-                }
+        .delete-btn {
+            background: var(--danger);
+        }
 
-                tr:nth-child(even) td {
-                    background: var(--sage);
-                }
+            .delete-btn:hover {
+                background: var(--danger-bright);
+                box-shadow: 0 8px 18px -6px rgba(212, 90, 63, 0.5);
+            }
 
-                tr:hover td {
-                    background: #FBF0D2;
-                }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #8A8F86;
+            font-size: 15px;
+        }
 
-                .details-btn {
-                    width: 38px;
-                    height: 38px;
-                    border: none;
-                    border-radius: 50%;
-                    background: var(--teal-soft);
-                    color: var(--cream);
-                    cursor: pointer;
-                    font-size: 15px;
-                    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
-                    box-shadow: 0 6px 14px -6px rgba(7, 40, 38, 0.5);
-                }
-
-                    .details-btn:hover {
-                        background: var(--gold);
-                        transform: scale(1.1);
-                        box-shadow: 0 8px 18px -6px rgba(201, 162, 39, 0.55);
-                    }
-
-                .delete-btn {
-                    background: var(--danger);
-                }
-
-                    .delete-btn:hover {
-                        background: var(--danger-bright);
-                        box-shadow: 0 8px 18px -6px rgba(212, 90, 63, 0.5);
-                    }
-
-                .empty-state {
-                    text-align: center;
-                    padding: 60px 20px;
-                    color: #8A8F86;
-                    font-size: 15px;
-                }
-
-                /* =========================
+        /* =========================
            RESPONSIVE
         ========================= */
 
-                @media (max-width: 992px) {
+        @media (max-width: 992px) {
 
-                    header {
-                        padding: 16px 25px;
-                    }
+            
 
-                        header h2 {
-                            font-size: 20px;
-                        }
+            .container {
+                width: 96%;
+                margin: 28px auto;
+            }
 
-                    .container {
-                        width: 96%;
-                        margin: 28px auto;
-                    }
+            table {
+                min-width: 850px;
+            }
 
-                    table {
-                        min-width: 850px;
-                    }
+            th, td {
+                padding: 13px 10px;
+                font-size: 14px;
+            }
+        }
 
-                    th, td {
-                        padding: 13px 10px;
-                        font-size: 14px;
-                    }
+        @media (max-width: 768px) {
+
+            
+
+            .container {
+                width: 98%;
+                margin: 20px auto;
+            }
+
+                .container > h2 {
+                    font-size: 20px;
                 }
 
-                @media (max-width: 768px) {
+            table {
+                min-width: 750px;
+            }
 
-                    header {
-                        padding: 14px 18px;
-                    }
+            th {
+                font-size: 11.5px;
+                padding: 11px;
+            }
 
-                        header h2 {
-                            font-size: 18px;
-                        }
+            td {
+                font-size: 13px;
+                padding: 11px;
+            }
 
-                        header button {
-                            padding: 8px 16px;
-                            font-size: 13px;
-                        }
+            .details-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 13px;
+            }
+        }
 
-                    .container {
-                        width: 98%;
-                        margin: 20px auto;
-                    }
+        @media (max-width: 480px) {
 
-                        .container > h2 {
-                            font-size: 20px;
-                        }
 
-                    table {
-                        min-width: 750px;
-                    }
+            table {
+                min-width: 700px;
+            }
 
-                    th {
-                        font-size: 11.5px;
-                        padding: 11px;
-                    }
+            th, td {
+                padding: 9px;
+                font-size: 12px;
+            }
 
-                    td {
-                        font-size: 13px;
-                        padding: 11px;
-                    }
-
-                    .details-btn {
-                        width: 34px;
-                        height: 34px;
-                        font-size: 13px;
-                    }
-                }
-
-                @media (max-width: 480px) {
-
-                    header {
-                        padding: 12px;
-                    }
-
-                        header h2 {
-                            font-size: 16px;
-                        }
-
-                        header button {
-                            padding: 7px 13px;
-                            font-size: 12px;
-                        }
-
-                    table {
-                        min-width: 700px;
-                    }
-
-                    th, td {
-                        padding: 9px;
-                        font-size: 12px;
-                    }
-
-                    .details-btn {
-                        width: 30px;
-                        height: 30px;
-                        font-size: 12px;
-                    }
-                }
+            .details-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <header>
-        <h2>Item Group List</h2>
-        <button onclick="goBack()">Dashboard</button>
-    </header>
+    <header class="top-header" id="layout"></header>
 
     <div class="container">
         <div class="table-card">
@@ -333,12 +250,8 @@
             </div>
         </div>
     </div>
-
+    <script src="/Shared/layout.js"></script>
     <script>
-
-        function goBack() {
-            window.location.href = "dashboard";
-        }
 
         window.onload = function () {
             loadItemGroups();
@@ -356,37 +269,37 @@
 
                     if (!data || data.length === 0) {
                         tbody.innerHTML = `
-                                <tr>
-                                    <td colspan="6" class="empty-state">No item groups found.</td>
-                                </tr>
-                            `;
+                                    <tr>
+                                        <td colspan="6" class="empty-state">No item groups found.</td>
+                                    </tr>
+                                `;
                         return;
                     }
 
                     data.forEach(item => {
 
                         tbody.innerHTML += `
-                                    <tr>
-                                        <td>${item.name}</td>
-                                        <td>${item.code}</td>
-                                        <td>${item.description}</td>
-                                        <td>${item.price}</td>
-                                        <td>
-                            <button class="details-btn"
-                                onclick="viewDetails(${item.productid})"
-                                title="View Details">
-                                👁️
+                                        <tr>
+                                            <td>${item.name}</td>
+                                            <td>${item.code}</td>
+                                            <td>${item.description}</td>
+                                            <td>${item.price}</td>
+                                            <td>
+                                <button class="details-btn"
+                                    onclick="viewDetails(${item.productid})"
+                                    title="View Details">
+                                    👁️
+                                </button>
+                            </td>
+                            <td>
+                            <button class="details-btn delete-btn"
+                            onclick="Delete(${item.productid})"
+                            title="Delete Item">
+                            🗑️
                             </button>
-                        </td>
-                        <td>
-                        <button class="details-btn delete-btn"
-                        onclick="Delete(${item.productid})"
-                        title="Delete Item">
-                        🗑️
-                        </button>
-                        </td>
-                                    </tr>
-                                `;
+                            </td>
+                                        </tr>
+                                    `;
 
                     });
 
@@ -426,7 +339,32 @@
                 alert(err.message);
             }
         }
+        fetch("/Shared/Layout.html")
 
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Unable to load Layout.html"
+                    );
+                }
+                return response.text();
+
+            })
+
+            .then(data => {
+
+                document.getElementById("layout")
+                    .innerHTML = data;
+                initializeLayout();
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+            });
     </script>
 
 </body>

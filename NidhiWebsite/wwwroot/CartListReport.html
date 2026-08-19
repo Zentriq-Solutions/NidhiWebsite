@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="/Shared/layout.css">
     <style>
         :root {
             --ink: #1B2521;
@@ -33,42 +33,17 @@
             background: var(--cream);
         }
 
-        .top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--teal);
-            color: var(--cream);
-            padding: 15px 40px;
+        main {
+            padding: 40px 30px;
         }
+        
 
-            .top-header .logo img {
-                width: 130px;
-                height: 80px;
-                border-radius: 10px;
-            }
-
-            .top-header .header-actions {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .top-header a {
-                color: var(--cream);
-                text-decoration: none;
-                font-weight: 600;
-                font-size: 15px;
-                border: 2px solid var(--gold);
-                padding: 8px 16px;
-                border-radius: 6px;
-                transition: 0.2s;
-            }
-
-                .top-header a:hover {
-                    background: var(--gold);
-                    color: white;
-                }
+        .header-actions {
+            max-width: 950px;
+            margin: 0 auto 15px auto;
+            display: flex;
+            justify-content: flex-end;
+        }
 
         .fetch-btn {
             background: var(--gold);
@@ -76,12 +51,11 @@
             border: 2px solid var(--gold);
             font-weight: 700;
             font-size: 15px;
-            padding: 8px 20px;
+            padding: 8px 10px;
             border-radius: 6px;
             cursor: pointer;
             transition: 0.2s;
         }
-
             .fetch-btn:hover {
                 background: var(--gold-bright);
                 border-color: var(--gold-bright);
@@ -92,25 +66,7 @@
                 cursor: not-allowed;
             }
 
-        main {
-            padding: 40px 30px;
-        }
-
-        h1 {
-            text-align: center;
-            font-family: 'Fraunces', serif;
-            font-weight: 600;
-            font-size: 30px;
-            color: var(--teal-deep);
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #7C8880;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
+        
 
         .table-wrap {
             max-width: 950px;
@@ -188,19 +144,12 @@
 </head>
 <body>
 
-    <header class="top-header">
-        <div class="logo">
-            <img src="/Upload/nidhilogo.png" alt="Logo">
-        </div>
+    <header class="top-header" id="layout"></header>
+    
+    <main>
         <div class="header-actions">
             <button class="fetch-btn" id="fetchBtn" onclick="loadReport()">Fetch</button>
-            <a href="dashboard">&larr; Back to Home</a>
         </div>
-    </header>
-
-    <main>
-        <h1>Most Cart Added Products</h1>
-        <p class="subtitle">Products ranked by number of times added to customer carts</p>
 
         <div class="table-wrap">
             <table id="reportTable">
@@ -218,7 +167,7 @@
             <p class="loading-text" id="reportStatus">Click "Fetch" to load the report.</p>
         </div>
     </main>
-
+    <script src="/Shared/layout.js"></script>
     <script>
         async function loadReport() {
             const fetchBtn = document.getElementById("fetchBtn");
@@ -243,14 +192,14 @@
                 }
 
                 body.innerHTML = data.map((row, i) => `
-                    <tr>
-                        <td><span class="rank-badge">${i + 1}</span></td>
-                        <td>${row.productName ?? "-"}</td>
-                        <td>${row.productCode ?? "-"}</td>
-                        <td class="price-cell">&#8377; ${row.productPrice}</td>
-                        <td class="count-cell">${row.totalNumber}</td>
-                    </tr>
-                `).join("");
+                            <tr>
+                                <td><span class="rank-badge">${i + 1}</span></td>
+                                <td>${row.productName ?? "-"}</td>
+                                <td>${row.productCode ?? "-"}</td>
+                                <td class="price-cell">&#8377; ${row.productPrice}</td>
+                                <td class="count-cell">${row.totalNumber}</td>
+                            </tr>
+                        `).join("");
 
                 status.style.display = "none";
                 table.style.display = "table";
@@ -261,6 +210,32 @@
                 fetchBtn.disabled = false;
             }
         }
+        fetch("/Shared/Layout.html")
+
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Unable to load Layout.html"
+                    );
+                }
+                return response.text();
+
+            })
+
+            .then(data => {
+
+                document.getElementById("layout")
+                    .innerHTML = data;
+                initializeLayout();
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+            });
     </script>
 
 </body>
