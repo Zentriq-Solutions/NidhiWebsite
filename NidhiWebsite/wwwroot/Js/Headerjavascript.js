@@ -1,190 +1,220 @@
-﻿javascript
-async function loadHeader() {
+﻿function initializeLayout() {
 
-    try {
+    const profileBtn = document.getElementById("profileBtn");
+    const profilePopup = document.getElementById("profilePopup");
 
-        const response = await fetch("header.html");
+    const reportBtn = document.getElementById("reportBtn");
+    const reportPopup = document.getElementById("reportPopup");
 
-        if (!response.ok) {
-            throw new Error("Unable to load header");
-        }
+    const loginBtn = document.getElementById("loginBtn");
+    const registerBtn = document.getElementById("registerBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-        const headerHtml = await response.text();
+    const addItem = document.getElementById("Additem");
+    const addItemGroup = document.getElementById("Additemgroup");
+    const allItemGroup = document.getElementById("AllItemGroup");
+    const allItem = document.getElementById("AllItem");
 
-        document.getElementById("headerContainer")
-            .innerHTML = headerHtml;
-
-
-        // Initialize header functionality
-        initializeHeader();
-
-    }
-    catch (error) {
-
-        console.error(
-            "Header loading error:",
-            error
-        );
-
-    }
-
-}
+    const reportMenu = document.getElementById("reportMenu");
 
 
-function initializeHeader() {
+    // =========================
+    // PROFILE MENU
+    // =========================
 
-    const profileBtn =
-        document.getElementById("profileBtn");
+    profileBtn.onclick = function (event) {
 
-    const popup =
-        document.getElementById("profilePopup");
+        event.stopPropagation();
 
-
-    // Profile button click
-    profileBtn.onclick = function () {
-
-        popup.style.display =
-            popup.style.display === "block"
+        profilePopup.style.display =
+            profilePopup.style.display === "block"
                 ? "none"
                 : "block";
 
+        if (reportPopup) {
+            reportPopup.style.display = "none";
+        }
     };
 
 
-    // Close popup when clicking outside
-    window.onclick = function (e) {
+    // =========================
+    // REPORT MENU
+    // =========================
 
-        if (!e.target.closest(".profile")) {
+    if (reportBtn) {
 
-            popup.style.display = "none";
+        reportBtn.onclick = function (event) {
 
+            event.stopPropagation();
+
+            reportPopup.style.display =
+                reportPopup.style.display === "block"
+                    ? "none"
+                    : "block";
+
+            profilePopup.style.display = "none";
+        };
+    }
+
+
+    // =========================
+    // CLOSE POPUPS
+    // =========================
+
+    document.addEventListener("click", function (event) {
+
+        if (!event.target.closest(".profile")) {
+
+            profilePopup.style.display = "none";
+
+            if (reportPopup) {
+                reportPopup.style.display = "none";
+            }
         }
 
-    };
+    });
 
 
-    // Get cookies
-    const userId =
-        getCookie("userId");
+    // =========================
+    // LOGIN / ADMIN CHECK
+    // =========================
 
-    const isAdmin =
-        getCookie("isAdmin");
-
-
-    const loginBtn =
-        document.getElementById("loginBtn");
-
-    const registerBtn =
-        document.getElementById("registerBtn");
-
-    const logoutBtn =
-        document.getElementById("logoutBtn");
-
-    const Additem =
-        document.getElementById("Additem");
-
-    const Additemgroup =
-        document.getElementById("Additemgroup");
-
-    const AllItemGroup =
-        document.getElementById("AllItemGroup");
+    const userId = getCookie("userId");
+    const isAdmin = getCookie("isAdmin");
 
 
-    // User is logged in
     if (userId) {
 
         loginBtn.style.display = "none";
-
         registerBtn.style.display = "none";
 
         logoutBtn.style.display = "block";
 
 
-        // Admin user
         if (isAdmin === "true") {
 
-            Additem.style.display = "block";
+            addItem.style.display = "block";
+            addItemGroup.style.display = "block";
+            allItemGroup.style.display = "block";
+            allItem.style.display = "block";
 
-            Additemgroup.style.display = "block";
-
-            AllItemGroup.style.display = "block";
+            reportMenu.style.display = "block";
 
         }
-
-        // Normal user
         else {
 
-            Additem.style.display = "none";
+            addItem.style.display = "none";
+            addItemGroup.style.display = "none";
+            allItemGroup.style.display = "none";
+            allItem.style.display = "none";
 
-            Additemgroup.style.display = "none";
-
-            AllItemGroup.style.display = "none";
-
+            reportMenu.style.display = "none";
         }
 
     }
-
-    // User is not logged in
     else {
 
         loginBtn.style.display = "block";
-
         registerBtn.style.display = "block";
 
         logoutBtn.style.display = "none";
 
-        Additem.style.display = "none";
+        addItem.style.display = "none";
+        addItemGroup.style.display = "none";
+        allItemGroup.style.display = "none";
+        allItem.style.display = "none";
 
-        Additemgroup.style.display = "none";
-
-        AllItemGroup.style.display = "none";
-
+        reportMenu.style.display = "none";
     }
-
 }
 
 
-// Navigation functions
+// =========================
+// COOKIE
+// =========================
+
+function getCookie(name) {
+
+    const cookies = document.cookie.split(";");
+
+    for (let cookie of cookies) {
+
+        cookie = cookie.trim();
+
+        if (cookie.startsWith(name + "=")) {
+
+            return decodeURIComponent(
+                cookie.substring(name.length + 1)
+            );
+        }
+    }
+
+    return null;
+}
+
+
+// =========================
+// NAVIGATION
+// =========================
 
 function goToAddItem() {
 
-    window.location.href =
-        "ProductCreation.html";
-
+    window.location.href = "ProductCreation";
 }
 
 
 function goToAddItemGroup() {
 
-    window.location.href =
-        "ItemGroupCreation.html";
-
+    window.location.href = "ItemGroupCreation";
 }
 
 
 function goToAllItemGroup() {
 
-    window.location.href =
-        "AllItemGroup.html";
+    window.location.href = "AllItemGroup";
+}
 
+
+function goToAllItem() {
+
+    window.location.href = "AllItem";
 }
 
 
 function goToLogin() {
 
-    window.location.href =
-        "UserLogin.html";
-
+    window.location.href = "UserLogin";
 }
 
 
 function goToRegister() {
 
-    window.location.href =
-        "UserRegister.html";
-
+    window.location.href = "UserRegister";
 }
 
+
+function goToCart() {
+
+    const userId = getCookie("userId");
+
+    if (userId) {
+
+        window.location.href = "CartItemDetails";
+
+    }
+    else {
+
+        LoginPopUp();
+    }
+}
+function GoToHome() {
+    window.location.href = "Dashboard";
+}
+
+
+// =========================
+// LOGOUT
+// =========================
 
 function logout() {
 
@@ -192,44 +222,54 @@ function logout() {
 
     deleteCookie("isAdmin");
 
-    window.location.href =
-        "dashboard.html";
+    sessionStorage.clear();
 
+    localStorage.clear();
+
+    window.location.href = "dashboard";
 }
 
 
 function deleteCookie(name) {
 
     document.cookie =
-        `${ name }=; expires = Thu, 01 Jan 1970 00:00:00 UTC; path = /`;
-
+        `${name}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/`;
 }
 
 
-function getCookie(name) {
+// =========================
+// LOGIN POPUP
+// =========================
 
-    const cookies =
-        document.cookie.split(";");
+function LoginPopUp() {
 
+    const popup =
+        document.getElementById("loginPopup");
 
-    for (let cookie of cookies) {
-
-        cookie = cookie.trim();
-
-
-        if (cookie.startsWith(name + "=")) {
-
-            return decodeURIComponent(
-                cookie.substring(
-                    name.length + 1
-                )
-            );
-
-        }
-
-    }
+    popup.style.display = "flex";
+}
 
 
-    return null;
+function closeLoginPopUp() {
 
+    const popup =
+        document.getElementById("loginPopup");
+
+    popup.style.display = "none";
+}
+
+
+// =========================
+// REPORTS
+// =========================
+
+function goToMostWishlistReport() {
+
+    window.location.href = "WishListReport";
+}
+
+
+function goToMostCartReport() {
+
+    window.location.href = "CartListReport";
 }
