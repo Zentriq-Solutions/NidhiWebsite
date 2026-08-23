@@ -1386,22 +1386,9 @@
         }, 5000);
         //region Itemgroupwiseloading
         // Call Product API
-        async function getProductsByItemGroup(itemGroupId) {
-            try {
-                const response = await fetch(`/api/Product/GetAllProductItemGroupWise?itemgroupid=${itemGroupId}`);
-                if (!response.ok) {
-                    throw new Error("Failed to load products");
-                }
-                const products = await response.json();
-                // Save products
-                sessionStorage.setItem("itemGroupProducts", JSON.stringify(products));
-                // Open Product List page
-                window.location.href = "ProductList";
-            } catch (error) {
-                console.error("Error loading products:", error);
-                alert("Unable to load products");
-            }
-        } // Load item groups when page loads
+        function getProductsByItemGroup(itemGroupId) {
+            window.location.href = `ProductList?itemgroupid=${itemGroupId}`;
+        }
 
         function goToMostWishlistReport() {
             window.location.href = "WishListReport";

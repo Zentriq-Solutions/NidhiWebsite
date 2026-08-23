@@ -1,371 +1,277 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+
+<html>
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Item Groups</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Shared/layout.css">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Products</title>
+
+
     <style>
-        :root {
-            --ink: #1B2521;
-            --teal: #0B3D3A;
-            --teal-deep: #072826;
-            --teal-soft: #124F4A;
-            --gold: #C9A227;
-            --gold-bright: #E0B93A;
-            --cream: #F6F3EC;
-            --sage: #F1F4EE;
-            --sage-line: #E1E7DC;
-            --danger: #B3452F;
-            --danger-bright: #D45A3F;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', Arial, sans-serif;
-        }
 
         body {
-            background: linear-gradient(180deg, #FBF9F3 0%, var(--cream) 260px);
-            color: var(--ink);
-            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
         }
 
-        .container {
-            width: 92%;
-            max-width: 1100px;
-            margin: 40px auto;
+        /* Product Container */
+        .product-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            max-width: 1200px;
+            margin: 130px auto 0;
         }
 
-            .container > h2 {
-                margin-bottom: 20px;
-                font-family: 'Fraunces', serif;
-                font-weight: 600;
-                color: var(--teal-deep);
-                font-size: 23px;
-            }
 
-        .table-card {
+        /* Product Card */
+
+        .product-card {
             background: white;
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 24px 50px -26px rgba(7, 40, 38, 0.32), 0 2px 6px rgba(7, 40, 38, 0.06);
-            border: 1px solid var(--sage-line);
-        }
-
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            background: var(--teal);
-            color: var(--cream);
-            padding: 16px 14px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-            text-align: center;
-            position: relative;
-        }
-
-            th:not(:last-child)::after {
-                content: "";
-                position: absolute;
-                right: 0;
-                top: 30%;
-                height: 40%;
-                width: 1px;
-                background: rgba(246, 243, 236, 0.15);
-            }
-
-        td {
-            padding: 15px 14px;
-            border-bottom: 1px solid var(--sage-line);
-            text-align: center;
-            font-size: 14.5px;
-            color: var(--ink);
-            transition: background .15s ease;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:nth-child(even) td {
-            background: var(--sage);
-        }
-
-        tr:hover td {
-            background: #FBF0D2;
-        }
-
-        .details-btn {
-            width: 38px;
-            height: 38px;
-            border: none;
-            border-radius: 50%;
-            background: var(--teal-soft);
-            color: var(--cream);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s ease;
             cursor: pointer;
-            font-size: 15px;
-            transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
-            box-shadow: 0 6px 14px -6px rgba(7, 40, 38, 0.5);
         }
 
-            .details-btn:hover {
-                background: var(--gold);
-                transform: scale(1.1);
-                box-shadow: 0 8px 18px -6px rgba(201, 162, 39, 0.55);
+
+            .product-card:hover {
+                transform: translateY(-5px);
             }
 
-        .delete-btn {
-            background: var(--danger);
+
+        /* Product Image */
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
         }
 
-            .delete-btn:hover {
-                background: var(--danger-bright);
-                box-shadow: 0 8px 18px -6px rgba(212, 90, 63, 0.5);
-            }
 
-        .empty-state {
+        /* Product Details */
+
+        .product-details {
+            padding: 20px;
+        }
+
+
+        .product-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+
+        .product-code {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+
+        .product-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 10px;
+        }
+
+
+        .product-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+
+        /* No Products */
+
+        .no-products {
             text-align: center;
-            padding: 60px 20px;
-            color: #8A8F86;
-            font-size: 15px;
-        }
-
-        /* =========================
-           RESPONSIVE
-        ========================= */
-
-        @media (max-width: 992px) {
-
-            
-
-            .container {
-                width: 96%;
-                margin: 28px auto;
-            }
-
-            table {
-                min-width: 850px;
-            }
-
-            th, td {
-                padding: 13px 10px;
-                font-size: 14px;
-            }
-        }
-
-        @media (max-width: 768px) {
-
-            
-
-            .container {
-                width: 98%;
-                margin: 20px auto;
-            }
-
-                .container > h2 {
-                    font-size: 20px;
-                }
-
-            table {
-                min-width: 750px;
-            }
-
-            th {
-                font-size: 11.5px;
-                padding: 11px;
-            }
-
-            td {
-                font-size: 13px;
-                padding: 11px;
-            }
-
-            .details-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 13px;
-            }
-        }
-
-        @media (max-width: 480px) {
-
-
-            table {
-                min-width: 700px;
-            }
-
-            th, td {
-                padding: 9px;
-                font-size: 12px;
-            }
-
-            .details-btn {
-                width: 30px;
-                height: 30px;
-                font-size: 12px;
-            }
+            padding: 50px;
+            font-size: 20px;
+            color: #777;
         }
     </style>
+
 </head>
+
 
 <body>
 
-    <header class="top-header" id="layout"></header>
+    <!-- Common Header will be loaded here -->
+    <div id="headerContainer"></div>
 
-    <div class="container">
-        <div class="table-card">
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item Name</th>
-                            <th>Item Code</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Details</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
 
-                    <tbody id="itemGroupBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <!-- Product List -->
+    <div class="product-container"
+         id="productContainer">
+
     </div>
-    <script src="/Shared/layout.js"></script>
+
+
+    <script src="Js/Headerjavascript.js"></script>
+
     <script>
 
-        window.onload = function () {
-            loadItemGroups();
-        }
+        document.addEventListener(
+            "DOMContentLoaded",
+            async function () {
 
-        function loadItemGroups() {
+                // Load common header first
+                await loadHeader();
 
-            fetch("/api/Product/GetAllProduct")
-                .then(response => response.json())
-                .then(data => {
+                // Load products
+                loadProducts();
 
-                    const tbody = document.getElementById("itemGroupBody");
+            }
+        );
 
-                    tbody.innerHTML = "";
 
-                    if (!data || data.length === 0) {
-                        tbody.innerHTML = `
-                                    <tr>
-                                        <td colspan="6" class="empty-state">No item groups found.</td>
-                                    </tr>
-                                `;
-                        return;
-                    }
+        document.addEventListener(
+            "DOMContentLoaded",
+            async function () {
 
-                    data.forEach(item => {
+                // Load common header first
+                await loadHeader();
 
-                        tbody.innerHTML += `
-                                        <tr>
-                                            <td>${item.name}</td>
-                                            <td>${item.code}</td>
-                                            <td>${item.description}</td>
-                                            <td>${item.price}</td>
-                                            <td>
-                                <button class="details-btn"
-                                    onclick="viewDetails(${item.productid})"
-                                    title="View Details">
-                                    👁️
-                                </button>
-                            </td>
-                            <td>
-                            <button class="details-btn delete-btn"
-                            onclick="Delete(${item.productid})"
-                            title="Delete Item">
-                            🗑️
-                            </button>
-                            </td>
-                                        </tr>
-                                    `;
+                // Load products
+                loadProducts();
 
-                    });
+            }
+        );
 
-                })
-                .catch(error => {
-                    alert("Unable to load Item.");
-                });
 
-        }
-        function viewDetails(id) {
-            window.location.href = "ProductCreation?id=" + id;
-        }
-        async function Delete(id) {
+        async function loadProducts() {
 
-            const confirmDelete = confirm("Are you sure you want to delete this Item?");
+            const container =
+                document.getElementById(
+                    "productContainer"
+                );
 
-            if (!confirmDelete) {
+            const urlParams =
+                new URLSearchParams(window.location.search);
+
+            const itemGroupId =
+                urlParams.get("itemgroupid");
+
+            if (!itemGroupId) {
+
+                container.innerHTML = `
+                    <div class="no-products">
+                        No item group specified.
+                    </div>
+                `;
+
                 return;
+
             }
 
             try {
 
-                const response = await fetch(`/api/Product/DeleteProduct?productid=${id}`, {
-                    method: "POST"
+                const response = await fetch(
+                    `/api/Product/GetAllProductItemGroupWise?itemgroupid=${itemGroupId}`
+                );
+
+                if (!response.ok) {
+                    throw new Error("Failed to load products");
+                }
+
+                const products = await response.json();
+
+                if (
+                    !products ||
+                    products.length === 0
+                ) {
+
+                    container.innerHTML = `
+                        <div class="no-products">
+                            No products found
+                            for this item group.
+                        </div>
+                    `;
+
+                    return;
+
+                }
+
+                container.innerHTML = "";
+
+                products.forEach(product => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "product-card";
+
+                    card.innerHTML = `
+
+                        <img
+                            class="product-image"
+                            src="${product.image}"
+                            alt="${product.name}"
+                            onerror="
+                                this.src =
+                                'images/no-image.png'
+                            "
+                        >
+
+                        <div class="product-details">
+
+                            <div class="product-name">
+                                ${product.name}
+                            </div>
+
+                            <div class="product-code">
+                                Product Code:
+                                ${product.code}
+                            </div>
+
+                            <div class="product-price">
+                                $${product.price}
+                            </div>
+
+                            <div class="product-description">
+                                ${product.description || ""}
+                            </div>
+
+                        </div>
+
+                    `;
+
+                    container.appendChild(card);
+
                 });
-                const message = await response.text();
-                if (!response.ok) {
-                    throw new Error(message);
-                }
 
-                alert(message);
+            } catch (error) {
 
-                loadItemGroups();
+                console.error("Error loading products:", error);
+
+                container.innerHTML = `
+                    <div class="no-products">
+                        Unable to load products.
+                    </div>
+                `;
 
             }
-            catch (err) {
-                alert(err.message);
-            }
+
         }
-        fetch("/Shared/Layout.html")
 
-            .then(response => {
-
-                if (!response.ok) {
-                    throw new Error(
-                        "Unable to load Layout.html"
-                    );
-                }
-                return response.text();
-
-            })
-
-            .then(data => {
-
-                document.getElementById("layout")
-                    .innerHTML = data;
-                initializeLayout();
-
-            })
-
-            .catch(error => {
-
-                console.error(error);
-
-            });
     </script>
 
 </body>
+
 </html>
