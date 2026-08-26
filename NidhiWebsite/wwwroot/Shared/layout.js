@@ -90,7 +90,7 @@
 
         logoutBtn.style.display = "block";
 
-
+        ViewAllProducts.style.display = "block";
         if (isAdmin === "true") {
 
             addItem.style.display = "block";
@@ -116,7 +116,7 @@
 
         loginBtn.style.display = "block";
         registerBtn.style.display = "block";
-
+        ViewAllProducts.style.display = "block";
         logoutBtn.style.display = "none";
 
         addItem.style.display = "none";
@@ -208,9 +208,11 @@ function goToCart() {
     }
 }
 function GoToHome() {
-        window.location.href = "Dashboard";
+    window.location.href = "Dashboard";
 }
-
+function GoToViewAllProducts() {
+    window.location.href = "ViewAllPage"
+}
 
 // =========================
 // LOGOUT

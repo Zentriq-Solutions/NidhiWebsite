@@ -46,7 +46,7 @@ namespace NidhiWebsite.Controllers
         {
             try
             {
-                bool isrefcart= await datacontext.Data_tbl_Cart.AnyAsync(x => x.cart_product_id == productid);
+                bool isrefcart = await datacontext.Data_tbl_Cart.AnyAsync(x => x.cart_product_id == productid);
                 if (isrefcart)
                 {
                     return BadRequest("Product is referenced in cart.");
@@ -322,6 +322,92 @@ namespace NidhiWebsite.Controllers
                 });
 
                 return Ok(itemgroup);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("AllProductCount")]
+        public async Task<IActionResult> GetAllProductCount()
+        {
+            try
+            {
+                var count = await datacontext.Data_tbl_Product.Where(l => l.product_id != 0).CountAsync();
+                return Ok(new { count });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetViewAllProducts")]
+        public async Task<IActionResult> GetAllProducts(int pageNumber = 1, int pageSize = 15, string sort = "")
+        {
+            try
+            {
+                var path = "/Upload/";
+
+                if (sort == "asc")
+                {
+                    var productsAsc = await datacontext.Data_tbl_Product
+                        .AsNoTracking()
+                        .Where(p => p.product_id != 0)
+                        .OrderBy(p => p.product_price)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .Select(p => new
+                        {
+                            id = p.product_id,
+                            name = p.product_name,
+                            code = p.product_code,
+                            price = p.product_price,
+                            image = path + p.product_image,
+                            description = p.product_description
+                        })
+                        .ToListAsync();
+                    return Ok(productsAsc);
+                }
+                else if (sort == "desc")
+                {
+                    var productsDesc = await datacontext.Data_tbl_Product
+                        .AsNoTracking()
+                        .Where(p => p.product_id != 0)
+                        .OrderByDescending(p => p.product_price)
+                        .Skip((pageNumber - 1) * pageSize)
+                        .Take(pageSize)
+                        .Select(p => new
+                        {
+                            id = p.product_id,
+                            name = p.product_name,
+                            code = p.product_code,
+                            price = p.product_price,
+                            image = path + p.product_image,
+                            description = p.product_description
+                        })
+                        .ToListAsync();
+                    return Ok(productsDesc);
+                }
+                var products = await datacontext.Data_tbl_Product
+                    .AsNoTracking()
+                    .Where(p => p.product_id != 0)
+                    .OrderBy(p => p.product_id)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(p => new
+                    {
+                        id = p.product_id,
+                        name = p.product_name,
+                        code = p.product_code,
+                        price = p.product_price,
+                        image = path + p.product_image,
+                        description = p.product_description
+                    })
+                    .ToListAsync();
+
+                return Ok(products);
             }
             catch (Exception ex)
             {
