@@ -344,66 +344,62 @@ namespace NidhiWebsite.Controllers
         }
 
         [HttpGet("GetViewAllProducts")]
-        public async Task<IActionResult> GetAllProducts(int pageNumber = 1, int pageSize = 15, string sort = "")
+        public async Task<IActionResult> GetAllProducts(int pageNumber = 1, int pageSize = 15, string sort = "",decimal? minPrice = null,
+    decimal? maxPrice = null)
         {
             try
             {
                 var path = "/Upload/";
 
-                if (sort == "asc")
-                {
-                    var productsAsc = await datacontext.Data_tbl_Product
-                        .AsNoTracking()
-                        .Where(p => p.product_id != 0)
-                        .OrderBy(p => p.product_price)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(p => new
-                        {
-                            id = p.product_id,
-                            name = p.product_name,
-                            code = p.product_code,
-                            price = p.product_price,
-                            image = path + p.product_image,
-                            description = p.product_description
-                        })
-                        .ToListAsync();
-                    return Ok(productsAsc);
-                }
-                else if (sort == "desc")
-                {
-                    var productsDesc = await datacontext.Data_tbl_Product
-                        .AsNoTracking()
-                        .Where(p => p.product_id != 0)
-                        .OrderByDescending(p => p.product_price)
-                        .Skip((pageNumber - 1) * pageSize)
-                        .Take(pageSize)
-                        .Select(p => new
-                        {
-                            id = p.product_id,
-                            name = p.product_name,
-                            code = p.product_code,
-                            price = p.product_price,
-                            image = path + p.product_image,
-                            description = p.product_description
-                        })
-                        .ToListAsync();
-                    return Ok(productsDesc);
-                }
-                var products = await datacontext.Data_tbl_Product
+                var query = datacontext.Data_tbl_Product
                     .AsNoTracking()
-                    .Where(p => p.product_id != 0)
-                    .OrderBy(p => p.product_id)
+                    .Where(x => x.product_id != 0);
+
+                // Price filter
+                if (minPrice.HasValue)
+                {
+                    query = query.Where(x => x.product_price >= minPrice.Value);
+                }
+
+                if (maxPrice.HasValue)
+                {
+                    query = query.Where(x => x.product_price <= maxPrice.Value);
+                }
+
+                // Sorting
+                switch (sort)
+                {
+                    case "asc":
+                        query = query.OrderBy(x => x.product_price);
+                        break;
+
+                    case "desc":
+                        query = query.OrderByDescending(x => x.product_price);
+                        break;
+
+                    case "AscAlpha":
+                        query = query.OrderBy(x => x.product_name);
+                        break;
+
+                    case "DescAlpha":
+                        query = query.OrderByDescending(x => x.product_name);
+                        break;
+
+                    default:
+                        query = query.OrderByDescending(x => x.product_id);
+                        break;
+                }
+                var products = await query
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
-                    .Select(p => new
+                    .Select(x => new
                     {
-                        id = p.product_id,
-                        name = p.product_name,
-                        code = p.product_code,
-                        price = p.product_price,
-                        image = path + p.product_image,
-                        description = p.product_description
+                        productid = x.product_id,
+                        name = x.product_name,
+                        code = x.product_code,
+                        price = x.product_price,
+                        image = path+x.product_image,
+                        description = x.product_description
                     })
                     .ToListAsync();
 
