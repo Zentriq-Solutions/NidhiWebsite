@@ -142,11 +142,6 @@
                 background: var(--sage);
             }
 
-        .result-count {
-            font-size: 14px;
-            color: #666;
-        }
-
         .product-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -328,8 +323,6 @@
                 </div>
             </div>
 
-            <div class="result-count" id="resultCount"></div>
-
         </div>
 
         <!-- Product List -->
@@ -349,216 +342,100 @@
     <script>
 
         const PAGE_SIZE = 15;
-
         let currentPage = 1;
-        let totalPages = 1;
-        let currentProducts = []; // the 15 (or fewer) products currently on screen
         let currentSort = "none";
-        let selectedSort = "none";
+        let isLoading = false;
+        let hasMorePages = true;
 
-        initPageCountThenLoad();
+        // Load first page initially
+        loadProducts(1);
 
+        // Apply filter
         document.getElementById("applyFilter").addEventListener("click", function () {
-
-            const selected = document.querySelector(
-                'input[name="priceSort"]:checked'
-            );
-            if (!selected) {
-                return;
-            }
-
+            const selected = document.querySelector('input[name="priceSort"]:checked');
+            if (!selected) return;
             currentSort = selected.value;
-            loadProducts(1);
+            currentPage = 1;
+            hasMorePages = true;
+            loadProducts(1, true);  // true = replace existing products
         });
 
-
+        // Clear filter
         document.getElementById("clearFilter").addEventListener("click", function () {
-
-            document.querySelector(
-                'input[name="priceSort"][value="none"]'
-            ).checked = true;
-
+            document.querySelector('input[name="priceSort"][value="none"]').checked = true;
             currentSort = "none";
-            loadProducts(1);
+            currentPage = 1;
+            hasMorePages = true;
+            loadProducts(1, true);
         });
 
-        // Step 1: find out how many products exist, work out how many pages we need,
-        // then load page 1.
-        async function initPageCountThenLoad() {
+        // Infinite scroll
+        window.addEventListener("scroll", function () {
+            if (isLoading || !hasMorePages) return;
 
-            const resultCountEl =
-                document.getElementById("resultCount");
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            // Load when user is within 200px of the bottom
+            if (scrollY + windowHeight >= documentHeight - 200) {
+                currentPage++;
+                loadProducts(currentPage, false);
+            }
+        });
+
+        async function loadProducts(page, replace = false) {
+            isLoading = true;
+            const container = document.getElementById("productContainer");
+            const apiUrl = `/api/Product/GetViewAllProducts?pageNumber=${page}&pageSize=${PAGE_SIZE}&sort=${encodeURIComponent(currentSort)}`;
 
             try {
-
-                const countResponse = await fetch("/api/Product/AllProductCount");
-
-                if (!countResponse.ok) {
-                    throw new Error(`Count API failed: ${countResponse.status}`);
-                }
-
-                const countData = await countResponse.json();
-                const totalCount = countData.count ?? 0;
-
-                totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-
-                resultCountEl.textContent = `${totalCount} product${totalCount === 1 ? "" : "s"} total`;
-
-                await loadProducts(1);
-            }
-            catch (error) {
-
-                console.error("Count API Error:", error);
-                resultCountEl.textContent = "";
-
-                // Fall back to just loading page 1 without knowing total pages up front
-                await loadProducts(1);
-            }
-        }
-
-        async function loadProducts(page) {
-
-            currentPage = page;
-
-            const container =
-                document.getElementById("productContainer");
-
-            const apiUrl =
-                `/api/Product/GetViewAllProducts?pageNumber=${page}&pageSize=${PAGE_SIZE}&sort=${encodeURIComponent(currentSort)}`;
-
-            console.log("Calling API:", apiUrl);
-
-            try {
-
                 const response = await fetch(apiUrl);
-
-
-                if (!response.ok) {
-                    throw new Error(`API failed: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`API failed: ${response.status}`);
 
                 const products = await response.json();
 
-                currentProducts = products || [];
+                if (replace) {
+                    container.innerHTML = "";
+                }
 
-                renderProducts(currentProducts);
+                if (!products || products.length === 0) {
+                    hasMorePages = false;
+                    if (replace) {
+                        container.innerHTML = '<div class="no-products">No products found.</div>';
+                    }
+                    return;
+                }
 
-                renderPagination(totalPages, currentPage);
+                // If returned fewer than PAGE_SIZE, no more pages
+                if (products.length < PAGE_SIZE) {
+                    hasMorePages = false;
+                }
 
-            }
-            catch (error) {
-
-                console.error("API Error:", error);
-
-                container.innerHTML = `
-                <div class="no-products">
-                    Unable to load products.
-                </div>
-            `;
-
-                document.getElementById("pagination").innerHTML = "";
-            }
-        }
-        // Step 3: the "filter" — sort whatever 15 products are already on screen.
-        // No new API call, just re-render the same array in a different order.
-
-        function renderProducts(products) {
-
-            const container =
-                document.getElementById("productContainer");
-
-            if (!products || products.length === 0) {
-
-                container.innerHTML = `
-                <div class="no-products">
-                    No products found
-                    for this item group.
-                </div>
-            `;
-                return;
-            }
-
-            container.innerHTML = "";
-
-            products.forEach(product => {
-
-                const card =
-                    document.createElement("div");
-
-                card.className =
-                    "product-card";
-
-                card.innerHTML = `
-
-                <img
-                    class="product-image"
-                    src="${product.image}"
-                    alt="${product.name}"
-                    onerror="
-                        this.src =
-                        'images/no-image.png'
-                    "
-                >
-
+                products.forEach(product => {
+                    const card = document.createElement("div");
+                    card.className = "product-card";
+                    card.innerHTML = `
+                <img class="product-image" src="${product.image}" alt="${product.name}"
+                     onerror="this.src='images/no-image.png'">
                 <div class="product-details">
-
-                    <div class="product-name">
-                        ${product.name}
-                    </div>
-
-                    <div class="product-code">
-                        Product Code:
-                        ${product.code}
-                    </div>
-
-                    <div class="product-price">
-                        $${product.price}
-                    </div>
-
-                    <div class="product-description">
-                        ${product.description || ""}
-                    </div>
-
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-code">Product Code: ${product.code}</div>
+                    <div class="product-price">${product.price}</div>
+                    <div class="product-description">${product.description || ""}</div>
                 </div>
-
             `;
+                    container.appendChild(card);
+                });
 
-                container.appendChild(card);
-
-            });
-        }
-
-        function renderPagination(totalPages, page) {
-
-            const paginationEl =
-                document.getElementById("pagination");
-
-            paginationEl.innerHTML = "";
-
-            if (totalPages <= 1) return;
-
-            const prevBtn = document.createElement("button");
-            prevBtn.className = "page-btn";
-            prevBtn.textContent = "Prev";
-            prevBtn.disabled = page === 1;
-            prevBtn.addEventListener("click", () => loadProducts(page - 1));
-            paginationEl.appendChild(prevBtn);
-
-            for (let i = 1; i <= totalPages; i++) {
-
-                const btn = document.createElement("button");
-                btn.className = "page-btn" + (i === page ? " active" : "");
-                btn.textContent = i;
-                btn.addEventListener("click", () => loadProducts(i));
-                paginationEl.appendChild(btn);
+            } catch (error) {
+                console.error("API Error:", error);
+                if (replace) {
+                    container.innerHTML = '<div class="no-products">Unable to load products.</div>';
+                }
+            } finally {
+                isLoading = false;
             }
-
-            const nextBtn = document.createElement("button");
-            nextBtn.className = "page-btn";
-            nextBtn.textContent = "Next";
-            nextBtn.disabled = page === totalPages;
-            nextBtn.addEventListener("click", () => loadProducts(page + 1));
-            paginationEl.appendChild(nextBtn);
         }
 
         fetch("/Shared/Layout.html")
