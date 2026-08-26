@@ -10,7 +10,7 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>Products</title>
-
+    <link rel="stylesheet" href="/Shared/layout.css">
 
     <style>
 
@@ -40,17 +40,14 @@
         main {
             padding: 40px 30px;
         }
-
-        /* Product Container */
         .product-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 25px;
             padding: 30px;
             max-width: 1200px;
-            margin: 130px auto 0;
+            margin: 20px auto 0;
         }
-
 
         /* Product Card */
 
@@ -132,7 +129,7 @@
 <body>
 
     <!-- Common Header will be loaded here -->
-    <div id="headerContainer"></div>
+    <header class="top-header" id="layout"></header>
 
 
     <!-- Product List -->
@@ -142,57 +139,54 @@
     </div>
 
 
-    <script src="Js/Headerjavascript.js"></script>
+    <script src="/Shared/layout.js"></script>
 
     <script>
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            async function () {
+        document.addEventListener("DOMContentLoaded", function () {
 
-                // Load common header first
-                await loadHeader();
 
-                // Load products
-                loadProducts();
+            loadProducts();
 
-            }
-        );
+            loadHeader();
+        });
 
 
         async function loadProducts() {
 
+
             const container =
-                document.getElementById(
-                    "productContainer"
-                );
+                document.getElementById("productContainer");
 
             const urlParams =
                 new URLSearchParams(window.location.search);
 
-            const itemGroupId =
+            const itemgroupid =
                 urlParams.get("itemgroupid");
 
-            if (!itemGroupId) {
+            if (!itemgroupid) {
 
                 container.innerHTML = `
-                    <div class="no-products">
-                        No item group specified.
-                    </div>
-                `;
+            <div class="no-products">
+                No item group specified.
+            </div>
+        `;
 
                 return;
-
             }
+
+            const apiUrl =
+                `/api/Product/GetAllProductItemGroupWise?itemgroupid=${itemgroupid}`;
 
             try {
 
-                const response = await fetch(
-                    `/api/Product/GetAllProductItemGroupWise?itemgroupid=${itemGroupId}`
-                );
+                const response = await fetch(apiUrl);
+
 
                 if (!response.ok) {
-                    throw new Error("Failed to load products");
+                    throw new Error(
+                        `API failed: ${response.status}`
+                    );
                 }
 
                 const products = await response.json();
@@ -203,11 +197,11 @@
                 ) {
 
                     container.innerHTML = `
-                        <div class="no-products">
-                            No products found
-                            for this item group.
-                        </div>
-                    `;
+        <div class="no-products">
+            No products found
+            for this item group.
+        </div>
+    `;
 
                     return;
 
@@ -225,57 +219,81 @@
 
                     card.innerHTML = `
 
-                        <img
-                            class="product-image"
-                            src="${product.image}"
-                            alt="${product.name}"
-                            onerror="
-                                this.src =
-                                'images/no-image.png'
-                            "
-                        >
+        <img
+            class="product-image"
+            src="${product.image}"
+            alt="${product.name}"
+            onerror="
+                this.src =
+                'images/no-image.png'
+            "
+        >
 
-                        <div class="product-details">
+        <div class="product-details">
 
-                            <div class="product-name">
-                                ${product.name}
-                            </div>
+            <div class="product-name">
+                ${product.name}
+            </div>
 
-                            <div class="product-code">
-                                Product Code:
-                                ${product.code}
-                            </div>
+            <div class="product-code">
+                Product Code:
+                ${product.code}
+            </div>
 
-                            <div class="product-price">
-                                $${product.price}
-                            </div>
+            <div class="product-price">
+                $${product.price}
+            </div>
 
-                            <div class="product-description">
-                                ${product.description || ""}
-                            </div>
+            <div class="product-description">
+                ${product.description || ""}
+            </div>
 
-                        </div>
+        </div>
 
-                    `;
+    `;
 
                     container.appendChild(card);
 
                 });
 
-            } catch (error) {
+            }
+            catch (error) {
 
-                console.error("Error loading products:", error);
+                console.error("API Error:", error);
 
                 container.innerHTML = `
-                    <div class="no-products">
-                        Unable to load products.
-                    </div>
-                `;
-
+            <div class="no-products">
+                Unable to load products.
+            </div>
+        `;
             }
-
         }
+        fetch("/Shared/Layout.html")
 
+            .then(response => {
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Unable to load Layout.html"
+                    );
+                }
+                return response.text();
+
+            })
+
+            .then(data => {
+
+                document.getElementById("layout")
+                    .innerHTML = data;
+                initializeLayout();
+
+            })
+
+            .catch(error => {
+
+                console.error(error);
+
+            });
     </script>
 
 </body>
